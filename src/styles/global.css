@@ -79,15 +79,24 @@ a:hover {
   white-space: nowrap;
 }
 
-/* Section entrance: fade + small upward offset, once. Hidden only when JS runs. */
+/*
+ * Section entrance: fade + small upward offset, once. Hidden only when JS runs.
+ * The offset is applied to the children, not the section, so anchor jumps to a
+ * not-yet-revealed section still land exactly (scroll targets use the section box).
+ */
 [data-reveal] {
-  transition:
-    opacity 600ms ease-out,
-    transform 600ms ease-out;
+  transition: opacity 600ms ease-out;
+}
+
+[data-reveal] > * {
+  transition: transform 600ms ease-out;
 }
 
 .js [data-reveal]:not(.is-visible) {
   opacity: 0;
+}
+
+.js [data-reveal]:not(.is-visible) > * {
   transform: translateY(12px);
 }
 
@@ -113,6 +122,9 @@ a:hover {
 
   .js [data-reveal]:not(.is-visible) {
     opacity: 1;
+  }
+
+  .js [data-reveal]:not(.is-visible) > * {
     transform: none;
   }
 }
