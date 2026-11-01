@@ -1,0 +1,7 @@
+kind: email
+label:
+  en: Email
+  pt-br: E-mail
+  es: Correo
+url: mailto:hello@example.com
+order: 2

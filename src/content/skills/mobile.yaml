@@ -1,0 +1,9 @@
+category:
+  en: Mobile
+  pt-br: Mobile
+  es: Móvil
+items:
+  - Kotlin
+  - Android SDK
+  - Jetpack Compose
+order: 1
