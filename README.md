@@ -103,3 +103,13 @@ The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in 
   ></span>
 </ScrollThread>
 ```
+
+## Deployment
+
+The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
+
+- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check` and `npm run build`. Nothing is deployed.
+- **Push or merge to `main`** (or a manual **Run workflow**): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
+- **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
+- **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
+- **Rollback:** open a PR that reverts the offending merge and merge it; the workflow redeploys the previous state.

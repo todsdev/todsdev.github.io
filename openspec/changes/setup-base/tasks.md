@@ -82,7 +82,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 
 - [x] 10.1 Create `.github/workflows/deploy.yml` per design (push/PR to `main` plus `workflow_dispatch`; build job with `setup-node` from `.nvmrc`, `npm ci`, check/lint/format:check/build, and `upload-pages-artifact` skipped on PRs; deploy job gated to non-PR events in the `github-pages` environment; permissions `contents: read`, `pages: write`, `id-token: write`; concurrency group `pages`, `cancel-in-progress: false`); verify with `actionlint` (or `npx --yes yaml-lint`) and confirm that the workflow run triggered by this task's push shows build passing and deploy skipped
 - [x] 10.2 Verify (read-only, no settings changes) that the Pages source is already GitHub Actions: `gh api repos/todsdev/todsdev.github.io/pages --jq .build_type` returns `workflow`. If it doesn't, stop and ask the maintainer to fix it in Settings → Pages
-- [ ] 10.3 Document how deployment works (PR checks, deploy on merge to `main`, rollback through a revert PR) in `README.md`; verify that the description matches `deploy.yml`
+- [x] 10.3 Document how deployment works (PR checks, deploy on merge to `main`, rollback through a revert PR) in `README.md`; verify that the description matches `deploy.yml`
 
 ## 11. Integration
 
