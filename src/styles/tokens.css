@@ -1,0 +1,29 @@
+:root {
+  color-scheme: dark;
+
+  /* Color — the only palette for UI. --text-dim is decorative only (< 3:1 contrast). */
+  --bg: #0e0e0e;
+  --surface: #161616;
+  --surface-2: #1f1f1f;
+  --text: #d6d6d6;
+  --text-muted: #8a8a8a;
+  --text-dim: #5c5c5c;
+  --highlight: #ffffff;
+
+  /* Typography */
+  --font-title: "VT323", ui-monospace, Menlo, Consolas, monospace;
+  --font-body: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+
+  /* Layout */
+  --nav-height: 3.5rem;
+  --content-max: 52rem;
+  --thread-gutter: 2.5rem;
+}
