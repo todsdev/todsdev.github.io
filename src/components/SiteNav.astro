@@ -27,16 +27,7 @@ const { locale } = Astro.props;
 </header>
 
 <script>
-  // Browsers only scroll a focused link into view when it is fully hidden; keep
-  // partially clipped links in the horizontally scrolling list fully visible too.
-  const list = document.querySelector<HTMLElement>(".site-nav__sections");
-  list?.addEventListener("focusin", (event) => {
-    const link = event.target as HTMLElement;
-    const view = list.getBoundingClientRect();
-    const box = link.getBoundingClientRect();
-    if (box.left < view.left) list.scrollLeft -= view.left - box.left;
-    else if (box.right > view.right) list.scrollLeft += box.right - view.right;
-  });
+  import "../scripts/nav";
 </script>
 
 <style>
@@ -86,6 +77,33 @@ const { locale } = Astro.props;
 
   .site-nav__link:hover {
     color: var(--highlight);
+  }
+
+  .site-nav__link.is-active {
+    color: var(--highlight);
+  }
+
+  .site-nav__link.is-active::before {
+    content: "> ";
+    content: "> " / "";
+    white-space: pre;
+  }
+
+  /* Blinking block cursor; steady under reduced motion (global rule removes animations). */
+  .site-nav__link.is-active::after {
+    content: "";
+    display: inline-block;
+    width: 0.6em;
+    height: 1.1em;
+    margin-left: 0.2em;
+    background: var(--highlight);
+    animation: cursor-blink 1s steps(1) infinite;
+  }
+
+  @keyframes cursor-blink {
+    50% {
+      opacity: 0;
+    }
   }
 
   .site-nav__link:focus-visible {
