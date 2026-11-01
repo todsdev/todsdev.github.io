@@ -23,6 +23,26 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   title={t(locale, "meta.title")}
   description={t(locale, "meta.description")}
 >
+  {locale === "en" && <script is:inline slot="head-start">
+    // Saved-language redirect for the unprefixed root only. Runs synchronously
+    // in <head> before any stylesheet, so English is never painted first.
+    // Keep the key in sync with PREFERRED_LOCALE_KEY in src/scripts/locale.ts.
+    // Never consults the browser language.
+    (function () {
+      try {
+        var saved = localStorage.getItem("preferred-locale");
+        if (saved === "pt-br" || saved === "es") {
+          document.documentElement.style.visibility = "hidden";
+          setTimeout(function () {
+            document.documentElement.style.visibility = "";
+          }, 3000);
+          location.replace("/" + saved + "/" + location.hash);
+        }
+      } catch (e) {
+        // Storage blocked: stay on English.
+      }
+    })();
+  </script>}
   <a class="skip-link" href="#main">
     {t(locale, "skipLink")}
   </a>
