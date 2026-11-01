@@ -84,3 +84,22 @@ order: 2
 Missing translations fall back to English and print a build warning such as `[content] missing es translation: projects/my-app.description → using en`. Warnings never fail the build.
 
 Invalid data — a missing required field, a malformed URL, a wrong type or an unknown enum value — fails the build with the file and field in the error message.
+
+## Scroll thread markers
+
+The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in the left gutter whose drawn length follows scroll progress. Other sections can add markers to it:
+
+- A marker is any element with the `data-thread-marker` attribute, either placed in the thread's `markers` slot (absolutely positioned, e.g. `style="top: 40%"`) or anywhere inside `<main>`.
+- While the drawn line extends past a marker's vertical center, `src/scripts/thread.ts` sets `data-reached` on it, and removes it when the line retracts. Style both states with CSS, e.g. `[data-thread-marker][data-reached] { … }`.
+- The thread is `aria-hidden` and ignores pointer events, so markers are decorative too; put any meaningful text in the section itself.
+
+```astro
+<ScrollThread>
+  <span
+    slot="markers"
+    data-thread-marker
+    class="marker"
+    style="top: 40%"
+  ></span>
+</ScrollThread>
+```
