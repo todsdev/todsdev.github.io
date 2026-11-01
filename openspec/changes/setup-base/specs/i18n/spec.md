@@ -68,6 +68,10 @@ A language chosen through the switcher SHALL be remembered in the browser. When 
 - **WHEN** a visitor who previously chose Portuguese opens `/#contact`
 - **THEN** they are taken to `/pt-br/#contact`
 
+#### Scenario: No flash of English content
+- **WHEN** a visitor who previously chose Portuguese opens `/`
+- **THEN** the redirect runs from an inline script in `<head>`, before first paint and before any external script or stylesheet loads, so no English content is ever painted
+
 #### Scenario: Explicit locale URL
 - **WHEN** a visitor who previously chose Portuguese opens `/es/`
 - **THEN** the Spanish page is shown with no redirect
