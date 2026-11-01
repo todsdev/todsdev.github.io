@@ -35,7 +35,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 
 ## 4. i18n core
 
-- [ ] 4.1 Configure Astro i18n in `astro.config.mjs` (`defaultLocale: 'en'`, locales `en`, `{ path: 'pt-br', codes: ['pt-BR'] }`, `es`, `prefixDefaultLocale: false`); verify `npm run build` still exits 0
+- [x] 4.1 Configure Astro i18n in `astro.config.mjs` (`defaultLocale: 'en'`, locales `en`, `{ path: 'pt-br', codes: ['pt-BR'] }`, `es`, `prefixDefaultLocale: false`); verify `npm run build` still exits 0
 - [ ] 4.2 Create `src/i18n/en.ts` (nav labels, section prompt commands, skip link, language names, switcher labels, 404 strings), plus `pt-br.ts` and `es.ts` typed `satisfies Dictionary`; verify `npm run check` exits 0, and exits non-zero naming the key after temporarily deleting one key from `es.ts`
 - [ ] 4.3 Create `src/i18n/index.ts` with the locale list, locale→`lang` map (`en`, `pt-BR`, `es`), typed `t(locale, key)` and `localePath(locale, hash?)`; verify `npm run check` exits 0 and `localePath('pt-br', '#about')` is typed to return `/pt-br/#about`
 - [ ] 4.4 Create `src/layouts/BaseLayout.astro` (props `locale`, `title`, `description`): `<html lang>`, charset, viewport, title, meta description, favicon (`public/favicon.svg`), font and CSS imports, the inline `js`-class script, and `hreflang` alternates for `en`, `pt-BR`, `es` and `x-default` with absolute URLs; verify that built pages contain each element
