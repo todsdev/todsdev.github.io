@@ -31,7 +31,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 - [x] 3.1 Add `src/styles/tokens.css` with the seven color tokens (exact values), `color-scheme: dark`, spacing, `--nav-height` and font-family tokens; verify in preview that DevTools shows all seven on `:root` with the specified values
 - [x] 3.2 Install `@fontsource/vt323` and `@fontsource/ibm-plex-mono` (400 and 700) and define the title and body font stacks with monospace fallbacks; verify in preview that the network tab shows woff2 files only from `localhost`, and that text such as "ação, español" renders in IBM Plex Mono
 - [x] 3.3 Add `src/styles/global.css` (reset, body in `--text` on `--bg`, links, a 2px `--highlight` `:focus-visible` outline, a skip-to-content link) and a reduced-motion block that disables transitions, animations and smooth scrolling; verify in preview that tabbing shows a visible focus ring and that with emulated `prefers-reduced-motion: reduce` no computed transition or animation remains
-- [ ] 3.4 Check that no text style uses `--text-dim` and that `--text-muted`/`--text`/`--highlight` meet AA on all three surfaces (expected ratios ≥ 4.77; see design.md); verify by grepping the CSS for `--text-dim` (only decorative selectors) and checking with DevTools' contrast checker
+- [x] 3.4 Check that no text style uses `--text-dim` and that `--text-muted`/`--text`/`--highlight` meet AA on all three surfaces (expected ratios ≥ 4.77; see design.md); verify by grepping the CSS for `--text-dim` (only decorative selectors) and checking with DevTools' contrast checker
 
 ## 4. i18n core
 
