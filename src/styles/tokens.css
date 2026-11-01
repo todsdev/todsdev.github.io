@@ -27,3 +27,9 @@
   --content-max: 52rem;
   --thread-gutter: 2.5rem;
 }
+
+@media (max-width: 40rem) {
+  :root {
+    --thread-gutter: 0.75rem;
+  }
+}
