@@ -76,7 +76,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 
 ## 9. Placeholder 404
 
-- [ ] 9.1 Create `src/pages/404.astro` using `BaseLayout` with the English dictionary (`lang="en"`), a message and a link to `/`; verify that `dist/404.html` exists and contains `href="/"`, and that `npm run preview` serves it for an unknown path
+- [x] 9.1 Create `src/pages/404.astro` using `BaseLayout` with the English dictionary (`lang="en"`), a message and a link to `/`; verify that `dist/404.html` exists and contains `href="/"`, and that `npm run preview` serves it for an unknown path
 
 ## 10. Deployment workflow
 
