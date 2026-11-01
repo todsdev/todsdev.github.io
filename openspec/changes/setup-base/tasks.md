@@ -40,7 +40,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 - [x] 4.3 Create `src/i18n/index.ts` with the locale list, locale→`lang` map (`en`, `pt-BR`, `es`), typed `t(locale, key)` and `localePath(locale, hash?)`; verify `npm run check` exits 0 and `localePath('pt-br', '#about')` is typed to return `/pt-br/#about`
 - [x] 4.4 Create `src/layouts/BaseLayout.astro` (props `locale`, `title`, `description`): `<html lang>`, charset, viewport, title, meta description, favicon (`public/favicon.svg`), font and CSS imports, the inline `js`-class script, and `hreflang` alternates for `en`, `pt-BR`, `es` and `x-default` with absolute URLs; verify that built pages contain each element
 - [x] 4.5 Add `src/pages/index.astro`, `src/pages/pt-br/index.astro` and `src/pages/es/index.astro` as thin wrappers using the layout (replacing the temporary page); verify `dist/index.html`, `dist/pt-br/index.html` and `dist/es/index.html` exist, with `lang` `en`, `pt-BR` and `es`, and that there is no `dist/en/`
-- [ ] 4.6 Document in `README.md` how to add or translate a UI string and how locales map to URLs; verify the documented file paths exist
+- [x] 4.6 Document in `README.md` how to add or translate a UI string and how locales map to URLs; verify the documented file paths exist
 
 ## 5. Content model
 

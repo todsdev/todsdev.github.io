@@ -26,3 +26,23 @@ npm run dev
 | `npm run lint`         | Lint with ESLint                                |
 | `npm run format`       | Format all files with Prettier                  |
 | `npm run format:check` | Verify formatting without writing changes       |
+
+## Languages
+
+The site is published in three locales:
+
+| Locale             | URL       | `<html lang>` | Dictionary          |
+| ------------------ | --------- | ------------- | ------------------- |
+| English (default)  | `/`       | `en`          | `src/i18n/en.ts`    |
+| Português (Brasil) | `/pt-br/` | `pt-BR`       | `src/i18n/pt-br.ts` |
+| Español            | `/es/`    | `es`          | `src/i18n/es.ts`    |
+
+Each locale page lives in `src/pages/` (`index.astro`, `pt-br/index.astro`, `es/index.astro`); locale helpers are in `src/i18n/index.ts`.
+
+### Adding or translating a UI string
+
+All user-visible UI text comes from the dictionaries; never hardcode text in components.
+
+1. Add the key to `src/i18n/en.ts` (the source of truth).
+2. Add the same key to `src/i18n/pt-br.ts` and `src/i18n/es.ts`. A missing or extra key fails `npm run check`.
+3. Use it in a component with `t(locale, "group.key")` from `src/i18n/index.ts`; keys are type-checked.
