@@ -80,6 +80,15 @@ const flags = { en: FlagUS, "pt-br": FlagBR, es: FlagES } as const;
     display: inline-flex;
     width: 1.4em;
     image-rendering: pixelated;
+    filter: grayscale(1);
+    transition: filter 150ms ease-out;
+  }
+
+  /* Active locale in color; hover/focus previews an inactive flag's color. */
+  .lang-switcher__link[aria-current] .lang-switcher__flag,
+  .lang-switcher__link:hover .lang-switcher__flag,
+  .lang-switcher__link:focus-visible .lang-switcher__flag {
+    filter: none;
   }
 
   .lang-switcher__flag :global(svg) {
