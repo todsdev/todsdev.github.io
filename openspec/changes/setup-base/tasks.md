@@ -16,7 +16,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 - [x] 1.1 Create `package.json` (name `todsdev.github.io`, `private: true`, `type: module`, `engines.node: ">=24"`) and install `astro`, plus `@astrojs/check` and `typescript` as dev deps; verify `npm install` succeeds and `package-lock.json` is created
 - [x] 1.2 Add `astro.config.mjs` with `site: 'https://todsdev.github.io'`, `output: 'static'`, no `base` and no adapter; verify `npx astro info` runs without config errors
 - [x] 1.3 Add `tsconfig.json` extending `astro/tsconfigs/strict`; verify `npx astro check` reports 0 errors
-- [ ] 1.4 Add `.gitignore` covering `node_modules/`, `dist/`, `.astro/`, `.env*`, `.DS_Store`; verify `git status` shows no build or dependency output after a build
+- [x] 1.4 Add `.gitignore` covering `node_modules/`, `dist/`, `.astro/`, `.env*`, `.DS_Store`; verify `git status` shows no build or dependency output after a build
 - [ ] 1.5 Add `dev`, `build` and `preview` scripts and a temporary minimal `src/pages/index.astro`; verify `npm run build` exits 0 and produces `dist/index.html`
 
 ## 2. Quality tooling
