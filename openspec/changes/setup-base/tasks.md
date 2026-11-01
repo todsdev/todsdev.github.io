@@ -21,7 +21,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 
 ## 2. Quality tooling
 
-- [ ] 2.1 Install `eslint`, `typescript-eslint` and `eslint-plugin-astro`; add flat `eslint.config.js` (no stylistic rules; ignore `dist/` and `.astro/`) and a `lint` script; verify `npm run lint` exits 0, and exits non-zero after temporarily adding an unused variable
+- [x] 2.1 Install `eslint`, `typescript-eslint` and `eslint-plugin-astro`; add flat `eslint.config.js` (no stylistic rules; ignore `dist/` and `.astro/`) and a `lint` script; verify `npm run lint` exits 0, and exits non-zero after temporarily adding an unused variable
 - [ ] 2.2 Install `prettier` and `prettier-plugin-astro`; add `.prettierrc` (plugin only) and `.prettierignore` (`dist/`, `.astro/`, `openspec/`, `.claude/`, `package-lock.json`), plus `format` and `format:check` scripts; run `npm run format` and verify `npm run format:check` exits 0
 - [ ] 2.3 Add a `check` script (`astro check`); verify it exits 0, and exits non-zero after temporarily introducing a type error
 - [ ] 2.4 Write `README.md` with prerequisites (Node 24 via `.nvmrc`), `npm ci` and every npm script; verify each documented command runs as written
