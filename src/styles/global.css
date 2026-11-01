@@ -79,6 +79,18 @@ a:hover {
   white-space: nowrap;
 }
 
+/* Section entrance: fade + small upward offset, once. Hidden only when JS runs. */
+[data-reveal] {
+  transition:
+    opacity 600ms ease-out,
+    transform 600ms ease-out;
+}
+
+.js [data-reveal]:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
 /* Smooth anchor scrolling, only when motion is welcome */
 @media (prefers-reduced-motion: no-preference) {
   html {
@@ -97,5 +109,10 @@ a:hover {
   *::after {
     animation: none !important;
     transition: none !important;
+  }
+
+  .js [data-reveal]:not(.is-visible) {
+    opacity: 1;
+    transform: none;
   }
 }
