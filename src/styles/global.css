@@ -79,6 +79,13 @@ a:hover {
   white-space: nowrap;
 }
 
+/* Smooth anchor scrolling, only when motion is welcome */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Reduced motion — no animation, no transitions, no smooth scrolling */
 @media (prefers-reduced-motion: reduce) {
   html {
