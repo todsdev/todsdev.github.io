@@ -30,7 +30,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
     // Never consults the browser language.
     (function () {
       try {
-        var saved = localStorage.getItem("preferred-locale");
+        const saved = localStorage.getItem("preferred-locale");
         if (saved === "pt-br" || saved === "es") {
           document.documentElement.style.visibility = "hidden";
           setTimeout(function () {
@@ -38,7 +38,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
           }, 3000);
           location.replace("/" + saved + "/" + location.hash);
         }
-      } catch (e) {
+      } catch {
         // Storage blocked: stay on English.
       }
     })();
