@@ -93,3 +93,6 @@ if (sections.length > 0) {
   );
   update();
 }
+
+// Treat as an ES module so top-level names stay file-scoped.
+export {};

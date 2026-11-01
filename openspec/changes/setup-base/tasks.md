@@ -71,7 +71,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 ## 8. Scroll thread
 
 - [x] 8.1 Create `src/components/ScrollThread.astro` inside `main` (`--text-dim` track, `--text-muted` fill scaled by `--progress` defaulting to 1, `aria-hidden`, `pointer-events: none`, `<slot name="markers" />`, a narrow-screen gutter that doesn't overlap content); verify in preview with JS disabled that the thread is fully drawn from the first to the last section and doesn't overlap text at 320px
-- [ ] 8.2 Add `src/scripts/thread.ts` (rAF-throttled passive scroll and resize, a clamped progress value written to `--progress`, `data-reached` toggled on `[data-thread-marker]` elements, skipped under reduced motion); verify in preview that the line grows and shrinks with scrolling, is near zero at top and full at bottom, and stays fully drawn with reduced motion emulated
+- [x] 8.2 Add `src/scripts/thread.ts` (rAF-throttled passive scroll and resize, a clamped progress value written to `--progress`, `data-reached` toggled on `[data-thread-marker]` elements, skipped under reduced motion); verify in preview that the line grows and shrinks with scrolling, is near zero at top and full at bottom, and stays fully drawn with reduced motion emulated
 - [ ] 8.3 Verify the marker hook by temporarily adding a `[data-thread-marker]` element through the slot at mid-page: it renders on the line and gains or loses `data-reached` as the line passes it. Remove it afterwards and document the marker contract in `README.md`
 
 ## 9. Placeholder 404

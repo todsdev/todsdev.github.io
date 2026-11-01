@@ -21,3 +21,6 @@ if (reduceMotion.matches || !("IntersectionObserver" in window)) {
   );
   targets.forEach((el) => observer.observe(el));
 }
+
+// Treat as an ES module so top-level names stay file-scoped.
+export {};
