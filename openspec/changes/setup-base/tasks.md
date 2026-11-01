@@ -59,7 +59,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 - [x] 6.4 Add `src/scripts/nav.ts`: IntersectionObserver active-section tracking (hero forced active at top) that sets `aria-current="location"` and `is-active` on exactly one link, with CSS for the `> ` prefix and the blinking `--highlight` block cursor (steady under reduced motion); verify in preview, by scrolling through every section, that exactly one link is active and the hero is active at top
 - [x] 6.5 Enable smooth anchor scrolling under `prefers-reduced-motion: no-preference` only; verify in preview that clicking a link scrolls smoothly and sets the hash, that opening `/#skills` and `/es/#skills` lands on skills with its link active, and that jumps are instant with reduced motion emulated
 - [x] 6.6 Add `src/scripts/reveal.ts` and the CSS for the fade + upward entrance (once per section, hidden only under `.js`); verify in preview that sections fade up when first scrolled into view, that all are visible with JS disabled, and that they are visible immediately with reduced motion emulated
-- [ ] 6.7 Verify keyboard-only use in preview: skip link first, then nav links, then switcher in order, with a visible focus everywhere and no traps
+- [x] 6.7 Verify keyboard-only use in preview: skip link first, then nav links, then switcher in order, with a visible focus everywhere and no traps
 
 ## 7. Language switcher
 
