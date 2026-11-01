@@ -48,7 +48,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 - [x] 5.2 Add placeholder YAML entries for every collection under `src/content/` (profile "Thiago Rodrigues", role "Android Developer" in all three locales; at least one English-only experience field); verify `npm run build` exits 0
 - [x] 5.3 Implement `src/lib/content.ts` (`localize`, `getEntries` with hidden filtering and `order` sorting, deduplicated `reportMissingTranslations(locale)`); verify the build log shows a `[content] missing pt-br …` and `es` warning for the English-only field, and that the build still exits 0
 - [x] 5.4 Verify the failure paths by temporarily setting a course `certificateUrl: not-a-url`, removing a contact `url`, removing a profile `role.en` and setting a project `status: paused`: each makes `npm run build` exit non-zero with a message naming the file and field. Revert afterwards (no commit for the reverts)
-- [ ] 5.5 Verify that `hidden: true` removes an entry from `getEntries` results and that `order` sorting holds (temporary log or check script); revert any temporary code
+- [x] 5.5 Verify that `hidden: true` removes an entry from `getEntries` results and that `order` sorting holds (temporary log or check script); revert any temporary code
 - [ ] 5.6 Document the collections, translatable-field format, fallback warnings and common fields in `README.md`; verify that the documented example YAML validates when added as an entry
 
 ## 6. Layout shell and navigation
