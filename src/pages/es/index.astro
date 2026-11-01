@@ -1,0 +1,17 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { t } from "../../i18n";
+
+const locale = "es";
+---
+
+<BaseLayout
+  locale={locale}
+  title={t(locale, "meta.title")}
+  description={t(locale, "meta.description")}
+>
+  <a class="skip-link" href="#main">
+    {t(locale, "skipLink")}
+  </a>
+  <main id="main"></main>
+</BaseLayout>
