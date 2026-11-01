@@ -88,7 +88,7 @@ Manual checks marked "in preview" mean `npm run build && npm run preview`, then 
 
 - [x] 11.1 From a clean `npm ci`, run `npm run check && npm run lint && npm run format:check && npm run build`; verify that all exit 0 and that the build log contains only the expected translation-fallback warnings
 - [x] 11.2 In preview, walk through all three locales end to end (nav active state, hash-preserving switch, persistence, thread, reveal, reduced motion, keyboard) and verify that no console errors or failed network requests occur
-- [ ] 11.3 Verify that the latest PR workflow run on `feat/setup-base` succeeds (`gh pr checks`), with build passing and deploy skipped
+- [x] 11.3 Verify that the latest PR workflow run on `feat/setup-base` succeeds (`gh pr checks`), with build passing and deploy skipped
 
 ## Workflow follow-up
 
