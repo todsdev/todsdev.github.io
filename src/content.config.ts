@@ -1,6 +1,7 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { SENTENCE_CASE_MESSAGE, startsWithCapital } from "./lib/sentence-case";
 
 /** Translatable text: only `en` is required; missing locales fall back to English. */
 export const localized = <T extends z.ZodType>(schema: T) =>
@@ -12,6 +13,12 @@ export const localized = <T extends z.ZodType>(schema: T) =>
 
 const text = z.string().min(1);
 const localizedText = localized(text);
+
+/** Prose (summaries, descriptions, journey steps): must be in sentence case. */
+const sentence = text.refine(startsWithCapital, {
+  message: SENTENCE_CASE_MESSAGE,
+});
+const localizedSentence = localized(sentence);
 
 /** Optional fields shared by every collection entry. */
 const common = z.object({
@@ -37,9 +44,11 @@ const profile = defineCollection({
       name: text,
       role: localizedText,
       location: localizedText,
-      summary: localizedText,
+      summary: localizedSentence,
       /** How the owner got here; `years` ending with a dash (e.g. "2016–") is ongoing. */
-      journey: z.array(z.object({ years: text, text: localizedText })).min(1),
+      journey: z
+        .array(z.object({ years: text, text: localizedSentence }))
+        .min(1),
       /** Technical focus shown in the about facts, e.g. "Android · Kotlin · Jetpack Compose". */
       focus: localizedText,
       /**
@@ -88,7 +97,7 @@ const experience = defineCollection({
     start: z.coerce.date(),
     /** Omitted while the position is current. */
     end: z.coerce.date().optional(),
-    description: localizedText,
+    description: localizedSentence,
     tech: z.array(text).default([]),
   }),
 });
@@ -97,7 +106,7 @@ const projects = defineCollection({
   loader: yamlIn("projects"),
   schema: common.extend({
     title: text,
-    description: localizedText,
+    description: localizedSentence,
     status: z.enum(["live", "building"]),
     url: z.url().optional(),
     repoUrl: z.url().optional(),
