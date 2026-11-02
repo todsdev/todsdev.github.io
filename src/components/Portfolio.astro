@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import About from "./About.astro";
 import Hero from "./Hero.astro";
 import Section from "./Section.astro";
 import ScrollThread from "./ScrollThread.astro";
@@ -53,9 +54,15 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   <main id="main" class="site-main">
     <ScrollThread />
     <Hero locale={locale} />
-    {contentSections.map((id) => (
-      <Section id={id} locale={locale} />
-    ))}
+    {contentSections.map((id) =>
+      id === "about" ? (
+        <Section id={id} locale={locale}>
+          <About locale={locale} />
+        </Section>
+      ) : (
+        <Section id={id} locale={locale} />
+      ),
+    )}
   </main>
 </BaseLayout>
 

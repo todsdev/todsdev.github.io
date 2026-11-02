@@ -17,15 +17,16 @@ npm run dev
 
 ## Scripts
 
-| Command                | What it does                                    |
-| ---------------------- | ----------------------------------------------- |
-| `npm run dev`          | Start the dev server at `http://localhost:4321` |
-| `npm run build`        | Build the static site into `dist/`              |
-| `npm run preview`      | Serve the built `dist/` locally                 |
-| `npm run check`        | Type-check `.astro` and `.ts` files             |
-| `npm run lint`         | Lint with ESLint                                |
-| `npm run format`       | Format all files with Prettier                  |
-| `npm run format:check` | Verify formatting without writing changes       |
+| Command                | What it does                                                |
+| ---------------------- | ----------------------------------------------------------- |
+| `npm run dev`          | Start the dev server at `http://localhost:4321`             |
+| `npm run build`        | Build the static site into `dist/`                          |
+| `npm run preview`      | Serve the built `dist/` locally                             |
+| `npm run check`        | Type-check `.astro` and `.ts` files                         |
+| `npm run lint`         | Lint with ESLint                                            |
+| `npm run format`       | Format all files with Prettier                              |
+| `npm run format:check` | Verify formatting without writing changes                   |
+| `npm test`             | Run the automated tests (`*.test.ts`, Node built-in runner) |
 
 ## Languages
 
@@ -51,18 +52,43 @@ All user-visible UI text comes from the dictionaries; never hardcode text in com
 
 Portfolio data lives in YAML under `src/content/<collection>/`, one file per entry, validated by the Zod schemas in `src/content.config.ts`.
 
-| Collection   | Fields (L = translatable)                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------ |
-| `profile`    | `name`, `role` (L), `location`, `summary` (L), `photo`, `availability` — single entry            |
-| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                        |
-| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]` |
-| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`        |
-| `skills`     | `category` (L), `items[]` — one entry per category                                               |
-| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                               |
-| `education`  | `institution`, `degree` (L), `start`, `end?`                                                     |
-| `languages`  | `name` (L), `proficiency` (L)                                                                    |
+| Collection   | Fields (L = translatable)                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry |
+| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                         |
+| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]`                  |
+| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`                         |
+| `skills`     | `category` (L), `items[]` — one entry per category                                                                |
+| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                |
+| `education`  | `institution`, `degree` (L), `start`, `end?`                                                                      |
+| `languages`  | `name` (L), `proficiency` (L)                                                                                     |
 
 Every entry also accepts optional `order` (number, ascending), `featured` (boolean) and `hidden` (boolean; hidden entries are never rendered).
+
+### Profile about fields
+
+The about section reads these profile fields:
+
+```yaml
+# src/content/profile/profile.yaml (about excerpt)
+location:
+  en: Rio de Janeiro, Brazil
+  pt-br: Rio de Janeiro, Brasil
+  es: Rio de Janeiro, Brasil
+journey:
+  - years: 2016–2022
+    text:
+      en: Biological Sciences at UFRJ
+      pt-br: Ciências Biológicas na UFRJ
+  - years: 2023–
+    text:
+      en: Android development
+focus:
+  en: Android · Kotlin · Jetpack Compose
+```
+
+- `location` and `focus` are translatable and appear in the about facts block.
+- `journey` is a non-empty list of steps, rendered in order. `years` is a plain string shown as written. A trailing dash (`2023–`) marks an ongoing range, rendered as `2023–present` / `2023–atual` / `2023–actualidad`. `text` is translatable.
 
 ### Profile photo and availability
 
@@ -126,7 +152,7 @@ The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in 
 
 The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
 
-- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check` and `npm run build`. Nothing is deployed.
+- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check`, `npm test` and `npm run build`. Nothing is deployed.
 - **Push or merge to `main`** (or a manual **Run workflow**): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.

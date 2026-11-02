@@ -30,6 +30,18 @@ export const es = {
     /** `{name}` is replaced with the profile name. */
     photoAlt: "Retrato de {name}",
   },
+  about: {
+    journeyCommand: "cat trayectoria.log",
+    factsCommand: "neofetch",
+    /** Appended to open-ended journey years, e.g. "2023–" → "2023–actualidad". */
+    present: "actualidad",
+    facts: {
+      location: "ubicación",
+      languages: "idiomas",
+      education: "formación",
+      focus: "enfoque",
+    },
+  },
   switcher: {
     label: "Idioma",
   },

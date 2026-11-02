@@ -36,8 +36,12 @@ const profile = defineCollection({
     common.extend({
       name: text,
       role: localizedText,
-      location: text,
+      location: localizedText,
       summary: localizedText,
+      /** How the owner got here; `years` ending with a dash (e.g. "2016–") is ongoing. */
+      journey: z.array(z.object({ years: text, text: localizedText })).min(1),
+      /** Technical focus shown in the about facts, e.g. "Android · Kotlin · Jetpack Compose". */
+      focus: localizedText,
       /**
        * Path relative to profile.yaml; optimized at build time. Checked first so a
        * missing file is reported against the profile entry and the `photo` field.
