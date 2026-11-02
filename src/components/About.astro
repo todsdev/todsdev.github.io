@@ -71,3 +71,100 @@ const languagesValue = languages
     </dl>
   </aside>
 </div>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5);
+    margin-top: var(--space-4);
+  }
+
+  /* Facts beside the main column on wide screens; after the journey on narrow ones. */
+  @media (min-width: 48rem) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+      align-items: start;
+    }
+  }
+
+  .about__summary {
+    max-width: 60ch;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .about__cmd {
+    margin-bottom: var(--space-3);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
+  .about__journey {
+    margin-top: var(--space-5);
+  }
+
+  .about__steps {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    font-size: 0.9375rem;
+  }
+
+  /* Narrow screens: years on their own line above the step text. */
+  .about__years {
+    display: block;
+    color: var(--text-muted);
+  }
+
+  /* Wider screens: terminal-output lines sharing one years column (subgrid), so
+     every step's text starts at the same x and wrapped lines align under it. */
+  @media (min-width: 30rem) {
+    .about__steps {
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: var(--space-2) 1ch;
+    }
+
+    .about__step {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: subgrid;
+    }
+  }
+
+  .about__step-text {
+    color: var(--text);
+  }
+
+  .about__facts {
+    padding-left: var(--space-3);
+    border-left: 1px solid var(--surface-2);
+  }
+
+  /* neofetch-style key/value rows sharing one key column. */
+  .about__list {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: var(--space-2) var(--space-3);
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .about__fact {
+    display: contents;
+  }
+
+  .about__list dt {
+    grid-column: 1;
+    color: var(--text-muted);
+  }
+
+  .about__list dd {
+    grid-column: 2;
+    margin: 0;
+    color: var(--text);
+  }
+</style>
