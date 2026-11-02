@@ -21,6 +21,15 @@ const education = await getEntries("education", locale);
 const formatYears = (years: string) =>
   /[–-]$/.test(years) ? `${years}${t(locale, "about.present")}` : years;
 
+// Hanging indent for the journey: width of the widest "[years]" label in this
+// locale. IBM Plex Mono advances every glyph (space included) by 0.6em; CSS `ch`
+// is not used because it does not match that advance for this font.
+const GLYPH_EM = 0.6;
+const yearsChars = Math.max(
+  ...profile.journey.map((step) => formatYears(step.years).length + 2),
+);
+const yearsWidth = `${(yearsChars * GLYPH_EM).toFixed(2)}em`;
+
 const languagesValue = languages
   .map((l) => `${l.name} (${l.proficiency})`)
   .join(" · ");
@@ -34,7 +43,11 @@ const languagesValue = languages
         <span aria-hidden="true">$&nbsp;</span>
         {t(locale, "about.journeyCommand")}
       </h3>
-      <ol class="about__steps" role="list">
+      <ol
+        class="about__steps"
+        role="list"
+        style={`--years-w: ${yearsWidth}; --glyph: ${GLYPH_EM}em`}
+      >
         {profile.journey.map((step) => (
           <li class="about__step">
             <span class="about__years">[{formatYears(step.years)}]</span>{" "}
@@ -114,24 +127,38 @@ const languagesValue = languages
     font-size: 0.9375rem;
   }
 
-  /* Narrow screens: years on their own line above the step text. */
+  /* Years and text stay inline, separated by a real space, so copying a step
+     yields "[2016–present] Quality control…". */
   .about__years {
-    display: block;
     color: var(--text-muted);
   }
 
-  /* Wider screens: terminal-output lines sharing one years column (subgrid), so
-     every step's text starts at the same x and wrapped lines align under it. */
+  /* Narrow screens: a generated (never copied) line break puts the years on
+     their own line above the text. */
+  @media (max-width: 29.99rem) {
+    .about__step-text::before {
+      content: "\A";
+      white-space: pre;
+    }
+  }
+
+  /* Wider screens: terminal-output lines with a hanging indent sized to the
+     widest years label plus the space, so all text starts at one column and
+     wrapped lines align under it. */
   @media (min-width: 30rem) {
     .about__steps {
-      grid-template-columns: max-content minmax(0, 1fr);
-      gap: var(--space-2) 1ch;
+      gap: var(--space-2);
     }
 
     .about__step {
-      display: grid;
-      grid-column: 1 / -1;
-      grid-template-columns: subgrid;
+      padding-left: calc(var(--years-w) + var(--glyph));
+      text-indent: calc(-1 * (var(--years-w) + var(--glyph)));
+    }
+
+    .about__years {
+      display: inline-block;
+      min-width: var(--years-w);
+      text-indent: 0;
     }
   }
 
