@@ -19,7 +19,7 @@ After completing each task during `/opsx:apply`:
 ## 2. Content model
 
 - [x] 2.1 Make profile `location` translatable (`localizedText`), add `journey` (`z.array({ years: text, text: localizedText }).min(1)`) and `focus` (`localizedText`) to the profile schema, and seed them in `profile.yaml` per design.md (location en "Rio de Janeiro, Brazil", pt-br/es "Rio de Janeiro, Brasil"; open ranges written as `2016–` / `2023–`); verify `npm run build` exits 0 with no fallback warnings, and that `getEntries("profile", "es")` returns location "Rio de Janeiro, Brasil" and three journey steps with Spanish text
-- [ ] 2.2 Verify the failure paths by temporarily emptying `journey`, removing a step's `years`, removing `journey[0].text.en`, removing `focus.en`, writing `location` as a plain string and removing `location.en`: each makes `npm run build` exit non-zero, naming the profile file and field. Revert afterwards
+- [x] 2.2 Verify the failure paths by temporarily emptying `journey`, removing a step's `years`, removing `journey[0].text.en`, removing `focus.en`, writing `location` as a plain string and removing `location.en`: each makes `npm run build` exit non-zero, naming the profile file and field. Revert afterwards
 - [ ] 2.3 Document translatable `location`, `journey` (including the trailing-dash convention) and `focus` in the README (Content table and profile section); verify the documented YAML validates
 
 ## 3. Testable fallback
