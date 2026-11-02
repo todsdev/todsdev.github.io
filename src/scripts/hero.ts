@@ -160,11 +160,23 @@ function start(): void {
   if (!name || !role) return;
   const lines = { name: buildLine(name), role: buildLine(role) };
   const controller = new AbortController();
+
+  // Any click or key press skips to the final state. No preventDefault: the
+  // interaction still does its normal job (follow a link, move focus, ...).
+  const skip = () => controller.abort();
+  const options = { capture: true, passive: true } as const;
+  window.addEventListener("pointerdown", skip, options);
+  window.addEventListener("keydown", skip, options);
+
   play(lines, controller.signal)
     .catch(() => {
       // Aborted: finish() below shows the final state.
     })
-    .finally(() => finish(lines));
+    .finally(() => {
+      window.removeEventListener("pointerdown", skip, options);
+      window.removeEventListener("keydown", skip, options);
+      finish(lines);
+    });
 }
 
 start();
