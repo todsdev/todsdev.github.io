@@ -26,7 +26,7 @@ After completing each task during `/opsx:apply`:
 
 - [x] 3.1 Move the pure localization logic into `src/lib/localize.ts` (no runtime imports, injectable `warn`, `resetFallbackWarnings()`), and make `content.ts` import it; verify `npm run build` output is byte-identical for `dist/index.html` before and after, and that `npm run check` and `npm run lint` pass
 - [x] 3.2 Add `src/lib/localize.test.ts` with inline fixtures covering: English fallback, one warning naming collection, entry, field and locale, deduplication, no warning when translated or for `en`, nested arrays (`journey[0].text`), and untouched non-localized objects. Add the `test` script (`node --test "src/**/*.test.ts"`), plus a typed setup that keeps `astro check` passing without new dependencies (exclude the test from `astro check` and add a minimal ambient declaration, or document why `@types/node` is needed). Verify `npm test` passes, and that it fails naming the test when `localize` is temporarily broken (revert)
-- [ ] 3.3 Add a `Test` step (`npm test`) to `.github/workflows/deploy.yml` between "Format check" and "Build", and document `npm test` in the README scripts table; verify the workflow validates and that the PR run for this push shows the Test step passing
+- [x] 3.3 Add a `Test` step (`npm test`) to `.github/workflows/deploy.yml` between "Format check" and "Build", and document `npm test` in the README scripts table; verify the workflow validates and that the PR run for this push shows the Test step passing
 
 ## 4. About section
 

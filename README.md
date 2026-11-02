@@ -17,15 +17,16 @@ npm run dev
 
 ## Scripts
 
-| Command                | What it does                                    |
-| ---------------------- | ----------------------------------------------- |
-| `npm run dev`          | Start the dev server at `http://localhost:4321` |
-| `npm run build`        | Build the static site into `dist/`              |
-| `npm run preview`      | Serve the built `dist/` locally                 |
-| `npm run check`        | Type-check `.astro` and `.ts` files             |
-| `npm run lint`         | Lint with ESLint                                |
-| `npm run format`       | Format all files with Prettier                  |
-| `npm run format:check` | Verify formatting without writing changes       |
+| Command                | What it does                                                |
+| ---------------------- | ----------------------------------------------------------- |
+| `npm run dev`          | Start the dev server at `http://localhost:4321`             |
+| `npm run build`        | Build the static site into `dist/`                          |
+| `npm run preview`      | Serve the built `dist/` locally                             |
+| `npm run check`        | Type-check `.astro` and `.ts` files                         |
+| `npm run lint`         | Lint with ESLint                                            |
+| `npm run format`       | Format all files with Prettier                              |
+| `npm run format:check` | Verify formatting without writing changes                   |
+| `npm test`             | Run the automated tests (`*.test.ts`, Node built-in runner) |
 
 ## Languages
 
@@ -151,7 +152,7 @@ The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in 
 
 The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
 
-- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check` and `npm run build`. Nothing is deployed.
+- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check`, `npm test` and `npm run build`. Nothing is deployed.
 - **Push or merge to `main`** (or a manual **Run workflow**): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
