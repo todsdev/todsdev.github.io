@@ -13,7 +13,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `l-*.mjs` (`./run.sh <s
 ## 2. Hero name on one line
 
 - [x] 2.1 Widen `--content-max` from 52rem to 60rem and add `--measure: 39em`. Cap `.about__summary` at `var(--measure)`. Verify that every section's left and right content edges match the hero's at 1280, 1440 and 1920px, that the about summary lines hold at most about 65 characters, that the about facts column and journey still lay out correctly, and that the `a43`, `a-space` and `t81` checks pass
-- [ ] 2.2 Make `.hero__text` a size container, pass `--name-chars` on the `h1`, and set the name size to `min(clamp(3rem, 2rem + 6vw, 5.5rem), max(2.5rem, calc(100cqi / (var(--name-chars) * 0.4))))`. Verify with `l-name.mjs`: one line at the full 88px size at 1280, 1440 and 1920px in all locales; one line at a smaller size at 768px; a single line or a clean wrap without overflow at 375 and 320px; photo width unchanged from the current build at each width
+- [x] 2.2 Make `.hero__text` a size container, pass `--name-chars` on the `h1`, and set the name size to `min(clamp(3rem, 2rem + 6vw, 5.5rem), max(2.5rem, calc(100cqi / (var(--name-chars) * 0.4))))`. Verify with `l-name.mjs`: one line at the full 88px size at 1280, 1440 and 1920px in all locales; one line at a smaller size at 768px; a single line or a clean wrap without overflow at 375 and 320px; photo width unchanged from the current build at each width
 - [ ] 2.3 Verify the typing animation still reserves the final layout: overlay and real text match within 1px and CLS is 0 during the full sequence at 1280px (one line) and at the narrowest width that wraps, if any. Rerun `h42`, `h43` and `h61`
 
 ## 3. Tilde
