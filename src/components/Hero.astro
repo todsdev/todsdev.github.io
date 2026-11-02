@@ -92,6 +92,22 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
     color: transparent;
   }
 
+  /* While typing: prompt fades in; photo slot stays dark; status waits. */
+  .hero[data-hero-state="typing"] .hero__prompt {
+    animation: hero-fade-in 300ms ease-out both;
+  }
+
+  .hero[data-hero-state="typing"] .hero__img,
+  .hero[data-hero-state="typing"] .hero__status {
+    visibility: hidden;
+  }
+
+  @keyframes hero-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
   .hero :global(.hero__ch.is-hidden),
   .hero[data-hero-state="done"] :global(.hero__ch) {
     visibility: hidden;
