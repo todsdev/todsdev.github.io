@@ -18,7 +18,7 @@ After completing each task during `/opsx:apply`:
 
 ## 2. Content model
 
-- [ ] 2.1 Generate the neutral placeholder `src/content/profile/photo.png` (720×900, generic silhouette on a gray gradient, made once with `sharp` from an inline SVG); verify the file is 720×900 and contains no real person
+- [x] 2.1 Generate the neutral placeholder `src/content/profile/photo.png` (720×900, generic silhouette on a gray gradient, made once with `sharp` from an inline SVG); verify the file is 720×900 and contains no real person
 - [ ] 2.2 Extend the profile schema in `src/content.config.ts` to the `({ image }) =>` form with `photo: image()` and `availability: { enabled: boolean, label: localized }`, and add `photo: ./photo.png` and `availability` (enabled, with en/pt-br/es labels "open to work", "disponível para trabalho", "disponible para trabajar") to `profile.yaml`; verify `npm run build` exits 0 and `getEntries("profile", …)` returns `photo` as image metadata (`src`, `width`, `height`)
 - [ ] 2.3 Verify the failure paths by temporarily pointing `photo` at a missing file, setting `availability.enabled: "yes"` and removing `availability.label.en`: each makes `npm run build` exit non-zero, naming the profile file and field. Also confirm that removing the `es` label only produces the fallback warning. Revert afterwards
 - [ ] 2.4 Document `photo` and `availability` in the README's Content section (including how to replace the placeholder photo and turn the badge off); verify the documented YAML validates
