@@ -22,7 +22,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `l-*.mjs` (`./run.sh <s
 
 ## 4. Scroll-thread track
 
-- [ ] 4.1 Change the track to `color-mix(in srgb, var(--text-dim) 45%, var(--bg))`. Verify with `l-track.mjs`: track contrast is between 1.3 and 2:1, the fill color is unchanged, the thread is fully drawn without JS and under reduced motion, and `t81` and `t82` still pass. Save a 1280px screenshot of the margin
+- [x] 4.1 Change the track to `color-mix(in srgb, var(--text-dim) 45%, var(--bg))`. Verify with `l-track.mjs`: track contrast is between 1.3 and 2:1, the fill color is unchanged, the thread is fully drawn without JS and under reduced motion, and `t81` and `t82` still pass. Save a 1280px screenshot of the margin
 
 ## 5. Nav at 320px
 

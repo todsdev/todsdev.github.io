@@ -36,9 +36,10 @@
     inset: 0;
   }
 
-  /* Decorative only: --text-dim is below 3:1 contrast. */
+  /* Decorative only, and deliberately faint (~1.5:1 against --bg) so the empty
+     left margin doesn't read as a sidebar; the fill keeps --text-muted. */
   .scroll-thread__track {
-    background: var(--text-dim);
+    background: color-mix(in srgb, var(--text-dim) 45%, var(--bg));
   }
 
   .scroll-thread__fill {
