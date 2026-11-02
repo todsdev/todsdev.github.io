@@ -22,6 +22,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   locale={locale}
   title={t(locale, "meta.title")}
   description={t(locale, "meta.description")}
+  heroIntro
 >
   {locale === "en" && <script is:inline slot="head-start">
     // Saved-language redirect for the unprefixed root only. Runs synchronously

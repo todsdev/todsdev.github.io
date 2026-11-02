@@ -58,6 +58,13 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
 </section>
 
 <style>
+  /* Pre-paint gate (set inline in <head>, cleared by hero.ts): nothing of the
+     final state is painted before the intro starts; the photo slot stays dark. */
+  :global(.hero-pending) .hero__text,
+  :global(.hero-pending) .hero__img {
+    visibility: hidden;
+  }
+
   .hero {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
