@@ -10,6 +10,17 @@ schema: spec-driven
 #     Write all artifacts in Spanish
 
 context: |
+  Content conventions:
+  - Sentence case: every sentence and every list item of prose content starts
+    with a capital letter, in all three locales (e.g. journey "Quality control
+    at 8 Olympic Games with OBS"). Fix it in the content YAML, never with CSS
+    text-transform, so screen readers, copy-paste and search engines get the
+    right text. The build enforces it for profile summary, journey text and
+    experience/project descriptions (src/lib/sentence-case.ts). Exceptions:
+    terminal commands and prompts ("$ cd ~/about", "./hello", "$ neofetch"),
+    the hero's deliberate "Android developer" typo, and names with their own
+    casing ("iOS", "gRPC", "act digital"); extend OWN_CASING_WORDS when needed.
+
   Known issues (fix in the polish change, then remove from this list):
   - Nav at 320px viewport width: the section-link strip is only ~119px wide
     beside the language switcher, so active labels with the "> " prefix and
