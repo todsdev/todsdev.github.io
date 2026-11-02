@@ -34,12 +34,68 @@ const { availability } = profile;
       <span data-type="role">{role}</span>
       {availability.enabled && (
         <span class="hero__status">
-          <span class="hero__status-dot" aria-hidden="true">
-            ●
-          </span>{" "}
+          <span class="hero__status-dot" aria-hidden="true"></span>
           {availability.label}
         </span>
       )}
     </p>
   </div>
 </section>
+
+<style>
+  .hero {
+    min-height: calc(100vh - var(--nav-height));
+    padding-block: var(--space-6);
+    scroll-margin-top: var(--nav-height);
+  }
+
+  /* The whole hero text block is VT323. */
+  .hero__text {
+    font-family: var(--font-title);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .hero__prompt {
+    color: var(--text-muted);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.6rem);
+  }
+
+  .hero__line {
+    position: relative;
+    font-family: var(--font-title);
+    font-weight: 400;
+  }
+
+  .hero__name {
+    margin-top: var(--space-3);
+    color: var(--text);
+    font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
+    line-height: 1;
+  }
+
+  .hero__role {
+    margin-top: var(--space-3);
+    color: var(--text);
+    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+  }
+
+  .hero__status {
+    display: inline-block;
+    margin-left: 0.75em;
+    color: var(--text-muted);
+    font-size: 0.7em;
+    white-space: nowrap;
+  }
+
+  /* Drawn, not a "●" glyph: VT323 has no U+25CF, which would fall back to another font. */
+  .hero__status-dot {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.4em;
+    border-radius: 50%;
+    background: var(--text);
+    vertical-align: 0.05em;
+  }
+</style>
