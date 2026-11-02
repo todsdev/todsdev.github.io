@@ -11,7 +11,7 @@ All work happens on `feat/content-sentence-case`. Never push directly to `main`.
 ## 2. Content and validation
 
 - [x] 2.1 Capitalize the prose that starts lowercase in `profile.yaml` (journey steps 2 and 3 in all locales); verify a scan of all content YAML finds no prose field starting with a lowercase letter
-- [ ] 2.2 Add `src/lib/sentence-case.ts` (`startsWithCapital(text)`: skips leading digits/punctuation, accepts the allowlisted names) and `src/lib/sentence-case.test.ts` (fixtures: lowercase fails; capitalized, digit-led, `¿Qué`, `iOS`/`gRPC` pass); verify `npm test` passes and fails when the rule is temporarily broken (revert)
+- [x] 2.2 Add `src/lib/sentence-case.ts` (`startsWithCapital(text)`: skips leading digits/punctuation, accepts the allowlisted names) and `src/lib/sentence-case.test.ts` (fixtures: lowercase fails; capitalized, digit-led, `¿Qué`, `iOS`/`gRPC` pass); verify `npm test` passes and fails when the rule is temporarily broken (revert)
 - [ ] 2.3 Use it in `src/content.config.ts` through a `sentence` schema helper for profile `summary`, journey `text`, experience and project `description`; verify `npm run build` passes, and that temporarily lowercasing a journey step's `pt-br` text and a project `description.es` each fail the build, naming the file, field and locale (revert)
 
 ## 3. Docs, rule and journey spacing
