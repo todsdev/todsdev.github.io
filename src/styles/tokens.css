@@ -24,7 +24,9 @@
 
   /* Layout */
   --nav-height: 3.5rem;
-  --content-max: 52rem;
+  --content-max: 60rem;
+  /* Reading measure for prose: about 65 characters of IBM Plex Mono (0.6em advance each). */
+  --measure: 39em;
   --thread-gutter: 2.5rem;
 }
 
