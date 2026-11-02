@@ -1,0 +1,12 @@
+category:
+  en: Backend
+  pt-br: Backend
+  es: Backend
+items:
+  - Java
+  - Spring Boot
+  - Python
+  - REST APIs
+  - GraphQL
+  - Web scraping
+order: 3

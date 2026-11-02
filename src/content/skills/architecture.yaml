@@ -1,0 +1,11 @@
+category:
+  en: Architecture
+  pt-br: Arquitetura
+  es: Arquitectura
+items:
+  - MVVM
+  - MVP
+  - Clean Architecture
+  - Modular Architecture
+  - SOLID
+order: 2

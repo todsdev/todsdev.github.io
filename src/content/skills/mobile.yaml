@@ -4,6 +4,13 @@ category:
   es: Móvil
 items:
   - Kotlin
-  - Android SDK
   - Jetpack Compose
+  - Android SDK
+  - Coroutines / Flow
+  - Room
+  - Retrofit
+  - Hilt
+  - Firebase
+  - Android TV
+  - Video playback & streaming
 order: 1

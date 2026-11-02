@@ -1,0 +1,22 @@
+# TODO: add the Play Store link in `url` after confirming the app can be shown in the portfolio.
+title: GloboPop
+description:
+  en: >-
+    Globo's short-form vertical video app. Compose-first and modular; I built end-to-end profile
+    features (profile editing, liked content) on GraphQL APIs and personalization features.
+  pt-br: >-
+    App de vídeos verticais curtos da Globo. Compose-first e modular; desenvolvi funcionalidades
+    de perfil de ponta a ponta (edição de perfil, conteúdos curtidos) com APIs GraphQL e recursos
+    de personalização.
+  es: >-
+    App de videos verticales cortos de Globo. Compose-first y modular; desarrollé
+    funcionalidades de perfil de punta a punta (edición de perfil, contenido con "me gusta") con
+    APIs GraphQL y funciones de personalización.
+status: live
+tech:
+  - Kotlin
+  - Jetpack Compose
+  - GraphQL
+  - Modular Architecture
+order: 1
+featured: true

@@ -1,0 +1,25 @@
+title: todsdev.github.io
+description:
+  en: >-
+    This portfolio. A static, three-language site with a retro terminal look, built change by
+    change with Spec-Driven Development: every feature starts as an OpenSpec proposal, gets
+    implemented one task per commit and is verified by automated browser checks.
+  pt-br: >-
+    Este portfólio. Um site estático em três idiomas com visual de terminal retrô, construído
+    mudança por mudança com Spec-Driven Development: cada funcionalidade começa como uma proposta
+    no OpenSpec, é implementada com um commit por task e verificada por checagens automatizadas
+    no navegador.
+  es: >-
+    Este portafolio. Un sitio estático en tres idiomas con estética de terminal retro, construido
+    cambio a cambio con Spec-Driven Development: cada funcionalidad empieza como una propuesta en
+    OpenSpec, se implementa con un commit por tarea y se verifica con pruebas automatizadas en el
+    navegador.
+status: live
+url: https://todsdev.github.io/
+repoUrl: https://github.com/todsdev/todsdev.github.io
+tech:
+  - Astro
+  - TypeScript
+  - OpenSpec
+  - GitHub Actions
+order: 4

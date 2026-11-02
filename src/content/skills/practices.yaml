@@ -1,0 +1,12 @@
+category:
+  en: Practices & tools
+  pt-br: Práticas e ferramentas
+  es: Prácticas y herramientas
+items:
+  - Spec-Driven Development (SDD)
+  - OpenSpec
+  - Git / GitHub
+  - Code review
+  - Testing
+  - Agile / Scrum
+order: 4
