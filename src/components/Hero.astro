@@ -166,27 +166,33 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
     visibility: hidden;
   }
 
-  /* Block cursor drawn after its host character; never affects layout. */
+  /* Block cursor: absolutely positioned on its host character; never affects layout. */
   .hero :global(.hero__ch.is-caret) {
     position: relative;
   }
 
-  .hero :global(.hero__ch.is-caret::after) {
+  /* Cursor after its host character (::after) or, at the start of a line,
+     before the first character (::before). Using two different pseudo-elements
+     means a moving cursor never counts as a layout shift. */
+  .hero :global(.hero__ch.is-caret:not(.is-caret-start)::after),
+  .hero :global(.hero__ch.is-caret-start::before) {
     content: "";
     position: absolute;
     top: 0.12em;
     bottom: 0.08em;
-    left: 100%;
     width: 0.5em;
-    margin-left: 0.08em;
     background: var(--highlight);
     visibility: visible;
     animation: hero-cursor-blink 1s steps(1) infinite;
   }
 
-  .hero :global(.hero__ch.is-caret-start::after) {
+  .hero :global(.hero__ch.is-caret:not(.is-caret-start)::after) {
+    left: 100%;
+    margin-left: 0.08em;
+  }
+
+  .hero :global(.hero__ch.is-caret-start::before) {
     left: 0;
-    margin-left: 0;
   }
 
   @keyframes hero-cursor-blink {
