@@ -27,7 +27,7 @@ summary:
     viene mi obsesión por los detalles.
 photo: ./photo.png
 availability:
-  enabled: true
+  enabled: false
   label:
     en: open to work
     pt-br: disponível
