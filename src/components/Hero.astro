@@ -108,6 +108,25 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
     animation: hero-crt-on 900ms ease-out both;
   }
 
+  /* The status appears once the photo has powered on (space stays reserved). */
+  .hero[data-hero-poweron] .hero__status {
+    animation: hero-status-in 300ms ease-out 900ms both;
+  }
+
+  @keyframes hero-status-in {
+    from {
+      visibility: hidden;
+      opacity: 0;
+    }
+    1% {
+      visibility: visible;
+    }
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
   @keyframes hero-crt-on {
     0% {
       opacity: 0;
