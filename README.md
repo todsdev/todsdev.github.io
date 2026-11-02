@@ -53,7 +53,7 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 
 | Collection   | Fields (L = translatable)                                                                        |
 | ------------ | ------------------------------------------------------------------------------------------------ |
-| `profile`    | `name`, `role` (L), `location`, `summary` (L) — single entry                                     |
+| `profile`    | `name`, `role` (L), `location`, `summary` (L), `photo`, `availability` — single entry            |
 | `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                        |
 | `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]` |
 | `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`        |
@@ -63,6 +63,24 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 | `languages`  | `name` (L), `proficiency` (L)                                                                    |
 
 Every entry also accepts optional `order` (number, ascending), `featured` (boolean) and `hidden` (boolean; hidden entries are never rendered).
+
+### Profile photo and availability
+
+The hero reads two profile fields from `src/content/profile/profile.yaml`:
+
+```yaml
+# src/content/profile/profile.yaml (excerpt)
+photo: ./photo.png
+availability:
+  enabled: true
+  label:
+    en: open to work
+    pt-br: disponível para trabalho
+    es: disponible para trabajar
+```
+
+- `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). `photo.png` is a neutral placeholder: to use the real photo, drop the file next to `profile.yaml` and update the path (or overwrite `photo.png`). A portrait around 4:5 works best. A missing file fails the build with `photo: image file not found`.
+- `availability` drives the `● open to work` badge in the hero. Set `enabled: false` to hide it, or change `label` to reword it. No code changes are needed. The label is translatable and falls back to English.
 
 ### Translatable fields
 
