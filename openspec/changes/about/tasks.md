@@ -39,7 +39,7 @@ After completing each task during `/opsx:apply`:
 
 - [x] 5.1 Rerun all suites in `~/portfolio-verify-scripts` (setup-base, hero and the new about scripts); verify they all pass, with no console errors and no failed requests in all three locales
 - [x] 5.2 From a clean `npm ci`, run `npm run check && npm run lint && npm run format:check && npm test && npm run build`; verify all exit 0 and the build has no warnings
-- [ ] 5.3 Verify the latest PR workflow run on `feat/about` succeeds (`gh pr checks`), with the Test and build steps passing and deploy skipped
+- [x] 5.3 Verify the latest PR workflow run on `feat/about` succeeds (`gh pr checks`), with the Test and build steps passing and deploy skipped
 
 ## Workflow follow-up
 
