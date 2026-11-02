@@ -14,5 +14,5 @@ availability:
   enabled: true
   label:
     en: open to work
-    pt-br: disponível para trabalho
-    es: disponible para trabajar
+    pt-br: disponível
+    es: disponible

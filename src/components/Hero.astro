@@ -279,8 +279,8 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
     line-height: 1;
   }
 
-  /* Status sits beside the role when it fits (English on desktop) and wraps
-     directly under it, without indent, for longer labels or narrow screens. */
+  /* Status sits beside the role (all locales from ~375px) and wraps directly
+     under it, without indent, on the narrowest screens. */
   .hero__role {
     display: flex;
     flex-wrap: wrap;

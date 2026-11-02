@@ -75,8 +75,8 @@ availability:
   enabled: true
   label:
     en: open to work
-    pt-br: disponível para trabalho
-    es: disponible para trabajar
+    pt-br: disponível
+    es: disponible
 ```
 
 - `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). `photo.png` is a neutral placeholder: to use the real photo, drop the file next to `profile.yaml` and update the path (or overwrite `photo.png`). A portrait around 4:5 works best. A missing file fails the build with `photo: image file not found`.
