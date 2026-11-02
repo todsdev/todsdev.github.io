@@ -37,14 +37,14 @@ journey:
   # A trailing dash marks an ongoing range ("2016–present" / "atual" / "actualidad").
   - years: 2016–
     text:
-      en: quality control at 8 Olympic Games with OBS
-      pt-br: controle de qualidade em 8 edições dos Jogos Olímpicos com a OBS
-      es: control de calidad en 8 ediciones de los Juegos Olímpicos con OBS
+      en: Quality control at 8 Olympic Games with OBS
+      pt-br: Controle de qualidade em 8 edições dos Jogos Olímpicos com a OBS
+      es: Control de calidad en 8 ediciones de los Juegos Olímpicos con OBS
   - years: 2023–
     text:
       en: Android development, from multiplatform at Horus to Globo apps
-      pt-br: desenvolvimento Android, do multiplataforma na Horus aos apps da Globo
-      es: desarrollo Android, del multiplataforma en Horus a las apps de Globo
+      pt-br: Desenvolvimento Android, do multiplataforma na Horus aos apps da Globo
+      es: Desarrollo Android, del multiplataforma en Horus a las apps de Globo
 focus:
   en: Android · Kotlin · Jetpack Compose
   pt-br: Android · Kotlin · Jetpack Compose
