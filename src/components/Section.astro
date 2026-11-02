@@ -3,32 +3,22 @@ import { t, type Locale } from "../i18n";
 import type { SectionId } from "../lib/sections";
 
 interface Props {
-  id: SectionId;
+  id: Exclude<SectionId, "hero">;
   locale: Locale;
-  /**
-   * Element for the terminal-prompt title. Sections use `h2`; the hero uses `p`
-   * because its `h1` (the owner's name) follows the prompt.
-   */
-  titleTag?: "h2" | "p";
 }
 
-const { id, locale, titleTag: TitleTag = "h2" } = Astro.props;
+const { id, locale } = Astro.props;
 const titleId = `${id}-title`;
 const prompt = t(locale, `prompt.${id}` as const);
 ---
 
-<section
-  id={id}
-  class="section"
-  data-reveal
-  aria-labelledby={TitleTag === "h2" ? titleId : undefined}
->
-  <TitleTag id={titleId} class="section__title">
+<section id={id} class="section" data-reveal aria-labelledby={titleId}>
+  <h2 id={titleId} class="section__title">
     <span class="section__prompt" aria-hidden="true">
       ${" "}
     </span>
     {prompt}
-  </TitleTag>
+  </h2>
   <slot />
 </section>
 

@@ -8,9 +8,11 @@ interface Props {
   locale: Locale;
   title: string;
   description: string;
+  /** Page has the animated hero intro: gate it before first paint. */
+  heroIntro?: boolean;
 }
 
-const { locale, title, description } = Astro.props;
+const { locale, title, description, heroIntro = false } = Astro.props;
 const site = Astro.site ?? new URL("https://todsdev.github.io");
 const alternates = locales.map((l) => ({
   hreflang: langCode[l],
@@ -27,6 +29,22 @@ const xDefault = new URL(localePath("en"), site).href;
     <script is:inline>
       document.documentElement.classList.replace("no-js", "js");
     </script>
+    {heroIntro && <script is:inline>
+      // Hide the hero's final text before first paint when its intro will
+      // play (motion allowed, no deep link to another section).
+      // src/scripts/hero.ts takes over; the timeout is a safety net in case
+      // that script never runs, so content is never stuck hidden.
+      (function () {
+        const root = document.documentElement;
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const hash = location.hash;
+        if (reduce || (hash !== "" && hash !== "#hero")) return;
+        root.classList.add("hero-pending");
+        setTimeout(function () {
+          root.classList.remove("hero-pending");
+        }, 4000);
+      })();
+    </script>}
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

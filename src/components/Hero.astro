@@ -1,0 +1,316 @@
+---
+/**
+ * Hero: prompt line, name (the page's h1), role and availability status.
+ * The server always renders the final state (`data-hero-state="final"`), so the
+ * content is complete without JavaScript; src/scripts/hero.ts animates an
+ * aria-hidden overlay on top of it.
+ */
+import { Picture } from "astro:assets";
+import { t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const [profile] = await getEntries("profile", locale);
+const [profileEn] = await getEntries("profile", "en");
+if (!profile || !profileEn) {
+  throw new Error("src/content/profile must contain one entry");
+}
+// The role is a job title: always shown in English, whatever the locale.
+const role = profileEn.role;
+const { availability } = profile;
+const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
+---
+
+<section id="hero" class="hero" data-reveal data-hero-state="final">
+  <div class="hero__text">
+    <p class="hero__prompt">{t(locale, "hero.prompt")}</p>
+    <h1 class="hero__line hero__name" data-type="name">
+      {profile.name}
+    </h1>
+    <p class="hero__line hero__role">
+      <span class="hero__role-text">
+        <span aria-hidden="true">&gt;&nbsp;</span>
+        <span data-type="role">{role}</span>
+      </span>
+      {availability.enabled && (
+        <span class="hero__status">
+          <span class="hero__status-dot" aria-hidden="true"></span>
+          {availability.label}
+        </span>
+      )}
+    </p>
+  </div>
+  <figure class="hero__photo">
+    <Picture
+      src={profile.photo}
+      alt={photoAlt}
+      formats={["avif", "webp"]}
+      widths={[240, 360, 480, 720]}
+      sizes="(min-width: 48rem) 16rem, 60vw"
+      loading="eager"
+      class="hero__img"
+    />
+  </figure>
+</section>
+
+<script>
+  import "../scripts/hero";
+</script>
+
+<style>
+  /* Pre-paint gate (set inline in <head>, cleared by hero.ts): nothing of the
+     final state is painted before the intro starts; the photo slot stays dark. */
+  :global(.hero-pending) .hero__text,
+  :global(.hero-pending) .hero__img {
+    visibility: hidden;
+  }
+
+  /* Animated overlay (created by src/scripts/hero.ts, hence :global). It sits
+     exactly over the real text, which keeps the layout and the accessible text. */
+  [data-type] {
+    position: relative;
+  }
+
+  .hero :global(.hero__overlay) {
+    position: absolute;
+    inset: 0;
+    color: var(--text);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The role is inline (single line): match its content box, not the line box. */
+  [data-type="role"] :global(.hero__overlay) {
+    line-height: normal;
+  }
+
+  .hero[data-hero-state="typing"] [data-type] {
+    color: transparent;
+  }
+
+  /* While typing: prompt fades in; photo slot stays dark; status waits. */
+  .hero[data-hero-state="typing"] .hero__prompt {
+    animation: hero-fade-in 300ms ease-out both;
+  }
+
+  .hero[data-hero-state="typing"] .hero__img,
+  .hero[data-hero-state="typing"] .hero__status {
+    visibility: hidden;
+  }
+
+  /* CRT power-on after the typing completes: a thin bright line opens up,
+     flashes, dims, then fades in to the grayscale resting state. */
+  .hero[data-hero-poweron] .hero__img {
+    animation: hero-crt-on 900ms ease-out both;
+  }
+
+  /* The status appears once the photo has powered on (space stays reserved). */
+  .hero[data-hero-poweron] .hero__status {
+    animation: hero-status-in 300ms ease-out 900ms both;
+  }
+
+  @keyframes hero-status-in {
+    from {
+      visibility: hidden;
+      opacity: 0;
+    }
+    1% {
+      visibility: visible;
+    }
+    to {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  @keyframes hero-crt-on {
+    0% {
+      opacity: 0;
+      transform: scaleY(0.02);
+      filter: grayscale(1) brightness(3);
+    }
+    10% {
+      opacity: 1;
+      transform: scaleY(0.02);
+      filter: grayscale(1) brightness(3);
+    }
+    22% {
+      opacity: 1;
+      transform: scaleY(1);
+      filter: grayscale(1) brightness(2.2);
+    }
+    38% {
+      opacity: 0.35;
+      transform: scaleY(1);
+      filter: grayscale(1) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+      filter: grayscale(1) contrast(1.05);
+    }
+  }
+
+  @keyframes hero-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .hero :global(.hero__ch.is-hidden),
+  .hero[data-hero-state="done"] :global(.hero__ch) {
+    visibility: hidden;
+  }
+
+  /* Block cursor: absolutely positioned on its host character; never affects layout. */
+  .hero :global(.hero__ch.is-caret) {
+    position: relative;
+  }
+
+  /* Cursor after its host character (::after) or, at the start of a line,
+     before the first character (::before). Using two different pseudo-elements
+     means a moving cursor never counts as a layout shift. */
+  .hero :global(.hero__ch.is-caret:not(.is-caret-start)::after),
+  .hero :global(.hero__ch.is-caret-start::before) {
+    content: "";
+    position: absolute;
+    top: 0.12em;
+    bottom: 0.08em;
+    width: 0.5em;
+    background: var(--highlight);
+    visibility: visible;
+    animation: hero-cursor-blink 1s steps(1) infinite;
+  }
+
+  .hero :global(.hero__ch.is-caret:not(.is-caret-start)::after) {
+    left: 100%;
+    margin-left: 0.08em;
+  }
+
+  .hero :global(.hero__ch.is-caret-start::before) {
+    left: 0;
+  }
+
+  @keyframes hero-cursor-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+    gap: var(--space-5);
+    min-height: calc(100vh - var(--nav-height));
+    padding-block: var(--space-6);
+    scroll-margin-top: var(--nav-height);
+  }
+
+  /* Photo above the text on narrow screens, beside it from 48rem. */
+  .hero__photo {
+    order: -1;
+    width: min(60vw, 15rem);
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--surface);
+  }
+
+  /* Subtle CRT scanlines over the photo (token-based color). */
+  .hero__photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0 2px,
+      color-mix(in srgb, var(--bg) 35%, transparent) 2px 3px
+    );
+    pointer-events: none;
+  }
+
+  @media (min-width: 48rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) min(16rem, 32vw);
+      align-items: center;
+    }
+
+    .hero__photo {
+      order: 0;
+      width: 100%;
+    }
+  }
+
+  .hero__photo :global(.hero__img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.05);
+  }
+
+  /* The whole hero text block is VT323. */
+  .hero__text {
+    font-family: var(--font-title);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .hero__prompt {
+    color: var(--text-muted);
+    font-size: clamp(1.25rem, 1rem + 1vw, 1.6rem);
+  }
+
+  .hero__line {
+    position: relative;
+    font-family: var(--font-title);
+    font-weight: 400;
+  }
+
+  .hero__name {
+    margin-top: var(--space-3);
+    color: var(--text);
+    font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
+    line-height: 1;
+  }
+
+  /* Status sits beside the role (all locales from ~375px) and wraps directly
+     under it, without indent, on the narrowest screens. */
+  .hero__role {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.5em;
+    row-gap: var(--space-2);
+    margin-top: var(--space-3);
+    color: var(--text);
+    font-size: clamp(1.6rem, 1.2rem + 2vw, 2.4rem);
+  }
+
+  .hero__role-text {
+    white-space: nowrap;
+  }
+
+  .hero__status {
+    display: inline-block;
+    color: var(--text-muted);
+    font-size: 0.7em;
+    white-space: nowrap;
+  }
+
+  /* Drawn, not a "●" glyph: VT323 has no U+25CF, which would fall back to another font. */
+  .hero__status-dot {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-right: 0.4em;
+    border-radius: 50%;
+    background: var(--text);
+    vertical-align: 0.05em;
+  }
+</style>

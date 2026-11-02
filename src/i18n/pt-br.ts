@@ -18,13 +18,17 @@ export const ptBr = {
     contact: "Contato",
   },
   prompt: {
-    hero: "whoami",
     about: "cd ~/sobre",
     experience: "ls ./experiencia",
     projects: "ls ./projetos",
     skills: "cat habilidades.txt",
     courses: "ls ./cursos",
     contact: "./contato.sh",
+  },
+  hero: {
+    prompt: "~/portfolio $ ./ola",
+    /** `{name}` is replaced with the profile name. */
+    photoAlt: "Retrato de {name}",
   },
   switcher: {
     label: "Idioma",

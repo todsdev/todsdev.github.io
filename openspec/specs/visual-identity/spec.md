@@ -39,7 +39,7 @@ The `--text-dim` token (contrast below 3:1 on every surface) SHALL NOT be used f
 - **THEN** its color is `--text`, `--text-muted` or `--highlight`, never `--text-dim`
 
 ### Requirement: Self-hosted typography
-The site SHALL use VT323 for the hero title and section titles and IBM Plex Mono for all other text, both served from the site's own origin, with fallback monospace fonts and non-blocking font loading.
+The site SHALL use VT323 for the hero text block (prompt line, name, role and status) and for section titles, and IBM Plex Mono for all other text. Both are served from the site's own origin, with fallback monospace fonts and non-blocking font loading.
 
 #### Scenario: No third-party font requests
 - **WHEN** a page loads
@@ -48,6 +48,10 @@ The site SHALL use VT323 for the hero title and section titles and IBM Plex Mono
 #### Scenario: Accented characters
 - **WHEN** Portuguese or Spanish text with accented characters is rendered
 - **THEN** it is displayed in the specified font without falling back for those glyphs
+
+#### Scenario: Hero text block
+- **WHEN** the hero is rendered in any locale
+- **THEN** its prompt line, name, role and status badge are all rendered in VT323
 
 ### Requirement: Terminal-prompt section titles
 Each section title SHALL be presented as a terminal prompt (for example `$ cd ~/about`, `$ ls ./experience`, `$ cat skills.txt`), with the command text coming from the active locale's dictionary.
