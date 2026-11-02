@@ -18,10 +18,10 @@ Every push to the `main` branch SHALL trigger an automated build and, if it succ
 - **THEN** the current `main` is built and deployed
 
 ### Requirement: Checks gate deployment
-A deployment SHALL proceed only if the type check, lint, format check and build all succeed.
+A deployment SHALL proceed only if the type check, lint, format check, automated tests and build all succeed.
 
 #### Scenario: Failing check blocks deploy
-- **WHEN** any quality check or the build fails during the workflow
+- **WHEN** any quality check, the automated tests or the build fail during the workflow
 - **THEN** no deployment occurs and the previously published site remains live
 
 ### Requirement: Pull request verification
