@@ -26,7 +26,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `l-*.mjs` (`./run.sh <s
 
 ## 5. Nav at 320px
 
-- [ ] 5.1 Add the narrow-width (< 360px) spacing and label size for the nav and the language switcher. Verify with `l-nav.mjs`: at 320px every active label in EN/PT/ES (Experience, Experiência, Habilidades, Experiencia, Proyectos, ...) fits fully inside the strip; tabbing reaches every link and language control and scrolls each into view; switcher codes stay visible; computed nav styles at 360px and 1280px are unchanged. Rerun `t63` and `kbd`
+- [x] 5.1 Add the narrow-width (< 360px) spacing and label size for the nav and the language switcher. Verify with `l-nav.mjs`: at 320px every active label in EN/PT/ES (Experience, Experiência, Habilidades, Experiencia, Proyectos, ...) fits fully inside the strip; tabbing reaches every link and language control and scrolls each into view; switcher codes stay visible; computed nav styles at 360px and 1280px are unchanged. Rerun `t63` and `kbd`
 
 ## 6. Font loading
 

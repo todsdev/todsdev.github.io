@@ -80,6 +80,17 @@ const flags = { en: FlagUS, "pt-br": FlagBR, es: FlagES } as const;
     outline-offset: -2px;
   }
 
+  /* Narrowest phones (< 360px): compact switcher; flags and codes stay visible. */
+  @media (max-width: 22.49rem) {
+    .lang-switcher {
+      gap: 2px;
+    }
+
+    .lang-switcher__link {
+      padding-inline: 0.25rem;
+    }
+  }
+
   .lang-switcher__flag {
     display: inline-flex;
     width: 1.4em;

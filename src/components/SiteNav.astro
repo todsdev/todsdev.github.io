@@ -110,6 +110,20 @@ const { locale } = Astro.props;
     outline-offset: -2px;
   }
 
+  /* Narrowest phones (< 360px): tighter spacing and a slightly smaller label so
+     the longest active label ("> Experiência", "> Habilidades") fits the strip. */
+  @media (max-width: 22.49rem) {
+    .site-nav {
+      gap: var(--space-2);
+      padding-inline: var(--space-2);
+    }
+
+    .site-nav__link {
+      padding-inline: var(--space-1);
+      font-size: 0.8125rem;
+    }
+  }
+
   .site-nav__end {
     flex: none;
     display: flex;
