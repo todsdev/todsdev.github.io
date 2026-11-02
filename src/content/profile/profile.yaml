@@ -1,14 +1,30 @@
-# Placeholder profile — summary copy lands with the about change; photo.png is a neutral placeholder.
+# Role stays "Android Developer" in every locale: it is a job title, and the hero's
+# typo-correction animation works on the English wording.
 name: Thiago Rodrigues
 role:
   en: Android Developer
-  pt-br: Desenvolvedor Android
-  es: Desarrollador Android
-location: Remote
+  pt-br: Android Developer
+  es: Android Developer
+location: Rio de Janeiro, Brazil
 summary:
-  en: Placeholder summary. Real content comes in a later change.
-  pt-br: Resumo provisório. O conteúdo real vem em uma mudança futura.
-  es: Resumen provisional. El contenido real llegará en un cambio futuro.
+  en: >-
+    Android Developer with 3 years of experience building and evolving apps in big tech
+    and startup environments, from Compose-first video experiences at Globo
+    to multiplatform and backend work at Horus. Before writing code, I spent a decade in
+    quality control for live broadcasts at eight Olympic Games, which is where my obsession
+    with detail comes from.
+  pt-br: >-
+    Desenvolvedor Android com 3 anos de experiência criando e evoluindo apps em big techs e
+    startups, de experiências de vídeo Compose-first na Globo a trabalho multiplataforma e de
+    backend na Horus. Antes de programar, passei uma década no controle de qualidade de
+    transmissões ao vivo em oito edições dos Jogos Olímpicos, e é daí que vem a minha
+    obsessão por detalhes.
+  es: >-
+    Desarrollador Android con 3 años de experiencia creando y evolucionando apps en grandes
+    tecnológicas y startups, desde experiencias de video Compose-first en Globo hasta trabajo
+    multiplataforma y de backend en Horus. Antes de programar, pasé una década en el control
+    de calidad de transmisiones en vivo en ocho ediciones de los Juegos Olímpicos, y de ahí
+    viene mi obsesión por los detalles.
 photo: ./photo.png
 availability:
   enabled: true

@@ -1,0 +1,39 @@
+company: "act digital (client: Globo)"
+role:
+  en: Android Developer
+  pt-br: Desenvolvedor Android
+  es: Desarrollador Android
+location: Rio de Janeiro, Brazil
+start: 2025-01-01
+end: 2026-03-31
+description:
+  en: >-
+    Built and maintained Globo's Android apps in Kotlin. On GloboPop, a Compose-first, modular
+    app for short-form vertical video, I delivered end-to-end profile features (profile editing,
+    liked content) on GraphQL APIs and personalization features in Jetpack Compose. On Premiere
+    and Combate, I worked on TV-focused experiences across Android platforms, video playback and
+    streaming, and the metrics and analytics behind content consumption. Active in code reviews,
+    architecture discussions and technical decisions.
+  pt-br: >-
+    Desenvolvi e mantive apps Android da Globo em Kotlin. No GloboPop, um app modular e
+    Compose-first de vídeos verticais curtos, entreguei funcionalidades de perfil de ponta a ponta
+    (edição de perfil, conteúdos curtidos) com APIs GraphQL e recursos de personalização em
+    Jetpack Compose. No Premiere e no Combate, trabalhei em experiências para TV em diferentes
+    plataformas Android, reprodução de vídeo e streaming, e nas métricas e analytics de consumo
+    de conteúdo. Participação ativa em code reviews, discussões de arquitetura e decisões técnicas.
+  es: >-
+    Desarrollé y mantuve apps Android de Globo en Kotlin. En GloboPop, una app modular y
+    Compose-first de videos verticales cortos, entregué funcionalidades de perfil de punta a punta
+    (edición de perfil, contenido con "me gusta") con APIs GraphQL y funciones de personalización
+    en Jetpack Compose. En Premiere y Combate, trabajé en experiencias para TV en distintas
+    plataformas Android, reproducción de video y streaming, y en las métricas y analytics de
+    consumo de contenido. Participación activa en code reviews, discusiones de arquitectura y
+    decisiones técnicas.
+tech:
+  - Kotlin
+  - Jetpack Compose
+  - GraphQL
+  - REST APIs
+  - Modular Architecture
+  - Android TV
+order: 1

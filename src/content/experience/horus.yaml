@@ -1,0 +1,31 @@
+company: Horus
+role:
+  en: Android & Backend Developer Jr.
+  pt-br: Desenvolvedor Android & Backend Jr.
+  es: Desarrollador Android & Backend Jr.
+location: Rio de Janeiro, Brazil
+start: 2023-05-01
+end: 2024-11-30
+description:
+  en: >-
+    Maintained and evolved mobile apps with a focus on multiplatform solutions and shared
+    codebases, shipping features, fixing bugs and improving stability. On the backend, built
+    services and REST APIs with Java and Spring Boot, plus Python web scraping tools and data
+    pipelines that fed mobile features.
+  pt-br: >-
+    Mantive e evoluí apps mobile com foco em soluções multiplataforma e código compartilhado,
+    entregando funcionalidades, corrigindo bugs e melhorando a estabilidade. No backend, criei
+    serviços e APIs REST com Java e Spring Boot, além de ferramentas de web scraping e pipelines
+    de dados em Python que alimentavam funcionalidades do app.
+  es: >-
+    Mantuve y evolucioné apps móviles con foco en soluciones multiplataforma y código
+    compartido, entregando funcionalidades, corrigiendo bugs y mejorando la estabilidad. En el
+    backend, desarrollé servicios y APIs REST con Java y Spring Boot, además de herramientas de
+    web scraping y pipelines de datos en Python que alimentaban funcionalidades de la app.
+tech:
+  - Kotlin
+  - Java
+  - Spring Boot
+  - Python
+  - REST APIs
+order: 2

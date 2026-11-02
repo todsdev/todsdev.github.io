@@ -1,0 +1,22 @@
+# TODO: add the Play Store link in `url` after confirming the app can be shown in the portfolio.
+title: Premiere
+description:
+  en: >-
+    Globo's football streaming app. I worked on new features, TV-focused experiences across
+    Android platforms, video playback and the analytics behind content consumption.
+  pt-br: >-
+    App de streaming de futebol da Globo. Trabalhei em novas funcionalidades, experiências para
+    TV em diferentes plataformas Android, reprodução de vídeo e no analytics de consumo de
+    conteúdo.
+  es: >-
+    App de streaming de fútbol de Globo. Trabajé en nuevas funcionalidades, experiencias para TV
+    en distintas plataformas Android, reproducción de video y en la analítica de consumo de
+    contenido.
+status: live
+tech:
+  - Kotlin
+  - Android TV
+  - Video streaming
+  - Analytics
+order: 2
+featured: true

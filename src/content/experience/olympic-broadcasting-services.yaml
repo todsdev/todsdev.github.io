@@ -1,0 +1,52 @@
+company: Olympic Broadcasting Services
+role:
+  en: Broadcast Operations, from Logger to Quality Control Coordinator (freelance)
+  pt-br: Operações de Transmissão, de Logger a Quality Control Coordinator (freelance)
+  es: Operaciones de Transmisión, de Logger a Quality Control Coordinator (freelance)
+location: Worldwide
+start: 2016-08-01
+description:
+  en: >-
+    Event-based freelance work in an international, English-first broadcasting environment at
+    eight Olympic Games. Progressed from logging live competition footage to quality control,
+    and coordinated a quality control team working with international crews to keep broadcast
+    standards during live events.
+  pt-br: >-
+    Trabalho freelance por evento em um ambiente internacional de transmissão, com o inglês como
+    língua de trabalho, em oito edições dos Jogos Olímpicos. Comecei registrando imagens de
+    competições ao vivo, passei ao controle de qualidade e coordenei uma equipe de QC junto a
+    times internacionais para manter o padrão das transmissões ao vivo.
+  es: >-
+    Trabajo freelance por evento en un entorno internacional de transmisión, con el inglés como
+    idioma de trabajo, en ocho ediciones de los Juegos Olímpicos. Empecé registrando imágenes de
+    competiciones en vivo, pasé al control de calidad y coordiné un equipo de QC junto a equipos
+    internacionales para mantener el estándar de las transmisiones en vivo.
+tech: []
+order: 3
+# Not in the current schema (stripped at build time). To be added to the experience schema
+# in the experience-timeline change, so each Games edition becomes a marker on the timeline.
+events:
+  - year: 2026
+    name: Dakar 2026 Youth Olympic Games
+    role: Quality Control Specialist
+  - year: 2026
+    name: Milano Cortina 2026 Olympic Winter Games
+    role: Quality Control Coordinator
+  - year: 2024
+    name: Paris 2024 Olympic Games
+    role: Quality Control Specialist
+  - year: 2022
+    name: Beijing 2022 Olympic and Paralympic Winter Games
+    role: Quality Control Specialist & Pro Video Logger
+  - year: 2021
+    name: Tokyo 2020 Olympic and Paralympic Games
+    role: Pro Video Logger
+  - year: 2018
+    name: Buenos Aires 2018 Youth Olympic Games
+    role: File Transfer
+  - year: 2018
+    name: PyeongChang 2018 Olympic Winter Games
+    role: Video Logger
+  - year: 2016
+    name: Rio 2016 Olympic and Paralympic Games
+    role: Logger
