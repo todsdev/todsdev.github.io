@@ -31,7 +31,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `l-*.mjs` (`./run.sh <s
 ## 6. Font loading
 
 - [x] 6.1 Identify which characters on each page trigger the latin-ext font files, and decide which woff2 files are needed above the fold; record the finding in the PR description
-- [ ] 6.2 Preload the above-the-fold woff2 files in `BaseLayout.astro` via `?url` imports (`as="font" type="font/woff2" crossorigin`). Verify the preload URLs equal the `@font-face` URLs in the built CSS and each font file is requested once
+- [x] 6.2 Preload the above-the-fold woff2 files in `BaseLayout.astro` via `?url` imports (`as="font" type="font/woff2" crossorigin`). Verify the preload URLs equal the `@font-face` URLs in the built CSS and each font file is requested once
 - [ ] 6.3 Add the metric-matched `"VT323 Fallback"` and `"IBM Plex Mono Fallback"` faces and insert them into the token stacks. Verify that with web fonts blocked (request interception) the nav link widths and hero name width match the web-font layout within 1px, and `l-cls.mjs` reports CLS 0 locally with fonts artificially delayed by 1s
 - [ ] 6.4 Remove both fixed items from the known issues in `openspec/config.yaml` (keep the content conventions); verify the YAML parses and the CLI context no longer lists them
 
