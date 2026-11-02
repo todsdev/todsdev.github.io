@@ -16,6 +16,11 @@ context: |
     cursor (EN "Experience"; PT "Experiência", "Habilidades"; ES "Experiencia",
     "Proyectos", "Habilidades") are wider than the strip and show truncated.
     Fine from 360px up. Found during the hero change (2026-11-02).
+  - Font-swap layout shift: on the live site the self-hosted IBM Plex Mono can
+    arrive after first paint, and the swap shifts the nav links (intermittent,
+    CLS ~0.0004, ~200-600 ms after load; not reproducible locally). Fix:
+    preload the fonts (e.g. <link rel="preload" as="font" crossorigin> for the
+    latin woff2 files). Found verifying the hero deploy (2026-11-02).
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
