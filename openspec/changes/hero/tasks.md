@@ -50,7 +50,7 @@ After completing each task during `/opsx:apply`:
 - [x] 6.1 Verify there's no layout shift: record `layout-shift` entries (PerformanceObserver) during the full sequence at 1280px and 320px, and confirm the hero's box and the `#about` top stay constant; expect a CLS contribution of 0
 - [x] 6.2 Rerun the setup-base verification suites (`e2e`, `t63`–`t74`, `t81`, `t82`, `t91`, `kbd`) from `~/portfolio-verify-scripts`, updating any assertion that relied on the old `$ whoami` hero; verify they all pass, with no console errors and no failed requests in all three locales
 - [x] 6.3 From a clean `npm ci`, run `npm run check && npm run lint && npm run format:check && npm run build`; verify all exit 0 and that the only build warnings are the expected translation fallbacks
-- [ ] 6.4 Verify the latest PR workflow run on `feat/hero` succeeds (`gh pr checks`), with build passing and deploy skipped
+- [x] 6.4 Verify the latest PR workflow run on `feat/hero` succeeds (`gh pr checks`), with build passing and deploy skipped
 
 ## Workflow follow-up
 
