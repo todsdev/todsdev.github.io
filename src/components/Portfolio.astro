@@ -52,9 +52,10 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   </SiteNav>
   <main id="main" class="site-main">
     <ScrollThread />
-    <Section id="hero" locale={locale} titleTag="p">
+    <section id="hero" class="section" data-reveal>
+      <p class="hero__prompt">{t(locale, "hero.prompt")}</p>
       <h1 class="hero__name">{profile.name}</h1>
-    </Section>
+    </section>
     {contentSections.map((id) => (
       <Section id={id} locale={locale} />
     ))}

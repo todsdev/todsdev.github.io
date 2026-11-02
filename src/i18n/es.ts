@@ -18,13 +18,17 @@ export const es = {
     contact: "Contacto",
   },
   prompt: {
-    hero: "whoami",
     about: "cd ~/sobre-mi",
     experience: "ls ./experiencia",
     projects: "ls ./proyectos",
     skills: "cat habilidades.txt",
     courses: "ls ./cursos",
     contact: "./contacto.sh",
+  },
+  hero: {
+    prompt: "~/portfolio $ ./hola",
+    /** `{name}` is replaced with the profile name. */
+    photoAlt: "Retrato de {name}",
   },
   switcher: {
     label: "Idioma",
