@@ -102,6 +102,40 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
     visibility: hidden;
   }
 
+  /* CRT power-on after the typing completes: a thin bright line opens up,
+     flashes, dims, then fades in to the grayscale resting state. */
+  .hero[data-hero-poweron] .hero__img {
+    animation: hero-crt-on 900ms ease-out both;
+  }
+
+  @keyframes hero-crt-on {
+    0% {
+      opacity: 0;
+      transform: scaleY(0.02);
+      filter: grayscale(1) brightness(3);
+    }
+    10% {
+      opacity: 1;
+      transform: scaleY(0.02);
+      filter: grayscale(1) brightness(3);
+    }
+    22% {
+      opacity: 1;
+      transform: scaleY(1);
+      filter: grayscale(1) brightness(2.2);
+    }
+    38% {
+      opacity: 0.35;
+      transform: scaleY(1);
+      filter: grayscale(1) brightness(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleY(1);
+      filter: grayscale(1) contrast(1.05);
+    }
+  }
+
   @keyframes hero-fade-in {
     from {
       opacity: 0;

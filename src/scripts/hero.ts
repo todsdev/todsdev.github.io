@@ -142,8 +142,12 @@ async function play(
   }
 }
 
-/** Jump to the final state: real text visible, cursor after the role. */
-function finish(lines: { name: Line; role: Line }): void {
+/**
+ * Final state: real text visible, cursor after the role. `powerOn` plays the CRT
+ * power-on (natural end of the sequence); a skip shows the photo already on.
+ */
+function finish(lines: { name: Line; role: Line }, powerOn: boolean): void {
+  if (powerOn && hero) hero.dataset.heroPoweron = "";
   for (const line of [lines.name, lines.role]) {
     line.chars.forEach((c, i) => (c.textContent = line.text[i] ?? ""));
     reveal(line, line.chars.length);
@@ -169,13 +173,14 @@ function start(): void {
   window.addEventListener("keydown", skip, options);
 
   play(lines, controller.signal)
-    .catch(() => {
-      // Aborted: finish() below shows the final state.
-    })
-    .finally(() => {
+    .then(
+      () => true,
+      () => false, // aborted by a skip
+    )
+    .then((completed) => {
       window.removeEventListener("pointerdown", skip, options);
       window.removeEventListener("keydown", skip, options);
-      finish(lines);
+      finish(lines, completed);
     });
 }
 

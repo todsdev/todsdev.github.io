@@ -42,7 +42,7 @@ After completing each task during `/opsx:apply`:
 
 ## 5. Photo power-on and status reveal
 
-- [ ] 5.1 Add the CRT power-on keyframes (line squash, brightness flash, fade to the grayscale rest, about 900 ms) triggered by `[data-hero-state="done"]`, with the photo slot dark until then; verify in preview, by sampling the computed opacity and filter over time after typing ends, that a brightness peak greater than 1 is followed by a settle at `grayscale(1)` with opacity 1
+- [x] 5.1 Add the CRT power-on keyframes (line squash, brightness flash, fade to the grayscale rest, about 900 ms) triggered by `[data-hero-state="done"]`, with the photo slot dark until then; verify in preview, by sampling the computed opacity and filter over time after typing ends, that a brightness peak greater than 1 is followed by a settle at `grayscale(1)` with opacity 1
 - [ ] 5.2 Reveal the status badge after the power-on (space reserved with `visibility: hidden`); verify in preview that the badge becomes visible only after the power-on peak, and that with `availability.enabled: false` (temporary) no badge is rendered in any locale. Revert afterwards
 
 ## 6. Integration
