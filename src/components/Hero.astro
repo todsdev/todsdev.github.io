@@ -57,12 +57,73 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
   </figure>
 </section>
 
+<script>
+  import "../scripts/hero";
+</script>
+
 <style>
   /* Pre-paint gate (set inline in <head>, cleared by hero.ts): nothing of the
      final state is painted before the intro starts; the photo slot stays dark. */
   :global(.hero-pending) .hero__text,
   :global(.hero-pending) .hero__img {
     visibility: hidden;
+  }
+
+  /* Animated overlay (created by src/scripts/hero.ts, hence :global). It sits
+     exactly over the real text, which keeps the layout and the accessible text. */
+  [data-type] {
+    position: relative;
+  }
+
+  .hero :global(.hero__overlay) {
+    position: absolute;
+    inset: 0;
+    color: var(--text);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* The role is inline (single line): match its content box, not the line box. */
+  [data-type="role"] :global(.hero__overlay) {
+    line-height: normal;
+  }
+
+  .hero[data-hero-state="typing"] [data-type] {
+    color: transparent;
+  }
+
+  .hero :global(.hero__ch.is-hidden),
+  .hero[data-hero-state="done"] :global(.hero__ch) {
+    visibility: hidden;
+  }
+
+  /* Block cursor drawn after its host character; never affects layout. */
+  .hero :global(.hero__ch.is-caret) {
+    position: relative;
+  }
+
+  .hero :global(.hero__ch.is-caret::after) {
+    content: "";
+    position: absolute;
+    top: 0.12em;
+    bottom: 0.08em;
+    left: 100%;
+    width: 0.5em;
+    margin-left: 0.08em;
+    background: var(--highlight);
+    visibility: visible;
+    animation: hero-cursor-blink 1s steps(1) infinite;
+  }
+
+  .hero :global(.hero__ch.is-caret-start::after) {
+    left: 0;
+    margin-left: 0;
+  }
+
+  @keyframes hero-cursor-blink {
+    50% {
+      opacity: 0;
+    }
   }
 
   .hero {
