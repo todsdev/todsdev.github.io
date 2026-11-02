@@ -16,7 +16,7 @@ All work happens on `feat/content-sentence-case`. Never push directly to `main`.
 
 ## 3. Docs, rule and journey spacing
 
-- [ ] 3.1 Add the sentence-case rule to the `context` in `openspec/config.yaml` and to the README content docs; verify the OpenSpec CLI still parses the context and that it contains the rule
+- [x] 3.1 Add the sentence-case rule to the `context` in `openspec/config.yaml` and to the README content docs; verify the OpenSpec CLI still parses the context and that it contains the rule
 - [ ] 3.2 Verify the journey has a real space between the year label and the text: in the built HTML, visually (a gap at 1280px and on its own line at 320px), and when copied (selecting each step yields `[years] Text` with a space or line break, never `]Text`) in all three locales
 
 ## 4. Integration

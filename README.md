@@ -127,6 +127,10 @@ order: 2
 
 Missing translations fall back to English and print a build warning such as `[content] missing es translation: projects/my-app.description → using en`. Warnings never fail the build.
 
+### Sentence case
+
+Prose fields (profile `summary`, journey `text`, experience and project `description`) must start with a capital letter in every locale, e.g. `Quality control at 8 Olympic Games with OBS`. Fix the text itself rather than using CSS `text-transform`. A lowercase start fails the build (`must start with an uppercase letter`). Leading digits and punctuation are skipped (`8 Olympic…`, `¿Qué…?`), and names with their own casing such as `iOS` or `gRPC` are allowed as the first word (see `OWN_CASING_WORDS` in `src/lib/sentence-case.ts`).
+
 Invalid data — a missing required field, a malformed URL, a wrong type or an unknown enum value — fails the build with the file and field in the error message.
 
 ## Scroll thread markers
