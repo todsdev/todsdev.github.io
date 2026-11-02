@@ -9,6 +9,14 @@ schema: spec-driven
 #     Designs and tasks must cover Windows, macOS, and Linux
 #     Write all artifacts in Spanish
 
+context: |
+  Known issues (fix in the polish change, then remove from this list):
+  - Nav at 320px viewport width: the section-link strip is only ~119px wide
+    beside the language switcher, so active labels with the "> " prefix and
+    cursor (EN "Experience"; PT "Experiência", "Habilidades"; ES "Experiencia",
+    "Proyectos", "Habilidades") are wider than the strip and show truncated.
+    Fine from 360px up. Found during the hero change (2026-11-02).
+
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
 # Example:
