@@ -51,18 +51,43 @@ All user-visible UI text comes from the dictionaries; never hardcode text in com
 
 Portfolio data lives in YAML under `src/content/<collection>/`, one file per entry, validated by the Zod schemas in `src/content.config.ts`.
 
-| Collection   | Fields (L = translatable)                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------ |
-| `profile`    | `name`, `role` (L), `location`, `summary` (L), `photo`, `availability` — single entry            |
-| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                        |
-| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]` |
-| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`        |
-| `skills`     | `category` (L), `items[]` — one entry per category                                               |
-| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                               |
-| `education`  | `institution`, `degree` (L), `start`, `end?`                                                     |
-| `languages`  | `name` (L), `proficiency` (L)                                                                    |
+| Collection   | Fields (L = translatable)                                                                                         |
+| ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry |
+| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                         |
+| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]`                  |
+| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`                         |
+| `skills`     | `category` (L), `items[]` — one entry per category                                                                |
+| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                |
+| `education`  | `institution`, `degree` (L), `start`, `end?`                                                                      |
+| `languages`  | `name` (L), `proficiency` (L)                                                                                     |
 
 Every entry also accepts optional `order` (number, ascending), `featured` (boolean) and `hidden` (boolean; hidden entries are never rendered).
+
+### Profile about fields
+
+The about section reads these profile fields:
+
+```yaml
+# src/content/profile/profile.yaml (about excerpt)
+location:
+  en: Rio de Janeiro, Brazil
+  pt-br: Rio de Janeiro, Brasil
+  es: Rio de Janeiro, Brasil
+journey:
+  - years: 2016–2022
+    text:
+      en: Biological Sciences at UFRJ
+      pt-br: Ciências Biológicas na UFRJ
+  - years: 2023–
+    text:
+      en: Android development
+focus:
+  en: Android · Kotlin · Jetpack Compose
+```
+
+- `location` and `focus` are translatable and appear in the about facts block.
+- `journey` is a non-empty list of steps, rendered in order. `years` is a plain string shown as written. A trailing dash (`2023–`) marks an ongoing range, rendered as `2023–present` / `2023–atual` / `2023–actualidad`. `text` is translatable.
 
 ### Profile photo and availability
 
