@@ -28,6 +28,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "astro check"
+    "check": "astro check",
+    "test": "node --test \"src/**/*.test.ts\""
   }
 }
