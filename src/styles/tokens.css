@@ -11,7 +11,8 @@
   --highlight: #ffffff;
 
   /* Typography */
-  --font-title: "VT323", ui-monospace, Menlo, Consolas, monospace;
+  --font-title:
+    "VT323 Tilde", "VT323", ui-monospace, Menlo, Consolas, monospace;
   --font-body: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
 
   /* Spacing */

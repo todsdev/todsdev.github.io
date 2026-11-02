@@ -18,7 +18,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `l-*.mjs` (`./run.sh <s
 
 ## 3. Tilde
 
-- [ ] 3.1 Add the `"VT323 Tilde"` face (`unicode-range: U+007E`, IBM Plex Mono latin-400 file, tuned `size-adjust` and ascent/descent overrides) and put it first in `--font-title`. Verify with `l-tilde.mjs` on the hero prompt and on `$ cd ~/about` / `~/sobre` / `~/sobre-mi`: the `~` renders in IBM Plex Mono (CDP), its vertical center is within the lowercase band, the next glyph keeps its monospace position (±1px), copy-paste yields `~`, the woff2 request count is unchanged, and zoomed screenshots look right at both sizes
+- [x] 3.1 Add the `"VT323 Tilde"` face (`unicode-range: U+007E`, IBM Plex Mono latin-400 file, tuned `size-adjust` and ascent/descent overrides) and put it first in `--font-title`. Verify with `l-tilde.mjs` on the hero prompt and on `$ cd ~/about` / `~/sobre` / `~/sobre-mi`: the `~` renders in IBM Plex Mono (CDP), its vertical center is within the lowercase band, the next glyph keeps its monospace position (±1px), copy-paste yields `~`, the woff2 request count is unchanged, and zoomed screenshots look right at both sizes
 
 ## 4. Scroll-thread track
 
