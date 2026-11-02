@@ -30,7 +30,7 @@ After completing each task during `/opsx:apply`:
 
 ## 4. About section
 
-- [ ] 4.1 Add the about dictionary keys from design.md to all three locales; verify `npm run check` passes and a missing key in `es.ts` fails it (revert)
+- [x] 4.1 Add the about dictionary keys from design.md to all three locales; verify `npm run check` passes and a missing key in `es.ts` fails it (revert)
 - [ ] 4.2 Create `src/components/About.astro` (summary, journey `ol` with years plus localized "present" for open ranges, facts `dl` in an `aside` with `h3` headings) and render it inside `<Section id="about">` in `Portfolio.astro`; verify in each built locale page that the summary, three journey steps (`2016–2022`, `2016–present`/`atual`/`actualidad`, `2023–…`) and four facts with the expected values appear (location "Rio de Janeiro, Brazil" on `/`, "Rio de Janeiro, Brasil" on `/pt-br/` and `/es/`), and that the markup has `dl` > `div` > `dt` + `dd` ×4, `ol` > `li` ×3 and two `h3`s
 - [ ] 4.3 Style the section per design.md (grid from `48rem`, summary `60ch` in IBM Plex Mono, journey hanging indent, facts keys `--text-muted` and values `--text`); verify in preview: at 1280px the facts are beside the main column, at 320px summary → journey → facts in one column with no horizontal overflow, the body font is used (CDP), and keys/values have ≥ 4.5:1 contrast
 - [ ] 4.4 Verify accessibility and motion in preview: one `h2` for the section and two `h3`s below it, the accessibility tree exposes the description list with four terms, nothing in the about section animates after its entrance, it's visible immediately with reduced motion and without JS, and a hidden language entry (temporary `hidden: true`) disappears from the facts (revert)
