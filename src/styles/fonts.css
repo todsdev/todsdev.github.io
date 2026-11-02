@@ -1,10 +1,13 @@
 /* Self-hosted via Fontsource: bundled into dist/, served from our own origin. */
-@import "@fontsource/vt323/latin-400.css";
-@import "@fontsource/vt323/latin-ext-400.css";
-@import "@fontsource/ibm-plex-mono/latin-400.css";
-@import "@fontsource/ibm-plex-mono/latin-ext-400.css";
-@import "@fontsource/ibm-plex-mono/latin-700.css";
-@import "@fontsource/ibm-plex-mono/latin-ext-700.css";
+/*
+ * Combined weight files declare a unicode-range per subset, so the browser only
+ * downloads the subsets the text actually uses (latin covers en/pt-br/es). The
+ * per-subset files (latin-400.css, latin-ext-400.css) have no unicode-range, so
+ * importing several of them downloaded every subset for any text.
+ */
+@import "@fontsource/vt323/400.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/700.css";
 
 /*
  * VT323's "~" is a small raised mark. This face covers only U+007E and draws it
