@@ -23,6 +23,13 @@ const common = z.object({
 const yamlIn = (name: string) =>
   glob({ pattern: "**/*.yaml", base: `./src/content/${name}` });
 
+/** Image files next to profile.yaml, keyed like `./content/profile/photo.png`. */
+const profileImages = new Set(
+  Object.keys(
+    import.meta.glob("./content/profile/**/*.{png,jpg,jpeg,webp,avif,gif}"),
+  ),
+);
+
 const profile = defineCollection({
   loader: yamlIn("profile"),
   schema: ({ image }) =>
@@ -31,8 +38,26 @@ const profile = defineCollection({
       role: localizedText,
       location: text,
       summary: localizedText,
-      /** Path relative to profile.yaml; optimized at build time. */
-      photo: image(),
+      /**
+       * Path relative to profile.yaml; optimized at build time. Checked first so a
+       * missing file is reported against the profile entry and the `photo` field.
+       */
+      photo: z
+        .string()
+        .refine(
+          (path) =>
+            profileImages.has(`./content/profile/${path.replace(/^\.\//, "")}`),
+          {
+            message: "image file not found (path is relative to profile.yaml)",
+          },
+        )
+        // image() parses the path string at runtime; its static type only models the output.
+        .pipe(
+          image() as unknown as z.ZodType<
+            z.output<ReturnType<typeof image>>,
+            string
+          >,
+        ),
       /** "Open to work" style badge in the hero; editable without code changes. */
       availability: z.object({
         enabled: z.boolean(),
