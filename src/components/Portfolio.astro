@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "./Hero.astro";
 import Section from "./Section.astro";
 import ScrollThread from "./ScrollThread.astro";
 import SiteNav from "./SiteNav.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t, type Locale } from "../i18n";
-import { getEntries, reportMissingTranslations } from "../lib/content";
+import { reportMissingTranslations } from "../lib/content";
 import { sectionIds } from "../lib/sections";
 
 interface Props {
@@ -14,8 +15,6 @@ interface Props {
 
 const { locale } = Astro.props;
 await reportMissingTranslations(locale);
-const [profile] = await getEntries("profile", locale);
-if (!profile) throw new Error("src/content/profile must contain one entry");
 const contentSections = sectionIds.filter((id) => id !== "hero");
 ---
 
@@ -52,10 +51,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   </SiteNav>
   <main id="main" class="site-main">
     <ScrollThread />
-    <section id="hero" class="section" data-reveal>
-      <p class="hero__prompt">{t(locale, "hero.prompt")}</p>
-      <h1 class="hero__name">{profile.name}</h1>
-    </section>
+    <Hero locale={locale} />
     {contentSections.map((id) => (
       <Section id={id} locale={locale} />
     ))}
@@ -73,14 +69,5 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
     max-width: var(--content-max);
     margin-inline: auto;
     padding: var(--nav-height) var(--space-4) 0 var(--thread-gutter);
-  }
-
-  .hero__name {
-    font-family: var(--font-title);
-    font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
-    font-weight: 400;
-    line-height: 1;
-    color: var(--text);
-    margin-top: var(--space-3);
   }
 </style>

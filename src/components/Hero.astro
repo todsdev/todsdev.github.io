@@ -1,0 +1,45 @@
+---
+/**
+ * Hero: prompt line, name (the page's h1), role and availability status.
+ * The server always renders the final state (`data-hero-state="final"`), so the
+ * content is complete without JavaScript; src/scripts/hero.ts animates an
+ * aria-hidden overlay on top of it.
+ */
+import { t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const [profile] = await getEntries("profile", locale);
+const [profileEn] = await getEntries("profile", "en");
+if (!profile || !profileEn) {
+  throw new Error("src/content/profile must contain one entry");
+}
+// The role is a job title: always shown in English, whatever the locale.
+const role = profileEn.role;
+const { availability } = profile;
+---
+
+<section id="hero" class="hero" data-reveal data-hero-state="final">
+  <div class="hero__text">
+    <p class="hero__prompt">{t(locale, "hero.prompt")}</p>
+    <h1 class="hero__line hero__name" data-type="name">
+      {profile.name}
+    </h1>
+    <p class="hero__line hero__role">
+      <span aria-hidden="true">&gt; </span>
+      <span data-type="role">{role}</span>
+      {availability.enabled && (
+        <span class="hero__status">
+          <span class="hero__status-dot" aria-hidden="true">
+            ●
+          </span>{" "}
+          {availability.label}
+        </span>
+      )}
+    </p>
+  </div>
+</section>
