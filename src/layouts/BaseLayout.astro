@@ -1,0 +1,41 @@
+---
+import "../styles/tokens.css";
+import "../styles/fonts.css";
+import "../styles/global.css";
+import { langCode, localePath, locales, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+}
+
+const { locale, title, description } = Astro.props;
+const site = Astro.site ?? new URL("https://todsdev.github.io");
+const alternates = locales.map((l) => ({
+  hreflang: langCode[l],
+  href: new URL(localePath(l), site).href,
+}));
+const xDefault = new URL(localePath("en"), site).href;
+---
+
+<html lang={langCode[locale]} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <slot name="head-start" />
+    <script is:inline>
+      document.documentElement.classList.replace("no-js", "js");
+    </script>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {alternates.map((a) => (
+      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

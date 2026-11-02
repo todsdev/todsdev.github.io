@@ -1,0 +1,61 @@
+---
+/**
+ * Decorative vertical thread in the left gutter of <main>, spanning from the
+ * first section to the last. Its fill is scaled by `--progress` (0–1, set by
+ * src/scripts/thread.ts); it defaults to 1 so the thread is fully drawn without
+ * JavaScript or under reduced motion.
+ *
+ * Marker hook: elements with `data-thread-marker` (placed in the `markers` slot
+ * with an inline `top`, or anywhere inside <main>) get `data-reached` while the
+ * drawn line extends past them.
+ */
+---
+
+<div class="scroll-thread" aria-hidden="true">
+  <div class="scroll-thread__track"></div>
+  <div class="scroll-thread__fill"></div>
+  <div class="scroll-thread__markers">
+    <slot name="markers" />
+  </div>
+</div>
+
+<style>
+  .scroll-thread {
+    --progress: 1;
+    position: absolute;
+    top: var(--nav-height);
+    bottom: 0;
+    left: calc(var(--thread-gutter) / 2);
+    width: 1px;
+    pointer-events: none;
+  }
+
+  .scroll-thread__track,
+  .scroll-thread__fill {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Decorative only: --text-dim is below 3:1 contrast. */
+  .scroll-thread__track {
+    background: var(--text-dim);
+  }
+
+  .scroll-thread__fill {
+    background: var(--text-muted);
+    transform: scaleY(var(--progress));
+    transform-origin: top;
+    will-change: transform;
+  }
+
+  .scroll-thread__markers {
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-thread__fill {
+      transform: none;
+    }
+  }
+</style>

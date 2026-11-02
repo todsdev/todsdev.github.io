@@ -1,0 +1,130 @@
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+  padding: 0;
+}
+
+/* Links */
+a {
+  color: var(--text);
+  text-decoration-color: var(--text-muted);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--highlight);
+  text-decoration-color: var(--highlight);
+}
+
+/* Focus — always visible for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--highlight);
+  outline-offset: 3px;
+}
+
+/* Skip link — first focusable element, hidden until focused */
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 100;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-2);
+  color: var(--highlight);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/*
+ * Section entrance: fade + small upward offset, once. Hidden only when JS runs.
+ * The offset is applied to the children, not the section, so anchor jumps to a
+ * not-yet-revealed section still land exactly (scroll targets use the section box).
+ */
+[data-reveal] {
+  transition: opacity 600ms ease-out;
+}
+
+[data-reveal] > * {
+  transition: transform 600ms ease-out;
+}
+
+.js [data-reveal]:not(.is-visible) {
+  opacity: 0;
+}
+
+.js [data-reveal]:not(.is-visible) > * {
+  transform: translateY(12px);
+}
+
+/* Smooth anchor scrolling, only when motion is welcome */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reduced motion — no animation, no transitions, no smooth scrolling */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .js [data-reveal]:not(.is-visible) {
+    opacity: 1;
+  }
+
+  .js [data-reveal]:not(.is-visible) > * {
+    transform: none;
+  }
+}

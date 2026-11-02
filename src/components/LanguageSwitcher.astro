@@ -1,0 +1,102 @@
+---
+import FlagBR from "./flags/FlagBR.astro";
+import FlagES from "./flags/FlagES.astro";
+import FlagUS from "./flags/FlagUS.astro";
+import {
+  langCode,
+  localePath,
+  locales,
+  shortCode,
+  t,
+  type Locale,
+} from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const flags = { en: FlagUS, "pt-br": FlagBR, es: FlagES } as const;
+---
+
+<ul class="lang-switcher" role="list" aria-label={t(locale, "switcher.label")}>
+  {locales.map((l) => {
+    const Flag = flags[l];
+    return (
+      <li>
+        <a
+          class="lang-switcher__link"
+          href={localePath(l)}
+          hreflang={langCode[l]}
+          lang={langCode[l]}
+          aria-label={t(locale, `language.${l}` as const)}
+          aria-current={l === locale ? "true" : undefined}
+          data-locale={l}
+        >
+          <span class="lang-switcher__flag">
+            <Flag />
+          </span>
+          <span class="lang-switcher__code" aria-hidden="true">
+            {shortCode[l]}
+          </span>
+        </a>
+      </li>
+    );
+  })}
+</ul>
+
+<script>
+  import "../scripts/locale";
+</script>
+
+<style>
+  .lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .lang-switcher__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    min-height: 2.25rem;
+    padding: var(--space-1) 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-decoration: none;
+  }
+
+  .lang-switcher__link[aria-current] {
+    color: var(--text);
+  }
+
+  .lang-switcher__link:hover,
+  .lang-switcher__link:focus-visible {
+    color: var(--highlight);
+  }
+
+  .lang-switcher__link:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .lang-switcher__flag {
+    display: inline-flex;
+    width: 1.4em;
+    image-rendering: pixelated;
+    filter: grayscale(1);
+    transition: filter 150ms ease-out;
+  }
+
+  /* Active locale in color; hover/focus previews an inactive flag's color. */
+  .lang-switcher__link[aria-current] .lang-switcher__flag,
+  .lang-switcher__link:hover .lang-switcher__flag,
+  .lang-switcher__link:focus-visible .lang-switcher__flag {
+    filter: none;
+  }
+
+  .lang-switcher__flag :global(svg) {
+    width: 100%;
+    height: auto;
+  }
+</style>

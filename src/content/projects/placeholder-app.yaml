@@ -1,0 +1,11 @@
+title: Placeholder App
+description:
+  en: Placeholder project description.
+  pt-br: Descrição provisória do projeto.
+  es: Descripción provisional del proyecto.
+status: building
+repoUrl: https://github.com/todsdev
+tech:
+  - Kotlin
+order: 1
+featured: true

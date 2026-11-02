@@ -1,0 +1,5 @@
+dist/
+.astro/
+openspec/
+.claude/
+package-lock.json

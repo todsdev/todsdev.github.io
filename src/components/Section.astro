@@ -1,0 +1,53 @@
+---
+import { t, type Locale } from "../i18n";
+import type { SectionId } from "../lib/sections";
+
+interface Props {
+  id: SectionId;
+  locale: Locale;
+  /**
+   * Element for the terminal-prompt title. Sections use `h2`; the hero uses `p`
+   * because its `h1` (the owner's name) follows the prompt.
+   */
+  titleTag?: "h2" | "p";
+}
+
+const { id, locale, titleTag: TitleTag = "h2" } = Astro.props;
+const titleId = `${id}-title`;
+const prompt = t(locale, `prompt.${id}` as const);
+---
+
+<section
+  id={id}
+  class="section"
+  data-reveal
+  aria-labelledby={TitleTag === "h2" ? titleId : undefined}
+>
+  <TitleTag id={titleId} class="section__title">
+    <span class="section__prompt" aria-hidden="true">
+      ${" "}
+    </span>
+    {prompt}
+  </TitleTag>
+  <slot />
+</section>
+
+<style>
+  .section {
+    min-height: 60vh;
+    padding-block: var(--space-6);
+    scroll-margin-top: var(--nav-height);
+  }
+
+  .section__title {
+    font-family: var(--font-title);
+    font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+  }
+
+  .section__prompt {
+    color: var(--text-muted);
+  }
+</style>
