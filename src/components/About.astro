@@ -1,0 +1,73 @@
+---
+/**
+ * About section body (rendered inside <Section id="about">): profile summary,
+ * a terminal-style journey and a neofetch-style facts list. All text comes from
+ * the content collections or the locale dictionaries.
+ */
+import { t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const [profile] = await getEntries("profile", locale);
+if (!profile) throw new Error("src/content/profile must contain one entry");
+const languages = await getEntries("languages", locale);
+const education = await getEntries("education", locale);
+
+/** "2023–" (open range) → "2023–present" in the page's language. */
+const formatYears = (years: string) =>
+  /[–-]$/.test(years) ? `${years}${t(locale, "about.present")}` : years;
+
+const languagesValue = languages
+  .map((l) => `${l.name} (${l.proficiency})`)
+  .join(" · ");
+---
+
+<div class="about">
+  <div class="about__main">
+    <p class="about__summary">{profile.summary}</p>
+    <div class="about__journey">
+      <h3 class="about__cmd">
+        <span aria-hidden="true">$&nbsp;</span>
+        {t(locale, "about.journeyCommand")}
+      </h3>
+      <ol class="about__steps" role="list">
+        {profile.journey.map((step) => (
+          <li class="about__step">
+            <span class="about__years">[{formatYears(step.years)}]</span>{" "}
+            <span class="about__step-text">{step.text}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+  <aside class="about__facts" aria-labelledby="about-facts-title">
+    <h3 id="about-facts-title" class="about__cmd">
+      <span aria-hidden="true">$&nbsp;</span>
+      {t(locale, "about.factsCommand")}
+    </h3>
+    <dl class="about__list">
+      <div class="about__fact">
+        <dt>{t(locale, "about.facts.location")}</dt>
+        <dd>{profile.location}</dd>
+      </div>
+      <div class="about__fact">
+        <dt>{t(locale, "about.facts.languages")}</dt>
+        <dd>{languagesValue}</dd>
+      </div>
+      <div class="about__fact">
+        <dt>{t(locale, "about.facts.education")}</dt>
+        {education.map((e) => (
+          <dd>{`${e.degree} · ${e.institution}`}</dd>
+        ))}
+      </div>
+      <div class="about__fact">
+        <dt>{t(locale, "about.facts.focus")}</dt>
+        <dd>{profile.focus}</dd>
+      </div>
+    </dl>
+  </aside>
+</div>
