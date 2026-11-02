@@ -1,4 +1,4 @@
-# Placeholder profile — real copy lands with the hero/about changes.
+# Placeholder profile — summary copy lands with the about change; photo.png is a neutral placeholder.
 name: Thiago Rodrigues
 role:
   en: Android Developer
@@ -9,3 +9,10 @@ summary:
   en: Placeholder summary. Real content comes in a later change.
   pt-br: Resumo provisório. O conteúdo real vem em uma mudança futura.
   es: Resumen provisional. El contenido real llegará en un cambio futuro.
+photo: ./photo.png
+availability:
+  enabled: true
+  label:
+    en: open to work
+    pt-br: disponível para trabalho
+    es: disponible para trabajar

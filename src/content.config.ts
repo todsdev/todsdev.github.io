@@ -25,12 +25,20 @@ const yamlIn = (name: string) =>
 
 const profile = defineCollection({
   loader: yamlIn("profile"),
-  schema: common.extend({
-    name: text,
-    role: localizedText,
-    location: text,
-    summary: localizedText,
-  }),
+  schema: ({ image }) =>
+    common.extend({
+      name: text,
+      role: localizedText,
+      location: text,
+      summary: localizedText,
+      /** Path relative to profile.yaml; optimized at build time. */
+      photo: image(),
+      /** "Open to work" style badge in the hero; editable without code changes. */
+      availability: z.object({
+        enabled: z.boolean(),
+        label: localizedText,
+      }),
+    }),
 });
 
 const contacts = defineCollection({
