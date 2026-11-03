@@ -58,7 +58,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
   - alt text localized;
   - note text exact in all three locales;
   - no project text hardcoded in the component (grep).
-- [ ] 3.4 Style the cards, frame, badge, actions and note per design.md, including grayscale → color on `:hover`/`:focus-within` and the reduced-motion rule. Verify with `p-cards.mjs` at 1280px and 320px in all locales:
+- [x] 3.4 Style the cards, frame, badge, actions and note per design.md, including grayscale → color on `:hover`/`:focus-within` and the reduced-motion rule. Verify with `p-cards.mjs` at 1280px and 320px in all locales:
   - the frame's screen is 9:19.5 (±1px);
   - description ≤ ~65 characters per line;
   - tags and actions wrap without overflow at 320px;
