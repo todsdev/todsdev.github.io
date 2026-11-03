@@ -11,7 +11,7 @@ All work happens on `feat/experience-location-i18n`. Never push directly to `mai
 ## 2. Translatable experience location
 
 - [x] 2.1 Change experience `location` to `localizedText` and write the three locations in en/pt-br/es as specified; update the README content table. Verify `npm run build` passes with no fallback warnings; a plain-string location and a missing `location.en` (temporarily) each fail the build naming the file and `location` (revert)
-- [ ] 2.2 Verify the timeline shows each location in the page's language in all three locales (built HTML and `x-style`/`x-markers`/`x-stable` still pass, since longer Portuguese/Spanish meta lines must not break alignment or cause shifts)
+- [x] 2.2 Verify the timeline shows each location in the page's language in all three locales (built HTML and `x-style`/`x-markers`/`x-stable` still pass, since longer Portuguese/Spanish meta lines must not break alignment or cause shifts)
 
 ## 3. Integration
 
