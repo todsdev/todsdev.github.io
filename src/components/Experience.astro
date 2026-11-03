@@ -151,4 +151,54 @@ const present = t(locale, "time.present");
   .xp__event-text {
     color: var(--text);
   }
+
+  /*
+   * Thread markers: positioned from their entry/event onto the scroll-thread line
+   * (half the gutter to the left of the content edge), centred on the first line.
+   * Default = "passed" (also the no-JS look); upcoming only while JS has not
+   * flagged them reached. Only colours/borders change, so nothing reflows.
+   */
+  .xp__marker,
+  .xp__tick {
+    position: absolute;
+    left: calc(var(--thread-gutter) / -2);
+    translate: -50% -50%;
+    pointer-events: none;
+  }
+
+  .xp__marker {
+    top: 0.8em; /* half the period line (line-height 1.6) */
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--text-muted);
+    background: var(--text-muted);
+  }
+
+  .xp__tick {
+    top: 0.8em; /* half the event line */
+    width: 5px;
+    height: 1px;
+    background: color-mix(in srgb, var(--text-muted) 60%, var(--bg));
+  }
+
+  :global(.js) .xp__marker:not([data-reached]) {
+    border-color: var(--text-dim);
+    background: var(--bg);
+  }
+
+  :global(.js) .xp__tick:not([data-reached]) {
+    background: var(--text-dim);
+  }
+
+  /* Reduced motion: thread fully drawn, so every marker reads as passed. */
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .xp__marker:not([data-reached]) {
+      border-color: var(--text-muted);
+      background: var(--text-muted);
+    }
+
+    :global(.js) .xp__tick:not([data-reached]) {
+      background: color-mix(in srgb, var(--text-muted) 60%, var(--bg));
+    }
+  }
 </style>
