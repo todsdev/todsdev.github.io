@@ -16,7 +16,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `s-*.mjs`.
 
 ## 2. Skills file
 
-- [ ] 2.1 Create `src/components/Skills.astro` and render it in `<Section id="skills">`. Use the outline markup from design.md: per category, an `h3` with an `aria-hidden` `# ` prefix, then a `ul role="list"` with an `aria-hidden` `" · "` separator after each item except the last.
+- [x] 2.1 Create `src/components/Skills.astro` and render it in `<Section id="skills">`. Use the outline markup from design.md: per category, an `h3` with an `aria-hidden` `# ` prefix, then a `ul role="list"` with an `aria-hidden` `" · "` separator after each item except the last.
   - Verify in each built locale: header order and translations exactly as in the "Order and translations" scenario, and the Architecture item line text.
   - Verify in each locale that "Spec-Driven Development (SDD)" and "OpenSpec" are items in the list under the Practices & tools header, and under no other category. This check is also kept in `s-a11y.mjs` for the live run.
   - Verify there is no hardcoded category or item text in the component (grep).

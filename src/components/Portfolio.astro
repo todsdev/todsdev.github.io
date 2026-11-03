@@ -6,6 +6,7 @@ import Hero from "./Hero.astro";
 import Projects from "./Projects.astro";
 import Section from "./Section.astro";
 import ScrollThread from "./ScrollThread.astro";
+import Skills from "./Skills.astro";
 import SiteNav from "./SiteNav.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t, type Locale } from "../i18n";
@@ -68,6 +69,10 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
       ) : id === "projects" ? (
         <Section id={id} locale={locale}>
           <Projects locale={locale} />
+        </Section>
+      ) : id === "skills" ? (
+        <Section id={id} locale={locale}>
+          <Skills locale={locale} />
         </Section>
       ) : (
         <Section id={id} locale={locale} />
