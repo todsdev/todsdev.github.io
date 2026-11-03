@@ -21,7 +21,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `s-*.mjs`.
   - Verify in each locale that "Spec-Driven Development (SDD)" and "OpenSpec" are items in the list under the Practices & tools header, and under no other category. This check is also kept in `s-a11y.mjs` for the live run.
   - Verify there is no hardcoded category or item text in the component (grep).
   - Verify that hiding a category (temporarily) removes it.
-- [ ] 2.2 Style the file per design.md: em-based gutter, CSS-counter line numbers on `::before` with `/ ""` alt text, blank lines as numbered `::after` blocks, soft wrap under the text column, and colors. Verify with `s-file.mjs` at 1280px and 320px in all locales:
+- [x] 2.2 Style the file per design.md: em-based gutter, CSS-counter line numbers on `::before` with `/ ""` alt text, blank lines as numbered `::after` blocks, soft wrap under the text column, and colors. Verify with `s-file.mjs` at 1280px and 320px in all locales:
   - numbers 1–11 in order with one number per logical line, each vertically aligned with its line's first visual line;
   - wrapped continuation lines start at the text column's x;
   - no visual line starts with `·`;

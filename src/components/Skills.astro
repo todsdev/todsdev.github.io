@@ -42,3 +42,79 @@ const separator = " · ";
     </div>
   ))}
 </div>
+
+<style>
+  /*
+   * `cat -n` look. Widths are em-based (IBM Plex Mono advances 0.6em per glyph):
+   * the gutter holds 2 right-aligned digits (1.2em) plus spacing, and every line
+   * shares one line-height so numbers sit on their line's first visual row.
+   */
+  .file {
+    --digits: 1.2em;
+    --gutter: 3em;
+
+    margin-top: var(--space-4);
+    padding-left: var(--gutter);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    counter-reset: line;
+  }
+
+  @media (max-width: 39.99rem) {
+    .file {
+      --gutter: 2.4em;
+    }
+  }
+
+  .file__line {
+    position: relative;
+    max-width: var(--measure);
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+    counter-increment: line;
+  }
+
+  /* Regular weight and body size on purpose: a file line, not a display heading. */
+  .file__header {
+    font-family: var(--font-body);
+    font-size: inherit;
+    font-weight: 400;
+    line-height: inherit;
+  }
+
+  /* Items soft-wrap under the text column; the gutter keeps one number per logical line. */
+  .file__items li {
+    display: inline;
+  }
+
+  .file__syntax {
+    color: var(--text-muted);
+  }
+
+  /*
+   * Line numbers: generated content with empty alt text, so they are never copied,
+   * selected or read. Browsers without alt-text support drop the declaration and
+   * show no numbers, which is safe.
+   */
+  .file__line::before {
+    content: counter(line) / "";
+    position: absolute;
+    top: 0;
+    left: calc(-1 * var(--gutter));
+    width: var(--digits);
+    color: var(--text-dim);
+    text-align: right;
+  }
+
+  /* Blank numbered line between categories: the ::after is itself the number. */
+  .file__group:not(:last-child)::after {
+    content: counter(line) / "";
+    display: block;
+    width: var(--digits);
+    margin-left: calc(-1 * var(--gutter));
+    color: var(--text-dim);
+    text-align: right;
+    counter-increment: line;
+  }
+</style>
