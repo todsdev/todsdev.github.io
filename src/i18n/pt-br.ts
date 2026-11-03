@@ -33,14 +33,31 @@ export const ptBr = {
   about: {
     journeyCommand: "cat jornada.log",
     factsCommand: "neofetch",
-    /** Appended to open-ended journey years, e.g. "2023–" → "2023–atual". */
-    present: "atual",
     facts: {
       location: "localização",
       languages: "idiomas",
       education: "formação",
       focus: "foco",
     },
+  },
+  time: {
+    /** Ongoing ranges: "2023–present", "Aug 2016 – present". */
+    present: "atual",
+    /** Month abbreviations, January first (periods in the experience timeline). */
+    months: [
+      "jan",
+      "fev",
+      "mar",
+      "abr",
+      "mai",
+      "jun",
+      "jul",
+      "ago",
+      "set",
+      "out",
+      "nov",
+      "dez",
+    ],
   },
   switcher: {
     label: "Idioma",
