@@ -68,7 +68,7 @@ const { locale } = Astro.props;
     display: inline-flex;
     align-items: center;
     min-height: 2.25rem;
-    padding: var(--space-1) var(--space-2);
+    padding: var(--space-1) 0;
     color: var(--text-muted);
     font-size: 0.875rem;
     text-decoration: none;
@@ -83,20 +83,33 @@ const { locale } = Astro.props;
     color: var(--highlight);
   }
 
-  .site-nav__link.is-active::before {
+  /* The indicator ("> " prefix + block cursor) is rendered on every link but only
+     visible on the active one, so its space is always reserved: changing the
+     active link (on load, while scrolling) never moves or resizes the nav. */
+  .site-nav__link::before {
     content: "> ";
     content: "> " / "";
     white-space: pre;
+    visibility: hidden;
   }
 
-  /* Blinking block cursor; steady under reduced motion (global rule removes animations). */
-  .site-nav__link.is-active::after {
+  .site-nav__link::after {
     content: "";
     display: inline-block;
     width: 0.6em;
     height: 1.1em;
     margin-left: 0.2em;
     background: var(--highlight);
+    visibility: hidden;
+  }
+
+  .site-nav__link.is-active::before,
+  .site-nav__link.is-active::after {
+    visibility: visible;
+  }
+
+  /* Blinking block cursor; steady under reduced motion (global rule removes animations). */
+  .site-nav__link.is-active::after {
     animation: cursor-blink 1s steps(1) infinite;
   }
 
@@ -119,7 +132,6 @@ const { locale } = Astro.props;
     }
 
     .site-nav__link {
-      padding-inline: var(--space-1);
       font-size: 0.8125rem;
     }
   }
