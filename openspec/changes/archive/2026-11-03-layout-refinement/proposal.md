@@ -57,3 +57,7 @@ Decisions:
 - **Config and docs:** `openspec/config.yaml` (known issues removed) and the README if needed.
 - **Dependencies:** none new. The preloads reuse the Fontsource woff2 files, so no extra font downloads.
 - **Out of scope:** experience-timeline, projects, skills, courses, contact-footer, terminal easter egg, polish.
+
+## Post-merge correction (2026-11-03)
+
+The "font-swap layout shift" known issue was misdiagnosed. The live CLS check after this change still found small nav shifts (about 0.0004 on 6 of 60 loads). Tracing them showed the cause was the nav's active indicator: the `> ` prefix and cursor were added only to the active link, widening it by about 28px whenever the active section changed (on load and while scrolling). Font loading was not the cause. The font work in this change (loading only the needed subsets, preloading, metric-matched fallbacks) is correct and stays. The nav shift is fixed by the `nav-indicator-stable` change, which reserves the indicator's space on every link.

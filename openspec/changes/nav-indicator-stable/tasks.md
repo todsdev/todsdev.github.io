@@ -15,7 +15,7 @@ All work happens on `feat/nav-indicator-stable`. Never push directly to `main`. 
 
 ## 3. Correct the record
 
-- [ ] 3.1 Append a correction note to `openspec/changes/archive/2026-11-03-layout-refinement/proposal.md` (the nav shift was the active indicator, not font loading; the font work stands on its own), comment the same on PR #8, and confirm no live doc or comment still attributes the nav shift to fonts (`grep`)
+- [x] 3.1 Append a correction note to `openspec/changes/archive/2026-11-03-layout-refinement/proposal.md` (the nav shift was the active indicator, not font loading; the font work stands on its own), comment the same on PR #8, and confirm no live doc or comment still attributes the nav shift to fonts (`grep`)
 
 ## 4. Integration
 
