@@ -52,16 +52,16 @@ All user-visible UI text comes from the dictionaries; never hardcode text in com
 
 Portfolio data lives in YAML under `src/content/<collection>/`, one file per entry, validated by the Zod schemas in `src/content.config.ts`.
 
-| Collection   | Fields (L = translatable)                                                                                         |
-| ------------ | ----------------------------------------------------------------------------------------------------------------- |
-| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry |
-| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                         |
-| `experience` | `company`, `role` (L), `location` (L), `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?` |
-| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`                         |
-| `skills`     | `category` (L), `items[]` — one entry per category                                                                |
-| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                |
-| `education`  | `institution`, `degree` (L), `start`, `end?`                                                                      |
-| `languages`  | `name` (L), `proficiency` (L)                                                                                     |
+| Collection   | Fields (L = translatable)                                                                                                                                                        |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry                                                                |
+| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                                                                                        |
+| `experience` | `company`, `role` (L), `location` (L), `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?`                                                                |
+| `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `ownership` (`contributor` \| `owner`), `owner?`, `via?`, `url?`, `repoUrl?`, `stores?`, `screenshots[]?`, `tech[]` |
+| `skills`     | `category` (L), `items[]` — one entry per category                                                                                                                               |
+| `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                                                                               |
+| `education`  | `institution`, `degree` (L), `start`, `end?`                                                                                                                                     |
+| `languages`  | `name` (L), `proficiency` (L)                                                                                                                                                    |
 
 Every entry also accepts optional `order` (number, ascending), `featured` (boolean) and `hidden` (boolean; hidden entries are never rendered).
 
@@ -125,6 +125,16 @@ availability:
 - `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). To change the photo, drop the new file next to `profile.yaml` and update the path (or overwrite `photo.jpg`). A 4:5 portrait works best (the current one is 960×1200). Strip location metadata before committing, because the original file is published too. A missing file fails the build with `photo: image file not found`.
 - `availability` drives the `● open to work` badge in the hero. Set `enabled: false` to hide it, or change `label` to reword it. No code changes are needed. The label is translatable and falls back to English.
 
+### Projects
+
+Each project becomes a card in the projects section, featured projects first, then by `order`.
+
+- `ownership` is `owner` for your own projects or `contributor` for apps you worked on for someone else. Contributor projects need `owner`, the name of the organization that owns the app (e.g. `Globo`). `owner` projects must not set it.
+- `via` is the plain name of the company you did the work through (e.g. `act digital`). It isn't translated: the connector words come from the dictionaries, giving "contributor · via act digital" / "colaborador · vía act digital" in the badge.
+- `stores.playStore` must be a `https://play.google.com/` URL and `stores.appStore` an `https://apps.apple.com/` URL. Each link you set gets a `$ open play-store`, `$ open app-store`, `$ open site` (`url`) or `$ open repo` (`repoUrl`) action. `building` projects show `[building... ▓▓▓░░░]` instead of their store links.
+- `screenshots` are paths relative to the project YAML; the card shows the first one in a phone frame (9:19.5, e.g. 600×1300), in grayscale until hovered or focused. Strip metadata before committing. A missing file fails the build.
+- The ownership note under the cards is built from the contributor projects: one sentence pair per `owner`/`via` group, with titles joined in each locale's list format, e.g. "GloboPop, Premiere and Combate Play are owned by Globo. I contributed to them as an Android developer through act digital." Its wording lives in the `projects.note` dictionary templates; adding, hiding or renaming a contributor project updates it automatically.
+
 ### Translatable fields
 
 A translatable field is an object with `en` (required), `pt-br` and `es` (optional):
@@ -136,7 +146,17 @@ description:
   en: An Android app.
   pt-br: Um app Android.
 status: live
-url: https://example.com
+ownership: contributor
+owner: Acme
+via: act digital
+stores:
+  playStore: https://play.google.com/store/apps/details?id=com.example.myapp
+  appStore: https://apps.apple.com/br/app/id000000000
+screenshots:
+  - src: ./my-app.webp
+    alt:
+      en: My App home screen with a list of videos.
+      pt-br: Tela inicial do My App com uma lista de vídeos.
 tech:
   - Kotlin
 order: 2
