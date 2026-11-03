@@ -59,6 +59,27 @@ export const ptBr = {
       "dez",
     ],
   },
+  projects: {
+    ownership: {
+      contributor: "colaborador",
+      owner: "proprietário",
+    },
+    via: "via {name}",
+    building: "construindo...",
+    destination: {
+      playStore: "{title} no Google Play",
+      appStore: "{title} na App Store",
+      site: "site de {title}",
+      repo: "código-fonte de {title}",
+    },
+    newTab: "abre em nova aba",
+    note: {
+      one: "{app} pertence à empresa {owner}. Contribuí com ele como desenvolvedor Android{through}.",
+      other:
+        "{apps} pertencem à empresa {owner}. Contribuí com eles como desenvolvedor Android{through}.",
+      through: " por meio da empresa {via}",
+    },
+  },
   switcher: {
     label: "Idioma",
   },

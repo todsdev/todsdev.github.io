@@ -37,6 +37,13 @@ const profileImages = new Set(
   ),
 );
 
+/** Image files next to the project YAMLs, keyed like `./content/projects/app.webp`. */
+const projectImages = new Set(
+  Object.keys(
+    import.meta.glob("./content/projects/**/*.{png,jpg,jpeg,webp,avif}"),
+  ),
+);
+
 const profile = defineCollection({
   loader: yamlIn("profile"),
   schema: ({ image }) =>
@@ -112,16 +119,79 @@ const experience = defineCollection({
   }),
 });
 
+/** A URL that must point at a given store, e.g. "https://play.google.com/". */
+const storeUrl = (prefix: string) =>
+  z.url().refine((url) => url.startsWith(prefix), {
+    message: `must be a ${prefix} URL`,
+  });
+
 const projects = defineCollection({
   loader: yamlIn("projects"),
-  schema: common.extend({
-    title: text,
-    description: localizedSentence,
-    status: z.enum(["live", "building"]),
-    url: z.url().optional(),
-    repoUrl: z.url().optional(),
-    tech: z.array(text).default([]),
-  }),
+  schema: ({ image }) =>
+    common
+      .extend({
+        title: text,
+        description: localizedSentence,
+        status: z.enum(["live", "building"]),
+        /** Whether the app is the site author's own or one they contributed to. */
+        ownership: z.enum(["contributor", "owner"]),
+        /** Organization that owns a contributed app, e.g. "Globo". A name: not translated. */
+        owner: text.optional(),
+        /** Company the work was done through, e.g. "act digital". A name: not translated. */
+        via: text.optional(),
+        url: z.url().optional(),
+        repoUrl: z.url().optional(),
+        stores: z
+          .strictObject({
+            playStore: storeUrl("https://play.google.com/").optional(),
+            appStore: storeUrl("https://apps.apple.com/").optional(),
+          })
+          .optional(),
+        tech: z.array(text).default([]),
+        /** Phone screenshots; the card shows the first one. Paths are relative to the project YAML. */
+        screenshots: z
+          .array(
+            z.object({
+              src: z
+                .string()
+                .refine(
+                  (path) =>
+                    projectImages.has(
+                      `./content/projects/${path.replace(/^\.\//, "")}`,
+                    ),
+                  {
+                    message:
+                      "image file not found (path is relative to the project YAML)",
+                  },
+                )
+                // image() parses the path string at runtime; its static type only models the output.
+                .pipe(
+                  image() as unknown as z.ZodType<
+                    z.output<ReturnType<typeof image>>,
+                    string
+                  >,
+                ),
+              alt: localizedText,
+            }),
+          )
+          .optional(),
+      })
+      .superRefine((project, ctx) => {
+        if (project.ownership === "contributor" && !project.owner) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["owner"],
+            message: "contributor projects need an owner",
+          });
+        }
+        if (project.ownership === "owner" && project.owner) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["owner"],
+            message: "owner projects must not set owner",
+          });
+        }
+      }),
 });
 
 /** One entry per category; `items` are the skills in that category. */

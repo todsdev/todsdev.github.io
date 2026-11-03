@@ -59,6 +59,27 @@ export const es = {
       "dic",
     ],
   },
+  projects: {
+    ownership: {
+      contributor: "colaborador",
+      owner: "propietario",
+    },
+    via: "vía {name}",
+    building: "construyendo...",
+    destination: {
+      playStore: "{title} en Google Play",
+      appStore: "{title} en la App Store",
+      site: "sitio web de {title}",
+      repo: "código fuente de {title}",
+    },
+    newTab: "se abre en una pestaña nueva",
+    note: {
+      one: "{app} es propiedad de {owner}. Colaboré en ella como desarrollador Android{through}.",
+      other:
+        "{apps} son propiedad de {owner}. Colaboré en ellas como desarrollador Android{through}.",
+      through: " a través de {via}",
+    },
+  },
   switcher: {
     label: "Idioma",
   },

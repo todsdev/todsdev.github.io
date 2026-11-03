@@ -20,6 +20,13 @@ context: |
     terminal commands and prompts ("$ cd ~/about", "./hello", "$ neofetch"),
     the hero's deliberate "Android developer" typo, and names with their own
     casing ("iOS", "gRPC", "act digital"); extend OWN_CASING_WORDS when needed.
+  - Terminal-style UI text: commands and their arguments stay in English in
+    every locale, like code ("$ open play-store", "$ open repo", "ls", "cd");
+    the labels around them are translated: section paths ("ls ./projetos"),
+    badges ("colaborador · via act digital"), status lines
+    ("[construindo... ▓▓▓░░░]"). Accessible names (aria-label, alt text) are
+    always fully localized. Applies to every terminal-style element, including
+    future sections (terminal, contact footer).
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.

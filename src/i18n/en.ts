@@ -61,6 +61,35 @@ export const en = {
       "Dec",
     ],
   },
+  projects: {
+    /** Ownership badge word; the `via` company is appended after " · ". */
+    ownership: {
+      contributor: "contributor",
+      owner: "owner",
+    },
+    /** Badge connector; `{name}` is the project's `via` company. */
+    via: "via {name}",
+    /** Status line label; rendered as "[building... ▓▓▓░░░]" with the blocks hidden from screen readers. */
+    building: "building...",
+    /** Accessible destinations for the "$ open …" actions; `{title}` is the project title. */
+    destination: {
+      playStore: "{title} on Google Play",
+      appStore: "{title} on the App Store",
+      site: "{title} website",
+      repo: "{title} source code",
+    },
+    newTab: "opens in a new tab",
+    /**
+     * Ownership note, one per owner/via group of contributor projects. `{app}`/`{apps}` are
+     * the titles joined with the locale's list format, `{through}` is `note.through` or empty.
+     */
+    note: {
+      one: "{app} is owned by {owner}. I contributed to it as an Android developer{through}.",
+      other:
+        "{apps} are owned by {owner}. I contributed to them as an Android developer{through}.",
+      through: " through {via}",
+    },
+  },
   switcher: {
     label: "Language",
   },

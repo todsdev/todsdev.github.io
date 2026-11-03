@@ -1,4 +1,3 @@
-# TODO: add the Play Store link in `url` after confirming the app can be shown in the portfolio.
 title: Premiere
 description:
   en: >-
@@ -13,6 +12,12 @@ description:
     en distintas plataformas Android, reproducción de video y en la analítica de consumo de
     contenido.
 status: live
+ownership: contributor
+owner: Globo
+via: act digital
+stores:
+  playStore: https://play.google.com/store/apps/details?id=br.tv.horizonte.android.premierefc
+  appStore: https://apps.apple.com/br/app/id468481865
 tech:
   - Kotlin
   - Android TV
@@ -20,3 +25,9 @@ tech:
   - Analytics
 order: 2
 featured: true
+screenshots:
+  - src: ./premiere.webp
+    alt:
+      en: "Premiere home screen: a featured Copa do Brasil match with its live score, above a list of live games."
+      pt-br: "Tela inicial do Premiere: uma partida da Copa do Brasil em destaque com o placar ao vivo, acima da lista de jogos ao vivo."
+      es: "Pantalla de inicio de Premiere: un partido destacado de la Copa do Brasil con su marcador en vivo, sobre una lista de partidos en vivo."

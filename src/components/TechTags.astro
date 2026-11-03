@@ -1,0 +1,37 @@
+---
+/**
+ * Tech tags as terminal-like tokens (bordered monospace, black/gray tokens only).
+ * Shared by the experience timeline and the project cards. Renders nothing for an empty list.
+ */
+interface Props {
+  items: readonly string[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <ul class="tags" role="list">
+    {items.map((item) => (
+      <li class="tag">{item}</li>
+    ))}
+  </ul>
+)}
+
+<style>
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+  }
+
+  .tag {
+    padding: 0 0.4em;
+    border: 1px solid var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+</style>
