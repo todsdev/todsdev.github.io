@@ -96,7 +96,7 @@ The hero reads two profile fields from `src/content/profile/profile.yaml`:
 
 ```yaml
 # src/content/profile/profile.yaml (excerpt)
-photo: ./photo.png
+photo: ./photo.jpg
 availability:
   enabled: true
   label:
@@ -105,7 +105,7 @@ availability:
     es: disponible
 ```
 
-- `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). `photo.png` is a neutral placeholder: to use the real photo, drop the file next to `profile.yaml` and update the path (or overwrite `photo.png`). A portrait around 4:5 works best. A missing file fails the build with `photo: image file not found`.
+- `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). To change the photo, drop the new file next to `profile.yaml` and update the path (or overwrite `photo.jpg`). A 4:5 portrait works best (the current one is 960×1200). Strip location metadata before committing, because the original file is published too. A missing file fails the build with `photo: image file not found`.
 - `availability` drives the `● open to work` badge in the hero. Set `enabled: false` to hide it, or change `label` to reword it. No code changes are needed. The label is translatable and falls back to English.
 
 ### Translatable fields
