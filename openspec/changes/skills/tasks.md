@@ -29,7 +29,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `s-*.mjs`.
   - no horizontal overflow;
   - readable text ≥ 4.5:1;
   - no bordered tokens.
-- [ ] 2.3 Verify accessibility and copy with `s-a11y.mjs` in all locales:
+- [x] 2.3 Verify accessibility and copy with `s-a11y.mjs` in all locales:
   - the accessibility tree has 4 headings named by category alone, each followed by a list whose items are named by the skill alone;
   - no node contains a line number, `#` or `·`;
   - selecting the block and reading the selection text gives the header and item lines from the "Copy in English" scenario (and the translated headers in other locales), no line starting with a digit, and at most one blank line between categories.
