@@ -36,7 +36,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
 
 ## 3. Cards
 
-- [ ] 3.1 Add `src/lib/projects.ts` (`sortProjects`, `projectActions`, `ownershipNotes`, English command constants) with `projects.test.ts`. Verify `npm test` covers:
+- [x] 3.1 Add `src/lib/projects.ts` (`sortProjects`, `projectActions`, `ownershipNotes`, English command constants) with `projects.test.ts`. Verify `npm test` covers:
   - featured-first ordering, then `order`;
   - action order play-store → app-store → site → repo;
   - no action for an undefined link;
