@@ -93,7 +93,7 @@ const experience = defineCollection({
   schema: common.extend({
     company: text,
     role: localizedText,
-    location: text,
+    location: localizedText,
     start: z.coerce.date(),
     /** Omitted while the position is current. */
     end: z.coerce.date().optional(),

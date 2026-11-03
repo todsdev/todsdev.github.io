@@ -3,7 +3,10 @@ role:
   en: Android Developer
   pt-br: Desenvolvedor Android
   es: Desarrollador Android
-location: Rio de Janeiro, Brazil
+location:
+  en: Rio de Janeiro, Brazil
+  pt-br: Rio de Janeiro, Brasil
+  es: Rio de Janeiro, Brasil
 start: 2025-01-01
 end: 2026-03-31
 description:
