@@ -56,7 +56,7 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 | ------------ | ----------------------------------------------------------------------------------------------------------------- |
 | `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry |
 | `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                         |
-| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?`     |
+| `experience` | `company`, `role` (L), `location` (L), `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?` |
 | `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`                         |
 | `skills`     | `category` (L), `items[]` — one entry per category                                                                |
 | `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                |

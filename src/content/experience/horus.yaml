@@ -3,7 +3,10 @@ role:
   en: Android & Backend Developer Jr.
   pt-br: Desenvolvedor Android & Backend Jr.
   es: Desarrollador Android & Backend Jr.
-location: Rio de Janeiro, Brazil
+location:
+  en: Rio de Janeiro, Brazil
+  pt-br: Rio de Janeiro, Brasil
+  es: Rio de Janeiro, Brasil
 start: 2023-05-01
 end: 2024-11-30
 description:
