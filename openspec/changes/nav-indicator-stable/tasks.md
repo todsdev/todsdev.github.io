@@ -11,7 +11,7 @@ All work happens on `feat/nav-indicator-stable`. Never push directly to `main`. 
 ## 2. Stable indicator
 
 - [x] 2.1 Render the `> ` prefix and the cursor on every nav link (hidden unless `.is-active`), with the blink only on the active cursor and link `padding-inline` set to 0 at all widths. Verify with the new `l-navstable.mjs`: scrolling top to bottom through every section in EN/PT/ES at 1280px and 320px changes the active link but moves or resizes no nav element (sub-pixel boxes, transforms neutralized), and nav boxes with JS disabled equal the boxes after `nav.ts` initializes
-- [ ] 2.2 Verify nothing else regressed: `l-nav` (longest active label fits at 320px; keyboard reaches every link and language), `t63`, `t64` (exactly one active link, prefix, cursor, `aria-current`, steady cursor under reduced motion) and `kbd` pass; hidden prefixes and cursors don't appear in the accessibility tree; save 1280px and 320px nav screenshots
+- [x] 2.2 Verify nothing else regressed: `l-nav` (longest active label fits at 320px; keyboard reaches every link and language), `t63`, `t64` (exactly one active link, prefix, cursor, `aria-current`, steady cursor under reduced motion) and `kbd` pass; hidden prefixes and cursors don't appear in the accessibility tree; save 1280px and 320px nav screenshots
 
 ## 3. Correct the record
 
