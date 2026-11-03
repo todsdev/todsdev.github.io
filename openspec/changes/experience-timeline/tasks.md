@@ -23,7 +23,7 @@ All work happens on `feat/experience-timeline`. Never push directly to `main`. A
 ## 4. Integration
 
 - [x] 4.1 Verify no layout shift: CLS 0 on load and while scrolling through the section (local `l-cls.mjs`, plus a scroll-based shift check), and `l-navstable` still passes
-- [ ] 4.2 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`; verify everything passes and the PR checks are green
+- [x] 4.2 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`; verify everything passes and the PR checks are green
 
 ## Workflow follow-up
 
