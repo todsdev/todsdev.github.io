@@ -31,7 +31,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
     - every file is 600×1300;
     - the build passes;
     - a missing `src` and a missing `alt` (temporarily) fail the build, naming the entry and `screenshots`.
-- [ ] 2.3 Add the `projects` dictionary keys to en/pt-br/es: ownership words, the badge connector (`via`: "via {name}" / "via {name}" / "vía {name}"), status label, destination templates and the note templates (`note.one`/`note.other`/`note.through`, approved wording per design.md). Verify `npm run check` fails if a locale lacks a key (temporarily), and that no template contains an app, owner or company name (grep)
+- [x] 2.3 Add the `projects` dictionary keys to en/pt-br/es: ownership words, the badge connector (`via`: "via {name}" / "via {name}" / "vía {name}"), status label, destination templates and the note templates (`note.one`/`note.other`/`note.through`, approved wording per design.md). Verify `npm run check` fails if a locale lacks a key (temporarily), and that no template contains an app, owner or company name (grep)
 - [ ] 2.4 Document the new fields in the README content table, update the projects example, and explain how the ownership note is built from contributor projects. Verify that the documented YAML validates
 
 ## 3. Cards
