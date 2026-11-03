@@ -28,7 +28,11 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
 <section id="hero" class="hero" data-reveal data-hero-state="final">
   <div class="hero__text">
     <p class="hero__prompt">{t(locale, "hero.prompt")}</p>
-    <h1 class="hero__line hero__name" data-type="name">
+    <h1
+      class="hero__line hero__name"
+      data-type="name"
+      style={`--name-chars: ${profile.name.length}`}
+    >
       {profile.name}
     </h1>
     <p class="hero__line hero__role">
@@ -256,6 +260,8 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
 
   /* The whole hero text block is VT323. */
   .hero__text {
+    /* Size container for the name's fit-to-column fallback (cqi units). */
+    container-type: inline-size;
     font-family: var(--font-title);
     font-weight: 400;
     line-height: 1.1;
@@ -275,7 +281,12 @@ const photoAlt = t(locale, "hero.photoAlt").replace("{name}", profile.name);
   .hero__name {
     margin-top: var(--space-3);
     color: var(--text);
-    font-size: clamp(3rem, 2rem + 6vw, 5.5rem);
+    /* Full size where it fits; otherwise shrink to fit the column on one line
+       (VT323 advances 0.4em per glyph), down to 2.5rem, then wrap. */
+    font-size: min(
+      clamp(3rem, 2rem + 6vw, 5.5rem),
+      max(2.5rem, calc(100cqi / (var(--name-chars) * 0.4)))
+    );
     line-height: 1;
   }
 

@@ -2,6 +2,8 @@
 import "../styles/tokens.css";
 import "../styles/fonts.css";
 import "../styles/global.css";
+import plexMonoLatin400 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
+import vt323Latin400 from "@fontsource/vt323/files/vt323-latin-400-normal.woff2?url";
 import { langCode, localePath, locales, type Locale } from "../i18n";
 
 interface Props {
@@ -45,6 +47,22 @@ const xDefault = new URL(localePath("en"), site).href;
         }, 4000);
       })();
     </script>}
+    <!-- Above-the-fold fonts (same files as the @font-face rules), fetched early so
+         text never swaps fonts after first paint. -->
+    <link
+      rel="preload"
+      href={plexMonoLatin400}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={vt323Latin400}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
