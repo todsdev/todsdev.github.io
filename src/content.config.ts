@@ -30,7 +30,7 @@ const common = z.object({
 const yamlIn = (name: string) =>
   glob({ pattern: "**/*.yaml", base: `./src/content/${name}` });
 
-/** Image files next to profile.yaml, keyed like `./content/profile/photo.png`. */
+/** Image files next to profile.yaml, keyed like `./content/profile/photo.jpg`. */
 const profileImages = new Set(
   Object.keys(
     import.meta.glob("./content/profile/**/*.{png,jpg,jpeg,webp,avif,gif}"),
