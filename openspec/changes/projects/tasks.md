@@ -69,7 +69,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
 
 ## 4. Integration
 
-- [ ] 4.1 Verify no layout shift:
+- [x] 4.1 Verify no layout shift:
   - CLS 0 on load, while scrolling through the section and after the lazy screenshots load;
   - card boxes unchanged before and after the images load, and on hover and focus (`p-stable.mjs`);
   - `l-cls.mjs`, `l-navstable` and the `x-*` checks still pass locally.
