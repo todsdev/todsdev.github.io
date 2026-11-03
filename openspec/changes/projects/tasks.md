@@ -73,7 +73,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
   - CLS 0 on load, while scrolling through the section and after the lazy screenshots load;
   - card boxes unchanged before and after the images load, and on hover and focus (`p-stable.mjs`);
   - `l-cls.mjs`, `l-navstable` and the `x-*` checks still pass locally.
-- [ ] 4.2 Verify the edge cases in a real build with temporary content edits, reverting each:
+- [x] 4.2 Verify the edge cases in a real build with temporary content edits, reverting each:
   - **Building:** set one project to `status: building`. Its card shows the translated status line in each locale and has no store actions, and the blocks are `aria-hidden`.
   - **Hidden contributor:** hide Premiere. The note reads "GloboPop and Combate Play are owned by Globo. …".
   - **No contributors:** hide all three Globo apps. No note element is rendered.
