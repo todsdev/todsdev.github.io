@@ -17,7 +17,7 @@ All work happens on `feat/experience-timeline`. Never push directly to `main`. A
 ## 3. Timeline
 
 - [x] 3.1 Create `src/components/Experience.astro` (ordered entries newest first, `<time datetime>` periods, company `h3`, role · location, description, tags, nested events) and render it in `<Section id="experience">`. Verify in each built locale: order act digital → Horus → OBS; periods exactly as in the spec scenarios; Horus Spanish content and tags; no tag list for OBS; 8 events newest first with localized names and English roles; markup (`ol` of entries, nested events list, every marker/tick `aria-hidden`)
-- [ ] 3.2 Style entries, tags and events per design.md. Verify in preview: description ≤ ~65 characters per line; tags wrap without overflow at 320px with ≥ 4.5:1 contrast; event names start at the same x after the year at 1280px and 320px with wrapped lines aligned; all text ≥ 4.5:1
+- [x] 3.2 Style entries, tags and events per design.md. Verify in preview: description ≤ ~65 characters per line; tags wrap without overflow at 320px with ≥ 4.5:1 contrast; event names start at the same x after the year at 1280px and 320px with wrapped lines aligned; all text ≥ 4.5:1
 - [ ] 3.3 Add primary markers and secondary ticks with their passed/upcoming styles. Verify with `x-markers.mjs`: each marker/tick centered on the thread line (±1px) and on its period/event line at 1280px and 320px in all locales; ticks smaller and dimmer than primaries; markers switch passed↔upcoming while scrolling down and up; all passed with reduced motion and without JS; markers never overlap content at 320px
 
 ## 4. Integration

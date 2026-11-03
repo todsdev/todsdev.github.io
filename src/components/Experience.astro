@@ -58,7 +58,7 @@ const present = t(locale, "time.present");
                 <span class="xp__tick" data-thread-marker aria-hidden="true" />
                 <span class="xp__year">{event.year}</span>{" "}
                 <span class="xp__event-text">
-                  {event.name} · {event.role}
+                  {event.name}&nbsp; ·&nbsp; {event.role}
                 </span>
               </li>
             ))}
@@ -68,3 +68,87 @@ const present = t(locale, "time.present");
     );
   })}
 </ol>
+
+<style>
+  .xp {
+    display: grid;
+    gap: var(--space-5);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+  }
+
+  .xp__entry {
+    position: relative;
+  }
+
+  .xp__period {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  /* Regular weight on purpose: bold would load a third font file late. */
+  .xp__company {
+    margin-top: var(--space-1);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    font-weight: 400;
+  }
+
+  .xp__meta {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .xp__desc {
+    max-width: var(--measure);
+    margin-top: var(--space-3);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Terminal-like tokens: bordered monospace, black/gray tokens only. */
+  .xp__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+  }
+
+  .xp__tag {
+    padding: 0 0.4em;
+    border: 1px solid var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  /* Events as terminal output: the year keeps its own column at every width
+     (4 glyphs + 2 spaces = 3.6em in IBM Plex Mono's 0.6em advance), and wrapped
+     names align under the name. */
+  .xp__events {
+    display: grid;
+    gap: var(--space-1);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .xp__event {
+    position: relative;
+    padding-left: 3.6em;
+    text-indent: -3.6em;
+  }
+
+  .xp__year {
+    display: inline-block;
+    min-width: 3em;
+    color: var(--text-muted);
+    text-indent: 0;
+  }
+
+  .xp__event-text {
+    color: var(--text);
+  }
+</style>
