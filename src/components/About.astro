@@ -19,7 +19,7 @@ const education = await getEntries("education", locale);
 
 /** "2023–" (open range) → "2023–present" in the page's language. */
 const formatYears = (years: string) =>
-  /[–-]$/.test(years) ? `${years}${t(locale, "about.present")}` : years;
+  /[–-]$/.test(years) ? `${years}${t(locale, "time.present")}` : years;
 
 // Hanging indent for the journey: width of the widest "[years]" label in this
 // locale. IBM Plex Mono advances every glyph (space included) by 0.6em; CSS `ch`

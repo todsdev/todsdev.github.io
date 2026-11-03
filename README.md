@@ -56,7 +56,7 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 | ------------ | ----------------------------------------------------------------------------------------------------------------- |
 | `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry |
 | `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                         |
-| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]`                  |
+| `experience` | `company`, `role` (L), `location`, `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?`     |
 | `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `url?`, `repoUrl?`, `tech[]`                         |
 | `skills`     | `category` (L), `items[]` — one entry per category                                                                |
 | `courses`    | `title`, `issuer`, `date`, `certificateUrl`, `featured` (required)                                                |
@@ -64,6 +64,23 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 | `languages`  | `name` (L), `proficiency` (L)                                                                                     |
 
 Every entry also accepts optional `order` (number, ascending), `featured` (boolean) and `hidden` (boolean; hidden entries are never rendered).
+
+### Experience events
+
+An experience entry may list sub-events (the Olympic Games under OBS). They render under the entry in the timeline, newest first, each with a small tick on the scroll thread:
+
+```yaml
+# src/content/experience/<entry>.yaml (excerpt)
+events:
+  - year: 2024
+    name:
+      en: Paris 2024 Olympic Games
+      pt-br: Jogos Olímpicos de Paris 2024
+      es: Juegos Olímpicos de París 2024
+    role: Quality Control Specialist
+```
+
+`year` is an integer and `name` is translatable. `role` is a job title, shown as written in every locale.
 
 ### Profile about fields
 

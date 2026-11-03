@@ -33,14 +33,31 @@ export const es = {
   about: {
     journeyCommand: "cat trayectoria.log",
     factsCommand: "neofetch",
-    /** Appended to open-ended journey years, e.g. "2023–" → "2023–actualidad". */
-    present: "actualidad",
     facts: {
       location: "ubicación",
       languages: "idiomas",
       education: "formación",
       focus: "enfoque",
     },
+  },
+  time: {
+    /** Ongoing ranges: "2023–present", "Aug 2016 – present". */
+    present: "actualidad",
+    /** Month abbreviations, January first (periods in the experience timeline). */
+    months: [
+      "ene",
+      "feb",
+      "mar",
+      "abr",
+      "may",
+      "jun",
+      "jul",
+      "ago",
+      "sep",
+      "oct",
+      "nov",
+      "dic",
+    ],
   },
   switcher: {
     label: "Idioma",

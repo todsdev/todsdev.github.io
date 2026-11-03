@@ -29,7 +29,11 @@ export function isLocale(value: unknown): value is Locale {
 }
 
 type Path<T> = {
-  [K in keyof T & string]: T[K] extends string ? K : `${K}.${Path<T[K]>}`;
+  [K in keyof T & string]: T[K] extends string
+    ? K
+    : T[K] extends readonly unknown[]
+      ? never // arrays (e.g. time.months) have their own accessors
+      : `${K}.${Path<T[K]>}`;
 }[keyof T & string];
 
 /** Every valid dot-path key into the dictionaries, e.g. `"nav.about"`. */
@@ -52,4 +56,9 @@ export function localePath<L extends Locale, H extends `#${string}` | "" = "">(
 ): `${LocalePrefix<L>}${H}` {
   const prefix = locale === "en" ? "/" : `/${locale}/`;
   return `${prefix}${hash ?? ""}` as `${LocalePrefix<L>}${H}`;
+}
+
+/** Month abbreviations for a locale, January first. */
+export function months(locale: Locale): readonly string[] {
+  return dictionaries[locale].time.months;
 }

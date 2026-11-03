@@ -1,0 +1,204 @@
+---
+/**
+ * Experience timeline (rendered inside <Section id="experience">): entries newest
+ * first, each anchored to a marker on the scroll thread; sub-events (e.g. each
+ * Olympic Games) get smaller ticks. Markers follow the thread's marker contract
+ * (`data-thread-marker` → `data-reached`, set by src/scripts/thread.ts).
+ */
+import { months, t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import { formatPeriod } from "../lib/period";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+// Newest first by start date; getEntries already sorted by `order`, and the
+// sort is stable, so `order` breaks ties.
+const entries = (await getEntries("experience", locale)).sort(
+  (a, b) => b.start.getTime() - a.start.getTime(),
+);
+const monthNames = months(locale);
+const present = t(locale, "time.present");
+---
+
+<ol class="xp" role="list">
+  {entries.map((entry) => {
+    const period = formatPeriod(entry.start, entry.end, monthNames, present);
+    const events = [...(entry.events ?? [])].sort((a, b) => b.year - a.year);
+    return (
+      <li class="xp__entry">
+        <p class="xp__period">
+          <span class="xp__marker" data-thread-marker aria-hidden="true" />
+          <time datetime={period.start.datetime}>{period.start.text}</time>
+          {" – "}
+          {period.end.datetime ? (
+            <time datetime={period.end.datetime}>{period.end.text}</time>
+          ) : (
+            <span>{period.end.text}</span>
+          )}
+        </p>
+        <h3 class="xp__company">{entry.company}</h3>
+        <p class="xp__meta">
+          {entry.role} · {entry.location}
+        </p>
+        <p class="xp__desc">{entry.description}</p>
+        {entry.tech.length > 0 && (
+          <ul class="xp__tags" role="list">
+            {entry.tech.map((tech) => (
+              <li class="xp__tag">{tech}</li>
+            ))}
+          </ul>
+        )}
+        {events.length > 0 && (
+          <ol class="xp__events" role="list">
+            {events.map((event) => (
+              <li class="xp__event">
+                <span class="xp__tick" data-thread-marker aria-hidden="true" />
+                <span class="xp__year">{event.year}</span>{" "}
+                <span class="xp__event-text">
+                  {event.name}&nbsp; ·&nbsp; {event.role}
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  .xp {
+    display: grid;
+    gap: var(--space-5);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+  }
+
+  .xp__entry {
+    position: relative;
+  }
+
+  .xp__period {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+  }
+
+  /* Regular weight on purpose: bold would load a third font file late. */
+  .xp__company {
+    margin-top: var(--space-1);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    font-weight: 400;
+  }
+
+  .xp__meta {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .xp__desc {
+    max-width: var(--measure);
+    margin-top: var(--space-3);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* Terminal-like tokens: bordered monospace, black/gray tokens only. */
+  .xp__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+  }
+
+  .xp__tag {
+    padding: 0 0.4em;
+    border: 1px solid var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.6;
+  }
+
+  /* Events as terminal output: the year keeps its own column at every width
+     (4 glyphs + 2 spaces = 3.6em in IBM Plex Mono's 0.6em advance), and wrapped
+     names align under the name. */
+  .xp__events {
+    display: grid;
+    gap: var(--space-1);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .xp__event {
+    position: relative;
+    padding-left: 3.6em;
+    text-indent: -3.6em;
+  }
+
+  .xp__year {
+    display: inline-block;
+    min-width: 3em;
+    color: var(--text-muted);
+    text-indent: 0;
+  }
+
+  .xp__event-text {
+    color: var(--text);
+  }
+
+  /*
+   * Thread markers: positioned from their entry/event onto the scroll-thread line
+   * (half the gutter to the left of the content edge), centred on the first line.
+   * Default = "passed" (also the no-JS look); upcoming only while JS has not
+   * flagged them reached. Only colours/borders change, so nothing reflows.
+   */
+  .xp__marker,
+  .xp__tick {
+    position: absolute;
+    left: calc(var(--thread-gutter) / -2);
+    translate: -50% -50%;
+    pointer-events: none;
+  }
+
+  .xp__marker {
+    top: 0.8em; /* half the period line (line-height 1.6) */
+    width: 9px;
+    height: 9px;
+    border: 1px solid var(--text-muted);
+    background: var(--text-muted);
+  }
+
+  .xp__tick {
+    top: 0.8em; /* half the event line */
+    width: 5px;
+    height: 1px;
+    background: color-mix(in srgb, var(--text-muted) 60%, var(--bg));
+  }
+
+  :global(.js) .xp__marker:not([data-reached]) {
+    border-color: var(--text-dim);
+    background: var(--bg);
+  }
+
+  :global(.js) .xp__tick:not([data-reached]) {
+    background: var(--text-dim);
+  }
+
+  /* Reduced motion: thread fully drawn, so every marker reads as passed. */
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .xp__marker:not([data-reached]) {
+      border-color: var(--text-muted);
+      background: var(--text-muted);
+    }
+
+    :global(.js) .xp__tick:not([data-reached]) {
+      background: color-mix(in srgb, var(--text-muted) 60%, var(--bg));
+    }
+  }
+</style>
