@@ -36,11 +36,11 @@ Each entry SHALL show its period as `<start> – <end>` using localized month ab
 - **THEN** its period reads `Aug 2016 – present`, `ago 2016 – atual` or `ago 2016 – actualidad`, and only the start is a `<time>` element
 
 ### Requirement: Entry content
-Each entry SHALL show the company, the role and location in the page's language (falling back to English), the description in the page's language as prose capped at the reading measure, and one tag per tech item. Entries without tech items show no tag list.
+Each entry SHALL show the company, the role in the page's language (falling back to English), the location as written in the content, the description in the page's language as prose capped at the reading measure, and one tag per tech item. Entries without tech items show no tag list.
 
 #### Scenario: Spanish entry
 - **WHEN** the Horus entry is rendered in Spanish
-- **THEN** it shows "Horus", the Spanish role, the location, the Spanish description (lines of at most about 65 characters) and the tags Kotlin, Java, Spring Boot, Python and REST APIs
+- **THEN** it shows "Horus", the Spanish role, the location as written, the Spanish description (lines of at most about 65 characters) and the tags Kotlin, Java, Spring Boot, Python and REST APIs
 
 #### Scenario: No tech items
 - **WHEN** an entry's `tech` list is empty, like OBS

@@ -1,0 +1,70 @@
+---
+/**
+ * Experience timeline (rendered inside <Section id="experience">): entries newest
+ * first, each anchored to a marker on the scroll thread; sub-events (e.g. each
+ * Olympic Games) get smaller ticks. Markers follow the thread's marker contract
+ * (`data-thread-marker` → `data-reached`, set by src/scripts/thread.ts).
+ */
+import { months, t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import { formatPeriod } from "../lib/period";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+// Newest first by start date; getEntries already sorted by `order`, and the
+// sort is stable, so `order` breaks ties.
+const entries = (await getEntries("experience", locale)).sort(
+  (a, b) => b.start.getTime() - a.start.getTime(),
+);
+const monthNames = months(locale);
+const present = t(locale, "time.present");
+---
+
+<ol class="xp" role="list">
+  {entries.map((entry) => {
+    const period = formatPeriod(entry.start, entry.end, monthNames, present);
+    const events = [...(entry.events ?? [])].sort((a, b) => b.year - a.year);
+    return (
+      <li class="xp__entry">
+        <p class="xp__period">
+          <span class="xp__marker" data-thread-marker aria-hidden="true" />
+          <time datetime={period.start.datetime}>{period.start.text}</time>
+          {" – "}
+          {period.end.datetime ? (
+            <time datetime={period.end.datetime}>{period.end.text}</time>
+          ) : (
+            <span>{period.end.text}</span>
+          )}
+        </p>
+        <h3 class="xp__company">{entry.company}</h3>
+        <p class="xp__meta">
+          {entry.role} · {entry.location}
+        </p>
+        <p class="xp__desc">{entry.description}</p>
+        {entry.tech.length > 0 && (
+          <ul class="xp__tags" role="list">
+            {entry.tech.map((tech) => (
+              <li class="xp__tag">{tech}</li>
+            ))}
+          </ul>
+        )}
+        {events.length > 0 && (
+          <ol class="xp__events" role="list">
+            {events.map((event) => (
+              <li class="xp__event">
+                <span class="xp__tick" data-thread-marker aria-hidden="true" />
+                <span class="xp__year">{event.year}</span>{" "}
+                <span class="xp__event-text">
+                  {event.name} · {event.role}
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
+      </li>
+    );
+  })}
+</ol>
