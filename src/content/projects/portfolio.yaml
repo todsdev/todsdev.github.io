@@ -24,3 +24,9 @@ tech:
   - OpenSpec
   - GitHub Actions
 order: 4
+screenshots:
+  - src: ./portfolio.webp
+    alt:
+      en: "This portfolio's hero on a phone: a grayscale photo, the ./hello prompt and the name Thiago Rodrigues, Android Developer."
+      pt-br: "O topo deste portfólio no celular: uma foto em tons de cinza, o prompt ./hello e o nome Thiago Rodrigues, Android Developer."
+      es: "La portada de este portafolio en un teléfono: una foto en escala de grises, el prompt ./hello y el nombre Thiago Rodrigues, Android Developer."

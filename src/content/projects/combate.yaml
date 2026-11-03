@@ -25,3 +25,9 @@ tech:
   - Analytics
 order: 3
 featured: true
+screenshots:
+  - src: ./combate.webp
+    alt:
+      en: "Combate Play home screen: rows of fight events and boxing videos to watch."
+      pt-br: "Tela inicial do Combate Play: fileiras de eventos de luta e vídeos de boxe para assistir."
+      es: "Pantalla de inicio de Combate Play: filas de eventos de lucha y videos de boxeo para ver."

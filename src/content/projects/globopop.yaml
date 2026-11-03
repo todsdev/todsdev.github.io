@@ -25,3 +25,9 @@ tech:
   - Modular Architecture
 order: 1
 featured: true
+screenshots:
+  - src: ./globopop.webp
+    alt:
+      en: "GloboPop home feed: a full-screen vertical video from Multishow with like, share and follow buttons."
+      pt-br: "Feed inicial do GloboPop: um vídeo vertical em tela cheia do Multishow com botões de curtir, compartilhar e seguir."
+      es: "Feed de inicio de GloboPop: un video vertical a pantalla completa de Multishow con botones de me gusta, compartir y seguir."

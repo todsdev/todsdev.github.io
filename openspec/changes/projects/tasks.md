@@ -21,7 +21,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
   - Rename Combate to "Combate Play" and remove the TODO comments.
   - Verify: `npm run build` passes with no fallback warnings.
   - Verify by temporarily breaking the data, then reverting. Each of these must fail the build, naming the entry and field: a missing `ownership`, `ownership: client`, a contributor without `owner`, an owner project with `owner`, an empty `via`, and an App Store URL placed in `playStore`.
-- [ ] 2.2 Add the `screenshots` field (`src` checked against a projects image glob and piped into `image()`, localized `alt`).
+- [x] 2.2 Add the `screenshots` field (`src` checked against a projects image glob and piped into `image()`, localized `alt`).
   - Download one iPhone screenshot (600×1300) per Globo app from its official App Store listing.
   - Re-encode each to WebP with metadata stripped (≤ 60 KB each), view it, and write alt text in en/pt-br/es describing the screen.
   - Capture the live hero at 390×845 (DPR 2) once typing finishes, resize it to 600×1300 and encode it the same way.

@@ -25,3 +25,9 @@ tech:
   - Analytics
 order: 2
 featured: true
+screenshots:
+  - src: ./premiere.webp
+    alt:
+      en: "Premiere home screen: a featured Copa do Brasil match with its live score, above a list of live games."
+      pt-br: "Tela inicial do Premiere: uma partida da Copa do Brasil em destaque com o placar ao vivo, acima da lista de jogos ao vivo."
+      es: "Pantalla de inicio de Premiere: un partido destacado de la Copa do Brasil con su marcador en vivo, sobre una lista de partidos en vivo."
