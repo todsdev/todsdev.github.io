@@ -1,0 +1,94 @@
+---
+/**
+ * Project cards (rendered inside <Section id="projects">), built entirely from the
+ * projects collection: phone-framed first screenshot, ownership badge, description,
+ * tech tags and terminal actions. Under the list, the ownership note is generated
+ * from the contributor projects (src/lib/projects.ts).
+ */
+import { Picture } from "astro:assets";
+import { t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import {
+  ownershipNotes,
+  projectActions,
+  sortProjects,
+  type ActionKind,
+} from "../lib/projects";
+import TechTags from "./TechTags.astro";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const projects = sortProjects(await getEntries("projects", locale));
+const notes = ownershipNotes(projects, locale, {
+  one: t(locale, "projects.note.one"),
+  other: t(locale, "projects.note.other"),
+  through: t(locale, "projects.note.through"),
+});
+const newTab = t(locale, "projects.newTab");
+const destination = (kind: ActionKind, title: string) =>
+  t(locale, `projects.destination.${kind}`).replace("{title}", title);
+---
+
+<ul class="projects" role="list">
+  {projects.map((project) => {
+    const titleId = `project-${project.id}`;
+    const shot = project.screenshots?.[0];
+    const actions = projectActions(project);
+    return (
+      <li>
+        <article
+          class:list={["card", { "card--shot": shot }]}
+          aria-labelledby={titleId}
+        >
+          {shot && (
+            <figure class="card__phone">
+              <Picture
+                src={shot.src}
+                alt={shot.alt}
+                formats={["avif", "webp"]}
+                widths={[160, 320, 480]}
+                sizes="(min-width: 40rem) 9rem, 8rem"
+                loading="lazy"
+                decoding="async"
+                class="card__shot"
+              />
+            </figure>
+          )}
+          <div class="card__body">
+            <h3 id={titleId} class="card__title">
+              {project.title}
+            </h3>
+            <p class="card__badge">
+              {t(locale, `projects.ownership.${project.ownership}`)}
+              {project.via &&
+                ` · ${t(locale, "projects.via").replace("{name}", project.via)}`}
+            </p>
+            <p class="card__desc">{project.description}</p>
+            <TechTags items={project.tech} />
+            {project.status === "building" && (
+              <p class="card__status">
+                [{t(locale, "projects.building")}{" "}
+                <span aria-hidden="true">▓▓▓░░░</span>]
+              </p>
+            )}
+            {actions.length > 0 && (
+              <ul class="card__actions" role="list">
+                {actions.map((action) => (
+                  <li>
+                    {/* No whitespace between the command and its hidden destination: it would read "play-store ,". */}
+                    {/* prettier-ignore */}
+                    <a class="card__action" href={action.href} target="_blank" rel="noopener"><span aria-hidden="true">$ </span>{action.command}<span class="visually-hidden">{`, ${destination(action.kind, project.title)} (${newTab})`}</span></a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </article>
+      </li>
+    );
+  })}
+</ul>
+{notes.length > 0 && <p class="projects__note">{notes.join(" ")}</p>}

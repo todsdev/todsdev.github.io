@@ -43,7 +43,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
   - `building` dropping store actions but keeping site and repo;
   - the note strings exactly as in the "Notes per locale" and "Single app" scenarios, no serial comma in English, two owners giving two sentence pairs in card order, a group without `via`, hidden projects excluded, and no notes when there are no contributors.
 - [x] 3.2 Extract `TechTags.astro` from `Experience.astro` and use it there. Verify `x-style.mjs` and `x-stable.mjs` still pass locally, with no change in the experience section's tag boxes
-- [ ] 3.3 Create `src/components/Projects.astro` and render it in `<Section id="projects">`. The component contains:
+- [x] 3.3 Create `src/components/Projects.astro` and render it in `<Section id="projects">`. The component contains:
   - a list of `article`s, each with an `h3` title and the badge;
   - the description, tags and actions (visually-hidden localized destination, `target="_blank"`, `rel="noopener"`);
   - the building status, with the blocks `aria-hidden`;
