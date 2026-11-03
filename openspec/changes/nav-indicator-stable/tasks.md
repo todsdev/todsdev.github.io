@@ -19,7 +19,7 @@ All work happens on `feat/nav-indicator-stable`. Never push directly to `main`. 
 
 ## 4. Integration
 
-- [ ] 4.1 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`; verify everything passes and the PR checks are green
+- [x] 4.1 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`; verify everything passes and the PR checks are green
 
 ## Workflow follow-up
 
