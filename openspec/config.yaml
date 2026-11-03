@@ -21,18 +21,6 @@ context: |
     the hero's deliberate "Android developer" typo, and names with their own
     casing ("iOS", "gRPC", "act digital"); extend OWN_CASING_WORDS when needed.
 
-  Known issues (fix in the polish change, then remove from this list):
-  - Nav at 320px viewport width: the section-link strip is only ~119px wide
-    beside the language switcher, so active labels with the "> " prefix and
-    cursor (EN "Experience"; PT "Experiência", "Habilidades"; ES "Experiencia",
-    "Proyectos", "Habilidades") are wider than the strip and show truncated.
-    Fine from 360px up. Found during the hero change (2026-11-02).
-  - Font-swap layout shift: on the live site the self-hosted IBM Plex Mono can
-    arrive after first paint, and the swap shifts the nav links (intermittent,
-    CLS ~0.0004, ~200-600 ms after load; not reproducible locally). Fix:
-    preload the fonts (e.g. <link rel="preload" as="font" crossorigin> for the
-    latin woff2 files). Found verifying the hero deploy (2026-11-02).
-
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
 # Example:
