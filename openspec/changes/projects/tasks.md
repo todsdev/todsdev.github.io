@@ -77,7 +77,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
   - **Building:** set one project to `status: building`. Its card shows the translated status line in each locale and has no store actions, and the blocks are `aria-hidden`.
   - **Hidden contributor:** hide Premiere. The note reads "GloboPop and Combate Play are owned by Globo. …".
   - **No contributors:** hide all three Globo apps. No note element is rendered.
-- [ ] 4.3 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+- [x] 4.3 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
 
 ## Workflow follow-up
 
