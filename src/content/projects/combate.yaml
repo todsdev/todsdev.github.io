@@ -1,5 +1,4 @@
-# TODO: add the Play Store link in `url` after confirming the app can be shown in the portfolio.
-title: Combate
+title: Combate Play
 description:
   en: >-
     Globo's combat sports streaming app. I worked on new features, TV-focused experiences across
@@ -13,6 +12,12 @@ description:
     experiencias para TV en distintas plataformas Android, reproducción de video y en la
     analítica de consumo de contenido.
 status: live
+ownership: contributor
+owner: Globo
+via: act digital
+stores:
+  playStore: https://play.google.com/store/apps/details?id=br.tv.horizonte.combate.vod.android
+  appStore: https://apps.apple.com/br/app/id777815939
 tech:
   - Kotlin
   - Android TV

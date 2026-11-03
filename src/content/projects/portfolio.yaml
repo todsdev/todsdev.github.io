@@ -15,6 +15,7 @@ description:
     OpenSpec, se implementa con un commit por tarea y se verifica con pruebas automatizadas en el
     navegador.
 status: live
+ownership: owner
 url: https://todsdev.github.io/
 repoUrl: https://github.com/todsdev/todsdev.github.io
 tech:

@@ -1,4 +1,3 @@
-# TODO: add the Play Store link in `url` after confirming the app can be shown in the portfolio.
 title: GloboPop
 description:
   en: >-
@@ -13,6 +12,12 @@ description:
     funcionalidades de perfil de punta a punta (edición de perfil, contenido con "me gusta") con
     APIs GraphQL y funciones de personalización.
 status: live
+ownership: contributor
+owner: Globo
+via: act digital
+stores:
+  playStore: https://play.google.com/store/apps/details?id=com.globo.globopop
+  appStore: https://apps.apple.com/br/app/id6757765539
 tech:
   - Kotlin
   - Jetpack Compose

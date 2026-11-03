@@ -16,7 +16,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `p-*.mjs`. Downloaded s
 
 ## 2. Content model and content
 
-- [ ] 2.1 Add `ownership` (required enum), `owner` (required for contributors, rejected for owners), `via` (plain non-empty text, optional) and `stores` (optional, domain-checked `playStore`/`appStore`) to the projects schema.
+- [x] 2.1 Add `ownership` (required enum), `owner` (required for contributors, rejected for owners), `via` (plain non-empty text, optional) and `stores` (optional, domain-checked `playStore`/`appStore`) to the projects schema.
   - In the same commit, give all four YAMLs their `ownership`/`owner`/`via` (`via: act digital` for the Globo apps) and add the three Globo apps' verified store links from proposal.md (exact URLs).
   - Rename Combate to "Combate Play" and remove the TODO comments.
   - Verify: `npm run build` passes with no fallback warnings.
