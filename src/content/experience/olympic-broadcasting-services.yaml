@@ -23,30 +23,53 @@ description:
     internacionales para mantener el estándar de las transmisiones en vivo.
 tech: []
 order: 3
-# Not in the current schema (stripped at build time). To be added to the experience schema
-# in the experience-timeline change, so each Games edition becomes a marker on the timeline.
+# Each Games edition: rendered under this entry and as a tick on the scroll thread.
 events:
   - year: 2026
-    name: Dakar 2026 Youth Olympic Games
+    name:
+      en: Dakar 2026 Youth Olympic Games
+      pt-br: Jogos Olímpicos da Juventude de Dakar 2026
+      es: Juegos Olímpicos de la Juventud de Dakar 2026
     role: Quality Control Specialist
   - year: 2026
-    name: Milano Cortina 2026 Olympic Winter Games
+    name:
+      en: Milano Cortina 2026 Olympic Winter Games
+      pt-br: Jogos Olímpicos de Inverno de Milão-Cortina 2026
+      es: Juegos Olímpicos de Invierno de Milán-Cortina 2026
     role: Quality Control Coordinator
   - year: 2024
-    name: Paris 2024 Olympic Games
+    name:
+      en: Paris 2024 Olympic Games
+      pt-br: Jogos Olímpicos de Paris 2024
+      es: Juegos Olímpicos de París 2024
     role: Quality Control Specialist
   - year: 2022
-    name: Beijing 2022 Olympic and Paralympic Winter Games
+    name:
+      en: Beijing 2022 Olympic and Paralympic Winter Games
+      pt-br: Jogos Olímpicos e Paralímpicos de Inverno de Pequim 2022
+      es: Juegos Olímpicos y Paralímpicos de Invierno de Pekín 2022
     role: Quality Control Specialist & Pro Video Logger
   - year: 2021
-    name: Tokyo 2020 Olympic and Paralympic Games
+    name:
+      en: Tokyo 2020 Olympic and Paralympic Games
+      pt-br: Jogos Olímpicos e Paralímpicos de Tóquio 2020
+      es: Juegos Olímpicos y Paralímpicos de Tokio 2020
     role: Pro Video Logger
   - year: 2018
-    name: Buenos Aires 2018 Youth Olympic Games
+    name:
+      en: Buenos Aires 2018 Youth Olympic Games
+      pt-br: Jogos Olímpicos da Juventude de Buenos Aires 2018
+      es: Juegos Olímpicos de la Juventud de Buenos Aires 2018
     role: File Transfer
   - year: 2018
-    name: PyeongChang 2018 Olympic Winter Games
+    name:
+      en: PyeongChang 2018 Olympic Winter Games
+      pt-br: Jogos Olímpicos de Inverno de PyeongChang 2018
+      es: Juegos Olímpicos de Invierno de PyeongChang 2018
     role: Video Logger
   - year: 2016
-    name: Rio 2016 Olympic and Paralympic Games
+    name:
+      en: Rio 2016 Olympic and Paralympic Games
+      pt-br: Jogos Olímpicos e Paralímpicos Rio 2016
+      es: Juegos Olímpicos y Paralímpicos de Río 2016
     role: Logger

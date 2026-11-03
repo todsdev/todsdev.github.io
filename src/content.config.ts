@@ -99,6 +99,16 @@ const experience = defineCollection({
     end: z.coerce.date().optional(),
     description: localizedSentence,
     tech: z.array(text).default([]),
+    /** Optional sub-events (e.g. each Olympic Games); `role` is a job title, kept as written. */
+    events: z
+      .array(
+        z.object({
+          year: z.number().int(),
+          name: localizedText,
+          role: text,
+        }),
+      )
+      .optional(),
   }),
 });
 

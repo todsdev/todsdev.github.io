@@ -10,7 +10,7 @@ All work happens on `feat/experience-timeline`. Never push directly to `main`. A
 
 ## 2. Content model and wording
 
-- [ ] 2.1 Add the optional `events` field to the experience schema (`year` int, localized `name`, non-empty `role`), and add the pt-br/es names from the approved table in proposal.md to the eight OBS events (exact strings). Verify `npm run build` passes with no fallback warnings, the OBS entry exposes 8 events with localized names, and an invalid event (non-integer year, missing `name.en`, empty role, each temporarily) fails the build naming the file and field (revert)
+- [x] 2.1 Add the optional `events` field to the experience schema (`year` int, localized `name`, non-empty `role`), and add the pt-br/es names from the approved table in proposal.md to the eight OBS events (exact strings). Verify `npm run build` passes with no fallback warnings, the OBS entry exposes 8 events with localized names, and an invalid event (non-integer year, missing `name.en`, empty role, each temporarily) fails the build naming the file and field (revert)
 - [ ] 2.2 Add `time.months` and `time.present` to all dictionaries, move About from `about.present` to `time.present` (removing `about.present`), and add `src/lib/period.ts` with `period.test.ts`. Verify `npm test` covers closed/open periods, `datetime`, time-zone safety and all locales; `npm run check` fails if a locale lacks a month (temporarily); the about journey output is byte-identical (`a-space`, `a43`)
 - [ ] 2.3 Document `events` in the README content table/section; verify the documented YAML validates
 
