@@ -12,8 +12,11 @@
 
   /* Typography */
   --font-title:
-    "VT323 Tilde", "VT323", ui-monospace, Menlo, Consolas, monospace;
-  --font-body: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    "VT323 Tilde", "VT323", "VT323 Fallback", "VT323 Fallback CN", ui-monospace,
+    Menlo, Consolas, monospace;
+  --font-body:
+    "IBM Plex Mono", "IBM Plex Mono Fallback", "IBM Plex Mono Fallback CN",
+    ui-monospace, Menlo, Consolas, monospace;
 
   /* Spacing */
   --space-1: 0.25rem;
