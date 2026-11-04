@@ -78,6 +78,8 @@ const profile = defineCollection({
             string
           >,
         ),
+      /** Source repository of this site, linked from the footer. */
+      sourceUrl: z.url().optional(),
       /** "Open to work" style badge in the hero; editable without code changes. */
       availability: z.object({
         enabled: z.boolean(),
@@ -89,8 +91,18 @@ const profile = defineCollection({
 const contacts = defineCollection({
   loader: yamlIn("contacts"),
   schema: common.extend({
-    kind: z.enum(["email", "github", "linkedin", "other"]),
+    kind: z.enum([
+      "email",
+      "phone",
+      "whatsapp",
+      "linkedin",
+      "github",
+      "instagram",
+      "other",
+    ]),
     label: localizedText,
+    /** Plain text shown on the contact line, e.g. "trod.dev@gmail.com" or "@ogtods". */
+    value: text,
     url: z.url(),
   }),
 });

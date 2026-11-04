@@ -1,0 +1,8 @@
+kind: email
+label:
+  en: email
+  pt-br: e-mail
+  es: correo
+value: trod.dev@gmail.com
+url: mailto:trod.dev@gmail.com
+order: 1

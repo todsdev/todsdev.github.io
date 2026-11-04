@@ -16,7 +16,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
 
 ## 2. Content model and content
 
-- [ ] 2.1 Extend the contacts schema (kinds `phone`, `whatsapp`, `instagram`; required `value`) and add the optional profile `sourceUrl`. In the same commit, replace the contacts with the six entries from proposal.md (labels per design, order 1–6) and set `sourceUrl`. Verify:
+- [x] 2.1 Extend the contacts schema (kinds `phone`, `whatsapp`, `instagram`; required `value`) and add the optional profile `sourceUrl`. In the same commit, replace the contacts with the six entries from proposal.md (labels per design, order 1–6) and set `sourceUrl`. Verify:
   - `npm run build` passes with no fallback warnings;
   - `kind: telegram`, a missing `value` and a malformed `sourceUrl` (each temporarily) fail the build, naming the entry and field.
 - [ ] 2.2 Strip the three résumés with the scratch `pdf-lib` tool and store them in `public/resume/`. Verify:

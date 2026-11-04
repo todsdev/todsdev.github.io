@@ -1,0 +1,9 @@
+# Protected kind: never rendered in readable form; the page assembles it at runtime.
+kind: whatsapp
+label:
+  en: whatsapp
+  pt-br: whatsapp
+  es: whatsapp
+value: +55 21 97147-0428
+url: https://wa.me/5521971470428
+order: 3

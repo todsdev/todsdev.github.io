@@ -1,0 +1,9 @@
+# Protected kind: never rendered in readable form; the page assembles it at runtime.
+kind: phone
+label:
+  en: phone
+  pt-br: telefone
+  es: teléfono
+value: +55 21 97147-0428
+url: tel:+5521971470428
+order: 2
