@@ -78,7 +78,6 @@ export const en = {
       site: "{title} website",
       repo: "{title} source code",
     },
-    newTab: "opens in a new tab",
     /**
      * Ownership note, one per owner/via group of contributor projects. `{app}`/`{apps}` are
      * the titles joined with the locale's list format, `{through}` is `note.through` or empty.
@@ -89,6 +88,14 @@ export const en = {
         "{apps} are owned by {owner}. I contributed to them as an Android developer{through}.",
       through: " through {via}",
     },
+  },
+  courses: {
+    /** Accessible destination for "$ open cert"; `{title}` is the course title. */
+    destination: "{title} certificate",
+  },
+  links: {
+    /** Appended to the accessible name of links that open in a new tab. */
+    newTab: "opens in a new tab",
   },
   switcher: {
     label: "Language",

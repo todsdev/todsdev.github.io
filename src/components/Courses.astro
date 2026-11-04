@@ -1,0 +1,119 @@
+---
+/**
+ * Courses (rendered inside <Section id="courses">) as `ls -l`-style output: one line
+ * per certificate with its localized date, issuer, title and a "$ open cert" action.
+ * Everything comes from the courses collection; order is in src/lib/courses.ts.
+ */
+import { months, t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import { OPEN_CERT, sortCourses } from "../lib/courses";
+import { formatMonth, isoDate } from "../lib/period";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const courses = sortCourses(await getEntries("courses", locale));
+const monthNames = months(locale);
+const newTab = t(locale, "links.newTab");
+const destination = (title: string) =>
+  t(locale, "courses.destination").replace("{title}", title);
+---
+
+<ul class="ls" role="list">
+  {courses.map((course) => (
+    <li class="ls__row">
+      <time class="ls__date" datetime={isoDate(course.date)}>
+        {formatMonth(course.date, monthNames)}
+      </time>
+      <span class="ls__issuer">
+        <span class="ls__sep" aria-hidden="true">
+          ·{" "}
+        </span>
+        {course.issuer}
+      </span>
+      <span class="ls__title">
+        <span class="ls__sep ls__sep--title" aria-hidden="true">
+          ·{" "}
+        </span>
+        {course.title}
+      </span>
+      {/* No whitespace between the command and its hidden destination: it would read "cert ,". */}
+      {/* prettier-ignore */}
+      <a class="ls__action" href={course.certificateUrl} target="_blank" rel="noopener"><span aria-hidden="true">$ </span>{OPEN_CERT}<span class="visually-hidden">{`, ${destination(course.title)} (${newTab})`}</span></a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /*
+   * `ls -l` columns on wide screens: the list is the grid and every row is a subgrid,
+   * so dates, issuers and titles line up across lines. Gaps are one glyph (0.6em).
+   */
+  .ls {
+    display: grid;
+    grid-template-columns: max-content max-content minmax(0, 1fr) max-content;
+    column-gap: 0.6em;
+    row-gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .ls__row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+
+  .ls__date,
+  .ls__issuer,
+  .ls__sep {
+    color: var(--text-muted);
+  }
+
+  .ls__title {
+    color: var(--text);
+  }
+
+  .ls__action {
+    color: var(--text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .ls__action:hover,
+  .ls__action:focus-visible {
+    color: var(--highlight);
+  }
+
+  /* Phones: date and issuer on one line, the title below, then the action. */
+  @media (max-width: 39.99rem) {
+    .ls {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-3);
+    }
+
+    .ls__row {
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 0.6em;
+    }
+
+    .ls__title {
+      grid-column: 1 / -1;
+    }
+
+    /* The title's separator would start its own line here. */
+    .ls__sep--title {
+      display: none;
+    }
+
+    .ls__action {
+      grid-column: 1 / -1;
+      justify-self: start;
+    }
+  }
+</style>
