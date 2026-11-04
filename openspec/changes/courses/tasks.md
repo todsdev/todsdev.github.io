@@ -40,7 +40,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
   - one list of five items;
   - hrefs, `target="_blank"` and `rel="noopener"`;
   - no hardcoded course text in the component (grep).
-- [ ] 3.4 Style the list per design.md (subgrid columns ≥ 40rem, stacked rows < 40rem, colors). Verify with `c-layout.mjs` at 1280px and 320px in all locales:
+- [x] 3.4 Style the list per design.md (subgrid columns ≥ 40rem, stacked rows < 40rem, colors). Verify with `c-layout.mjs` at 1280px and 320px in all locales:
   - columns aligned at 1280px;
   - at 320px, date and issuer on one line with the title below;
   - no overflow;
