@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import About from "./About.astro";
+import Courses from "./Courses.astro";
 import Experience from "./Experience.astro";
 import Hero from "./Hero.astro";
 import Projects from "./Projects.astro";
@@ -73,6 +74,10 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
       ) : id === "skills" ? (
         <Section id={id} locale={locale}>
           <Skills locale={locale} />
+        </Section>
+      ) : id === "courses" ? (
+        <Section id={id} locale={locale}>
+          <Courses locale={locale} />
         </Section>
       ) : (
         <Section id={id} locale={locale} />

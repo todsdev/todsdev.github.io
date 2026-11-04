@@ -1,0 +1,47 @@
+---
+/**
+ * Courses (rendered inside <Section id="courses">) as `ls -l`-style output: one line
+ * per certificate with its localized date, issuer, title and a "$ open cert" action.
+ * Everything comes from the courses collection; order is in src/lib/courses.ts.
+ */
+import { months, t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import { OPEN_CERT, sortCourses } from "../lib/courses";
+import { formatMonth, isoDate } from "../lib/period";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const courses = sortCourses(await getEntries("courses", locale));
+const monthNames = months(locale);
+const newTab = t(locale, "links.newTab");
+const destination = (title: string) =>
+  t(locale, "courses.destination").replace("{title}", title);
+---
+
+<ul class="ls" role="list">
+  {courses.map((course) => (
+    <li class="ls__row">
+      <time class="ls__date" datetime={isoDate(course.date)}>
+        {formatMonth(course.date, monthNames)}
+      </time>
+      <span class="ls__issuer">
+        <span class="ls__sep" aria-hidden="true">
+          ·{" "}
+        </span>
+        {course.issuer}
+      </span>
+      <span class="ls__title">
+        <span class="ls__sep ls__sep--title" aria-hidden="true">
+          ·{" "}
+        </span>
+        {course.title}
+      </span>
+      {/* No whitespace between the command and its hidden destination: it would read "cert ,". */}
+      {/* prettier-ignore */}
+      <a class="ls__action" href={course.certificateUrl} target="_blank" rel="noopener"><span aria-hidden="true">$ </span>{OPEN_CERT}<span class="visually-hidden">{`, ${destination(course.title)} (${newTab})`}</span></a>
+    </li>
+  ))}
+</ul>

@@ -34,7 +34,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
 - [x] 3.2 Move `projects.newTab` to `links.newTab` and add `courses.destination` ("{title} certificate" / "certificado de {title}" / "certificado de {title}"). Verify:
   - `npm run check` passes;
   - `p-markup.mjs` still passes unchanged (Projects names identical).
-- [ ] 3.3 Create `src/components/Courses.astro` (markup per design.md) and render it in `<Section id="courses">`. Verify in each built locale:
+- [x] 3.3 Create `src/components/Courses.astro` (markup per design.md) and render it in `<Section id="courses">`. Verify in each built locale:
   - order and dates exactly as in the spec scenarios;
   - `datetime` values;
   - one list of five items;
