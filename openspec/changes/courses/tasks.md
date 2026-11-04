@@ -50,7 +50,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
 
 ## 4. Integration
 
-- [ ] 4.1 Verify the links with `c-links.mjs`:
+- [x] 4.1 Verify the links with `c-links.mjs`:
   - hosted PDFs return 200 with a `%PDF-` body (against `BASE` before deploy);
   - the Udemy URLs are well-formed, and Udemy's certificate image for each id returns 200.
 - [ ] 4.2 Verify no layout shift: CLS 0 and unchanged boxes through load, a full scroll and focusing each action (`c-stable.mjs`), plus `l-cls.mjs` (60 loads)
