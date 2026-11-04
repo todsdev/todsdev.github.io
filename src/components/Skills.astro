@@ -2,8 +2,8 @@
 /**
  * Skills (rendered inside <Section id="skills">) as the numbered contents of a text
  * file, like `cat -n`. Underneath it's an outline: one h3 per category followed by a
- * list of its items. The "# " prefix and " · " separators are real text (copied, but
- * aria-hidden); line numbers are CSS-generated, so they are never copied or read.
+ * list of its items. The "# " prefix, " · " separators and inter-item spaces are real
+ * text (copied; prefix and separators aria-hidden); line numbers are CSS-generated, so they are never copied or read.
  */
 import type { Locale } from "../i18n";
 import { getEntries } from "../lib/content";
@@ -14,8 +14,9 @@ interface Props {
 
 const { locale } = Astro.props;
 const categories = await getEntries("skills", locale);
-// The no-break space keeps each "·" on the line of the item before it.
-const separator = " · ";
+// Each item is an unbreakable box ending in its separator, so "·" never starts a
+// line; the space between items (outside the boxes) is the gap and the break point.
+const separator = "\u00a0·";
 ---
 
 <div class="file">
@@ -29,14 +30,17 @@ const separator = " · ";
       </h3>
       <ul class="file__line file__items" role="list">
         {category.items.map((item, i) => (
-          <li>
-            {item}
-            {i < category.items.length - 1 && (
-              <span class="file__syntax" aria-hidden="true">
-                {separator}
-              </span>
-            )}
-          </li>
+          <Fragment>
+            {i > 0 && " "}
+            <li>
+              {item}
+              {i < category.items.length - 1 && (
+                <span class="file__syntax" aria-hidden="true">
+                  {separator}
+                </span>
+              )}
+            </li>
+          </Fragment>
         ))}
       </ul>
     </div>
@@ -83,9 +87,15 @@ const separator = " · ";
     line-height: inherit;
   }
 
-  /* Items soft-wrap under the text column; the gutter keeps one number per logical line. */
+  /*
+   * Items wrap as whole units: an inline-block moves to the next line intact, and
+   * breaks internally only when it alone is wider than the column (max-width).
+   * `vertical-align: top` keeps every row one line-height tall for the gutter.
+   */
   .file__items li {
-    display: inline;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
   }
 
   .file__syntax {

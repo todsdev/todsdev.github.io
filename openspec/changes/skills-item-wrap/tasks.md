@@ -14,7 +14,7 @@ All work happens on `fix/skills-item-wrap`. Never push directly to `main`. After
 
 ## 2. Whole-item wrapping
 
-- [ ] 2.1 In `Skills.astro`, make each item an inline-block (`max-width: 100%`, `vertical-align: top`). Change the in-item separator to `" ·"`, and put a literal space between items, per design.md. Verify with a new `s-wrap.mjs` at 1280px, 375px and 320px in all locales:
+- [x] 2.1 In `Skills.astro`, make each item an inline-block (`max-width: 100%`, `vertical-align: top`). Change the in-item separator to `" ·"`, and put a literal space between items, per design.md. Verify with a new `s-wrap.mjs` at 1280px, 375px and 320px in all locales:
   - no item spans more than one visual row unless its single-line width exceeds the text column (only "Spec-Driven Development (SDD)" at 320px with the current content);
   - "Video playback & streaming" is on one row at 1280px;
   - no row starts with `·`;
