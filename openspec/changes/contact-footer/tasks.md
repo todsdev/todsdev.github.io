@@ -23,7 +23,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
   - a byte scan finds no Info entries, XMP or page timestamps;
   - the renders are pixel-identical to the originals (all pages);
   - the files are valid two-page PDFs.
-- [ ] 2.3 Add the contact and footer dictionary keys to en/pt-br/es: labels for actions and notes, copy feedback, the WhatsApp message, accessible-name templates and footer strings, with exact strings from the specs. Verify `npm run check` fails if a locale lacks a key (temporarily)
+- [x] 2.3 Add the contact and footer dictionary keys to en/pt-br/es: labels for actions and notes, copy feedback, the WhatsApp message, accessible-name templates and footer strings, with exact strings from the specs. Verify `npm run check` fails if a locale lacks a key (temporarily)
 
 ## 3. Contact section
 

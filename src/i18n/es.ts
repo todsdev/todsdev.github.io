@@ -85,6 +85,28 @@ export const es = {
   links: {
     newTab: "se abre en una pestaña nueva",
   },
+  contact: {
+    noJs: "activa JavaScript para ver el número",
+    copied: "> copiado al portapapeles",
+    whatsappText: "¡Hola, Thiago! Vi tu portafolio y me gustaría conversar.",
+    destination: {
+      mail: "escribir a {value}",
+      call: "llamar al {value}",
+      copy: "copiar {value} al portapapeles",
+      chat: "chatear con {name} por WhatsApp",
+      linkedin: "perfil de {name} en LinkedIn",
+      github: "perfil de {name} en GitHub",
+      instagram: "perfil de {name} en Instagram",
+      vcard: "tarjeta de contacto de {name} (vCard)",
+      resume: "currículum de {name} ({language}, PDF)",
+    },
+  },
+  footer: {
+    builtWith: "hecho con Astro + OpenSpec",
+    repo: "código fuente de este sitio",
+    copyright: "© {year} {name}",
+    lastBuild: "última compilación",
+  },
   switcher: {
     label: "Idioma",
   },

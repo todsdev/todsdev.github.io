@@ -97,6 +97,34 @@ export const en = {
     /** Appended to the accessible name of links that open in a new tab. */
     newTab: "opens in a new tab",
   },
+  contact: {
+    /** Shown on the phone and WhatsApp lines when JavaScript is off (the number is never in the HTML). */
+    noJs: "enable JavaScript to see the number",
+    /** Replaces "$ copy" for about 2s after copying, and is announced via aria-live. */
+    copied: "> copied to clipboard",
+    /** Prefilled WhatsApp message (URL-encoded into ?text=). */
+    whatsappText: "Hi Thiago! I saw your portfolio and would like to talk.",
+    /** Accessible destinations for the actions: {value} is the contact value, {name} the profile name, {language} the résumé language. */
+    destination: {
+      mail: "write to {value}",
+      call: "call {value}",
+      copy: "copy {value} to the clipboard",
+      chat: "chat with {name} on WhatsApp",
+      linkedin: "LinkedIn profile of {name}",
+      github: "GitHub profile of {name}",
+      instagram: "Instagram profile of {name}",
+      vcard: "contact card of {name} (vCard)",
+      resume: "résumé of {name} ({language}, PDF)",
+    },
+  },
+  footer: {
+    builtWith: "built with Astro + OpenSpec",
+    /** Accessible destination of the built-with link. */
+    repo: "source code of this site",
+    /** {year} is the build year, {name} the profile name. */
+    copyright: "© {year} {name}",
+    lastBuild: "last build",
+  },
   switcher: {
     label: "Language",
   },

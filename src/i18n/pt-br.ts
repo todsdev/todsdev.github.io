@@ -85,6 +85,28 @@ export const ptBr = {
   links: {
     newTab: "abre em nova aba",
   },
+  contact: {
+    noJs: "ative o JavaScript para ver o número",
+    copied: "> copiado para a área de transferência",
+    whatsappText: "Olá, Thiago! Vi o seu portfólio e gostaria de conversar.",
+    destination: {
+      mail: "escrever para {value}",
+      call: "ligar para {value}",
+      copy: "copiar {value} para a área de transferência",
+      chat: "conversar com {name} no WhatsApp",
+      linkedin: "perfil de {name} no LinkedIn",
+      github: "perfil de {name} no GitHub",
+      instagram: "perfil de {name} no Instagram",
+      vcard: "cartão de contato de {name} (vCard)",
+      resume: "currículo de {name} ({language}, PDF)",
+    },
+  },
+  footer: {
+    builtWith: "feito com Astro + OpenSpec",
+    repo: "código-fonte deste site",
+    copyright: "© {year} {name}",
+    lastBuild: "última build",
+  },
   switcher: {
     label: "Idioma",
   },
