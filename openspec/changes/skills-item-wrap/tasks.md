@@ -25,7 +25,7 @@ All work happens on `fix/skills-item-wrap`. Never push directly to `main`. After
 
 ## 3. Integration
 
-- [ ] 3.1 Verify no layout shift (`s-stable.mjs`, `l-cls.mjs` with 60 loads), then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+- [x] 3.1 Verify no layout shift (`s-stable.mjs`, `l-cls.mjs` with 60 loads), then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
 
 ## Workflow follow-up
 
