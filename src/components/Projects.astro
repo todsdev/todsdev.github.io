@@ -27,7 +27,7 @@ const notes = ownershipNotes(projects, locale, {
   other: t(locale, "projects.note.other"),
   through: t(locale, "projects.note.through"),
 });
-const newTab = t(locale, "projects.newTab");
+const newTab = t(locale, "links.newTab");
 const destination = (kind: ActionKind, title: string) =>
   t(locale, `projects.destination.${kind}`).replace("{title}", title);
 ---

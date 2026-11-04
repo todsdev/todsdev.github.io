@@ -72,13 +72,18 @@ export const es = {
       site: "sitio web de {title}",
       repo: "código fuente de {title}",
     },
-    newTab: "se abre en una pestaña nueva",
     note: {
       one: "{app} es propiedad de {owner}. Colaboré en ella como desarrollador Android{through}.",
       other:
         "{apps} son propiedad de {owner}. Colaboré en ellas como desarrollador Android{through}.",
       through: " a través de {via}",
     },
+  },
+  courses: {
+    destination: "certificado de {title}",
+  },
+  links: {
+    newTab: "se abre en una pestaña nueva",
   },
   switcher: {
     label: "Idioma",
