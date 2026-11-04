@@ -135,6 +135,17 @@ Each project becomes a card in the projects section, featured projects first, th
 - `screenshots` are paths relative to the project YAML; the card shows the first one in a phone frame (9:19.5, e.g. 600×1300), in grayscale until hovered or focused. Strip metadata before committing. A missing file fails the build.
 - The ownership note under the cards is built from the contributor projects: one sentence pair per `owner`/`via` group, with titles joined in each locale's list format, e.g. "GloboPop, Premiere and Combate Play are owned by Globo. I contributed to them as an Android developer through act digital." Its wording lives in the `projects.note` dictionary templates; adding, hiding or renaming a contributor project updates it automatically.
 
+### Courses
+
+Each course is one line in the courses section (`ls -l` style): localized date · issuer · title · `$ open cert`. Featured courses come first, then the rest, newest first; courses with the same date follow `order`.
+
+- `title` and `issuer` are shown exactly as printed on the certificate. They are names, so they aren't translated.
+- `date` is the completion date (`YYYY-MM-DD`). The page shows the month and year from the locale's month dictionary ("Nov 2022" / "nov 2022").
+- `certificateUrl` opens in a new tab:
+  - **Udemy:** use the official `https://www.udemy.com/certificate/UC-…/` URL.
+  - **Share links that can expire (e.g. Adobe):** host the PDF instead. Put it in `public/certificates/<issuer>-<course>.pdf` and use its absolute site URL (`https://todsdev.github.io/certificates/…`). Keep the original link in a YAML comment.
+- Before publishing a PDF, strip its metadata: the Info dictionary (title, author, producer, dates), XMP, and generator annotations. Check that it still renders the same page.
+
 ### Translatable fields
 
 A translatable field is an object with `en` (required), `pt-br` and `es` (optional):

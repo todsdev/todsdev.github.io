@@ -54,7 +54,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
   - hosted PDFs return 200 with a `%PDF-` body (against `BASE` before deploy);
   - the Udemy URLs are well-formed, and Udemy's certificate image for each id returns 200.
 - [x] 4.2 Verify no layout shift: CLS 0 and unchanged boxes through load, a full scroll and focusing each action (`c-stable.mjs`), plus `l-cls.mjs` (60 loads)
-- [ ] 4.3 Document certificate hosting and stripping in the README. Then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+- [x] 4.3 Document certificate hosting and stripping in the README. Then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
 
 ## Workflow follow-up
 
