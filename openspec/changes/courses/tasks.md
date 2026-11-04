@@ -16,7 +16,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
 
 ## 2. Content
 
-- [ ] 2.1 Strip the three Curso em Vídeo PDFs with `pdf-lib` in a scratch tool directory, and store them as `public/certificates/cursoemvideo-{java-basico,java-poo,algoritmo}.pdf`. Verify:
+- [x] 2.1 Strip the three Curso em Vídeo PDFs with `pdf-lib` in a scratch tool directory, and store them as `public/certificates/cursoemvideo-{java-basico,java-poo,algoritmo}.pdf`. Verify:
   - a byte scan finds no `/Title`, `/Author`, `/Creator`, `/Producer`, `/CreationDate`, `/ModDate` or XMP;
   - each stripped file renders the same page as its original (side-by-side render, viewed);
   - each file is a valid one-page PDF.
