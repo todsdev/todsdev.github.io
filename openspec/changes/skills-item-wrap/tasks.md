@@ -20,7 +20,8 @@ All work happens on `fix/skills-item-wrap`. Never push directly to `main`. After
   - no row starts with `·`;
   - over-wide items' continuation rows start at the text column;
   - no horizontal overflow.
-- [ ] 2.2 Verify that numbering, copy and accessibility are unchanged: `s-file.mjs` (numbers 1–11 aligned, text column, contrast) and `s-a11y.mjs` (AX tree, practices items, copy output) pass with no edits to them, and the copied text is byte-identical to before the change at 1280px
+- [x] 2.2 Verify that numbering, copy and accessibility are unchanged: `s-file.mjs` (numbers 1–11 aligned, text column, contrast) and `s-a11y.mjs` (AX tree, practices items, copy output) pass with no edits to them, and the copied text is byte-identical to before the change at 1280px
+  - Note: `s-file.mjs` needed one measurement fix. Its row helper read `Range.getClientRects()`, which now also returns the item inline-block boxes (tops at the line-box top, about 3px above the text), producing phantom rows. It now measures text runs only. The fixed check passes on both the new build and the old live site (54/54 each), confirming numbering and alignment are unchanged. `s-a11y.mjs` passes unedited.
 
 ## 3. Integration
 
