@@ -20,7 +20,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
   - a byte scan finds no `/Title`, `/Author`, `/Creator`, `/Producer`, `/CreationDate`, `/ModDate` or XMP;
   - each stripped file renders the same page as its original (side-by-side render, viewed);
   - each file is a valid one-page PDF.
-- [ ] 2.2 Replace the placeholder with the five course YAMLs from proposal.md: exact titles, issuers, dates, `featured`, an `order` of 1–5 in final display order, the Udemy URLs, the hosted PDF URLs, and the original Adobe links as comments. Verify:
+- [x] 2.2 Replace the placeholder with the five course YAMLs from proposal.md: exact titles, issuers, dates, `featured`, an `order` of 1–5 in final display order, the Udemy URLs, the hosted PDF URLs, and the original Adobe links as comments. Verify:
   - `npm run build` passes;
   - the collection loads five entries;
   - the placeholder is gone (grep).
