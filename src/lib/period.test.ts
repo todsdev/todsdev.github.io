@@ -1,7 +1,7 @@
 /** Experience period formatting, verified with fixtures. Run with `npm test`. */
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatPeriod } from "./period.ts";
+import { formatMonth, formatPeriod, isoDate } from "./period.ts";
 
 const EN = [
   "Jan",
@@ -92,4 +92,24 @@ test("reads dates in UTC so the month never shifts", () => {
 
 test("each locale has twelve months", () => {
   for (const months of [EN, PT, ES]) assert.equal(months.length, 12);
+});
+
+test("formatMonth gives the short month and year in each locale", () => {
+  const nov = new Date("2022-11-22T00:00:00Z");
+  const oct = new Date("2021-10-13T00:00:00Z");
+  assert.equal(formatMonth(nov, EN), "Nov 2022");
+  assert.equal(formatMonth(nov, PT), "nov 2022");
+  assert.equal(formatMonth(nov, ES), "nov 2022");
+  assert.equal(formatMonth(oct, EN), "Oct 2021");
+  assert.equal(formatMonth(oct, PT), "out 2021");
+  assert.equal(formatMonth(oct, ES), "oct 2021");
+});
+
+test("formatMonth and isoDate read UTC, so the first and last day never shift", () => {
+  const first = new Date("2022-06-01T00:00:00Z");
+  const last = new Date("2022-06-30T23:59:59Z");
+  assert.equal(formatMonth(first, EN), "Jun 2022");
+  assert.equal(formatMonth(last, EN), "Jun 2022");
+  assert.equal(isoDate(new Date("2022-11-22T00:00:00Z")), "2022-11-22");
+  assert.equal(isoDate(new Date("2021-10-13T00:00:00Z")), "2021-10-13");
 });

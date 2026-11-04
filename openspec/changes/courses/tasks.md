@@ -27,7 +27,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `c-*.mjs`. Downloaded c
 
 ## 3. Section
 
-- [ ] 3.1 Add `formatMonth` to `src/lib/period.ts` (`formatPeriod` uses it) and `src/lib/courses.ts` (`sortCourses`, the `open cert` command constant), with tests. Verify `npm test` covers:
+- [x] 3.1 Add `formatMonth` to `src/lib/period.ts` (`formatPeriod` uses it) and `src/lib/courses.ts` (`sortCourses`, the `open cert` command constant), with tests. Verify `npm test` covers:
   - the existing period cases unchanged;
   - `formatMonth` in all three locales, UTC-safe;
   - featured first, then newest first, with the tie kept in `order`.

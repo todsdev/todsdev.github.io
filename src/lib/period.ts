@@ -15,11 +15,21 @@ export interface Period {
   end: PeriodEnd;
 }
 
+/** "Nov 2022" from a locale's month abbreviations, read in UTC. Shared with the courses list. */
+export function formatMonth(date: Date, months: readonly string[]): string {
+  return `${months[date.getUTCMonth()] ?? ""} ${date.getUTCFullYear()}`;
+}
+
+/** Full `YYYY-MM-DD` for `<time datetime>`, read in UTC. */
+export function isoDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
 function point(date: Date, months: readonly string[]): Required<PeriodEnd> {
   const month = date.getUTCMonth();
   const year = date.getUTCFullYear();
   return {
-    text: `${months[month] ?? ""} ${year}`,
+    text: formatMonth(date, months),
     datetime: `${year}-${String(month + 1).padStart(2, "0")}`,
   };
 }
