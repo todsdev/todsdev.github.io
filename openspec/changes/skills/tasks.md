@@ -36,7 +36,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `s-*.mjs`.
 
 ## 3. Integration
 
-- [ ] 3.1 Verify no layout shift: CLS 0 and unchanged section boxes through load and a full scroll (`s-stable.mjs`), and `l-cls.mjs` (60 loads) locally. Also verify that the section's only animation is the shared entrance: no `animation` or `transition` on section descendants beyond it
+- [x] 3.1 Verify no layout shift: CLS 0 and unchanged section boxes through load and a full scroll (`s-stable.mjs`), and `l-cls.mjs` (60 loads) locally. Also verify that the section's only animation is the shared entrance: no `animation` or `transition` on section descendants beyond it
 - [ ] 3.2 Run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
 
 ## Workflow follow-up
