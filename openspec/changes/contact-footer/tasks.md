@@ -27,7 +27,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
 
 ## 3. Contact section
 
-- [ ] 3.1 Add `src/lib/contact.ts` (actions per kind, `encode`/`decode`, `whatsappUrl`, `vcard`) plus `formatDay` in `period.ts`, with tests. Verify `npm test` covers:
+- [x] 3.1 Add `src/lib/contact.ts` (actions per kind, `encode`/`decode`, `whatsappUrl`, `vcard`) plus `formatDay` in `period.ts`, with tests. Verify `npm test` covers:
   - actions per kind;
   - encode/decode round-trip, and that the encoded form contains no phone digits in order;
   - the WhatsApp URL per locale (exact encoded text);

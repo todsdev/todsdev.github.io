@@ -20,6 +20,11 @@ export function formatMonth(date: Date, months: readonly string[]): string {
   return `${months[date.getUTCMonth()] ?? ""} ${date.getUTCFullYear()}`;
 }
 
+/** "4 Nov 2026" from a locale's month abbreviations, read in UTC. Used by the footer. */
+export function formatDay(date: Date, months: readonly string[]): string {
+  return `${date.getUTCDate()} ${formatMonth(date, months)}`;
+}
+
 /** Full `YYYY-MM-DD` for `<time datetime>`, read in UTC. */
 export function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);

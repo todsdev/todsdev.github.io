@@ -1,7 +1,7 @@
 /** Experience period formatting, verified with fixtures. Run with `npm test`. */
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { formatMonth, formatPeriod, isoDate } from "./period.ts";
+import { formatDay, formatMonth, formatPeriod, isoDate } from "./period.ts";
 
 const EN = [
   "Jan",
@@ -112,4 +112,12 @@ test("formatMonth and isoDate read UTC, so the first and last day never shift", 
   assert.equal(formatMonth(last, EN), "Jun 2022");
   assert.equal(isoDate(new Date("2022-11-22T00:00:00Z")), "2022-11-22");
   assert.equal(isoDate(new Date("2021-10-13T00:00:00Z")), "2021-10-13");
+});
+
+test("formatDay gives day, short month and year in each locale, in UTC", () => {
+  const d = new Date("2026-11-04T23:30:00Z");
+  assert.equal(formatDay(d, EN), "4 Nov 2026");
+  assert.equal(formatDay(d, PT), "4 nov 2026");
+  assert.equal(formatDay(d, ES), "4 nov 2026");
+  assert.equal(formatDay(new Date("2026-01-01T00:00:00Z"), EN), "1 Jan 2026");
 });
