@@ -110,12 +110,13 @@ track("terminal_command", { command: terminalCommand(input, COMMANDS) });
 - **Deep links:** a hash load jumps instantly, so skipped sections never enter the band and aren't counted.
 - **Nav jumps (owner decision):** a nav link click sets `jumpTarget` to that section in `nav.ts`, which already owns the links. While `jumpTarget` is set, only the target is recorded, at the moment `setActive` makes it active. Passed sections are not marked as seen, so they still count later if the visitor scrolls back to them normally.
 - **When a jump ends:** `jumpTarget` clears when any of these happens:
-  - the target becomes active;
+  - `scrollend` fires;
   - the visitor takes over (`wheel`, `touchstart`, or a scrolling key: arrows, Page Up/Down, Home, End, Space);
-  - `scrollend` fires (where supported);
-  - a 2 s safety timeout passes.
+  - 2 s pass with no scroll (a safety net when `scrollend` never comes).
 
-  Then normal recording resumes. With reduced motion the jump is instant and the same logic applies.
+  Reaching the target doesn't end the jump; the scroll may still be moving.
+- **After a jump:** sections the jump left in the band count only after the visitor's next scroll. With an instant (reduced-motion) jump, `scrollend` fires before the observer reports the new band. Without this rule, `courses`, still in the band under a short `contact`, would be recorded with no visitor scroll. The visitor's first scroll after the jump restores normal recording.
+- **Deep links:** a deep link to a section other than `hero` starts a jump at load, so the same rules apply.
 
 ### 6. Footer analytics line
 

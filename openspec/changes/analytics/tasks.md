@@ -76,7 +76,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
   - external links open in a new tab.
 
   Make one check fail against the build from task 4.1 (no attributes) to prove it isn't vacuous.
-- [ ] 4.4 Report `section_view` from `src/scripts/nav.ts` (a `seen` set fed by the existing observer's band and by `setActive`; no new observer), with nav-jump suppression (`jumpTarget`, cleared per design decision 5). Verify with `an-sections.mjs` (stub mode), in all locales at 1280px and 320px:
+- [x] 4.4 Report `section_view` from `src/scripts/nav.ts` (a `seen` set fed by the existing observer's band and by `setActive`; no new observer), with nav-jump suppression (`jumpTarget`, cleared per design decision 5). Verify with `an-sections.mjs` (stub mode), in all locales at 1280px and 320px:
   - a slow scroll to the bottom records exactly seven events in page order, including `contact` when it is set active only at the page end;
   - scrolling back up records nothing more;
   - `/#contact` records `contact` and not the skipped sections;
