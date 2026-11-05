@@ -66,7 +66,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
 ## 5. Integration
 
 - [x] 5.1 Verify no layout shift: CLS 0 and unchanged section boxes through load, scroll, focus and copy (`k-stable.mjs`), plus `l-cls.mjs` (60 loads)
-- [ ] 5.2 Document contacts, phone protection, vCard, résumés and the footer in the README. Then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+- [x] 5.2 Document contacts, phone protection, vCard, résumés and the footer in the README. Then run all verification suites plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
 
 ## Workflow follow-up
 
