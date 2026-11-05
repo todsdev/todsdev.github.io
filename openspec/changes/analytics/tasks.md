@@ -25,7 +25,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
 ## 3. Event module
 
-- [ ] 3.1 Add `src/lib/analytics.ts`:
+- [x] 3.1 Add `src/lib/analytics.ts`:
   - the constants `UMAMI_SCRIPT`, `WEBSITE_ID` and `TRACKED_HOST`;
   - the event table from design decision 2, with every event: `contact`, `vcard`, `resume`, `project_link`, `certificate`, `nav_click`, `not_found`, `section_view`, `terminal_open`, `terminal_command`;
   - `validEvent(name, data)`;
