@@ -35,14 +35,14 @@
 One tag in `<head>`, after the font preloads:
 
 ```html
-<script defer src="https://cloud.umami.is/script.js"
+<script async src="https://cloud.umami.is/script.js"
   data-website-id="22e09e62-a897-496c-9972-736ca18ac3ce"
   data-domains="todsdev.github.io" data-exclude-hash="true" data-do-not-track="true"></script>
 ```
 
 - **`is:inline`:** Astro must leave the external script as written.
 - **Constants:** the values come from constants in `src/lib/analytics.ts` (`UMAMI_SCRIPT`, `WEBSITE_ID`, `TRACKED_HOST`), so the README has a single place to point to.
-- **`defer`, not `async`:** it keeps execution order with the site's module scripts, which are also deferred and come later in the document. So `window.umami` usually exists when `src/scripts/analytics.ts` runs. The queue in decision 3 covers the case where it doesn't.
+- **`async`, not `defer`:** deferred classic scripts and module scripts run in one ordered queue, so a slow `script.js` would hold back every site script, including the hero intro. Measured: a 2 s tracker delay delayed a module script by 2 s with `defer` and not at all with `async`. With `async`, `window.umami` may not exist yet when site scripts run, and the queue in decision 3 covers that.
 - **`data-exclude-search` is not set:** the site has no query parameters of its own, and keeping them preserves `utm_*` campaign data, for example a link from a LinkedIn post.
 
 Alternatives considered:
@@ -153,7 +153,7 @@ New keys: `footer.analytics` (visible text) and `footer.analyticsPolicy` (destin
 - **Jump never reaches its target:** for example, the visitor interrupts the jump or the target can't become active. The interrupt listeners and the 2 s timeout clear `jumpTarget`, so recording never stays suppressed. The target's `section_view` is then recorded only if the visitor actually reaches it.
 - **Event volume:** at most about 10 events per visit. The owner confirmed this fits the plan's 100k events per month.
 - **Terminal misuse:** a future terminal could call `track` with raw input. Mitigations: `terminal_command` values must pass the slug guard, so input with spaces, `/`, `~` or `@` is dropped, and the README contract tells the terminal to call `terminalCommand()`.
-- **Saved-locale redirect on `/`:** it runs in `head-start`, before the deferred tracker executes, so the `/` page view isn't recorded. The spec scenario pins this down. If the redirect moves later, `an-live` catches the double count.
+- **Saved-locale redirect on `/`:** it runs in `head-start`, before the tracker tag is parsed. In 5 local runs with a localhost-tracking build, `/#contact` with a saved Portuguese preference recorded only `/pt-br/`. The spec scenario pins this down. If the redirect moves later, `an-live` catches the double count.
 
 ## Migration Plan
 

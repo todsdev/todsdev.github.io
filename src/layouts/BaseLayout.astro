@@ -6,6 +6,7 @@ import plexMonoLatin400 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-lati
 import vt323Latin400 from "@fontsource/vt323/files/vt323-latin-400-normal.woff2?url";
 import Footer from "../components/Footer.astro";
 import { langCode, localePath, locales, type Locale } from "../i18n";
+import { TRACKED_HOST, UMAMI_SCRIPT, WEBSITE_ID } from "../lib/analytics";
 
 interface Props {
   locale: Locale;
@@ -64,6 +65,17 @@ const xDefault = new URL(localePath("en"), site).href;
       type="font/woff2"
       crossorigin
     />
+    <!-- Cookieless analytics (README, "Analytics"). Async: a slow tracker never holds back
+         the site's own scripts, and it only reports from the production host. -->
+    <script
+      is:inline
+      async
+      src={UMAMI_SCRIPT}
+      data-website-id={WEBSITE_ID}
+      data-domains={TRACKED_HOST}
+      data-exclude-hash="true"
+      data-do-not-track="true"
+    ></script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -75,5 +87,8 @@ const xDefault = new URL(localePath("en"), site).href;
   <body>
     <slot />
     <Footer locale={locale} />
+    <script>
+      import "../scripts/analytics";
+    </script>
   </body>
 </html>

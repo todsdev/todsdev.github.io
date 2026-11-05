@@ -44,11 +44,11 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
 ## 4. Tracker and events
 
-- [ ] 4.1 Load the tracker in `BaseLayout.astro` (`is:inline`, `defer`, attributes from the constants). Add `src/scripts/track.ts` (`track()` with locale, validation and the load queue) and `src/scripts/analytics.ts` (the delegated capture listener and the 404 `not_found` event), imported once from `BaseLayout`. Verify in `dist`:
+- [x] 4.1 Load the tracker in `BaseLayout.astro` (`is:inline`, `async`, attributes from the constants). Add `src/scripts/track.ts` (`track()` with locale, validation and the load queue) and `src/scripts/analytics.ts` (the delegated capture listener and the 404 `not_found` event), imported once from `BaseLayout`. Verify in `dist`:
   - each of the four pages has exactly one tracker tag with the website ID, `data-domains="todsdev.github.io"`, `data-exclude-hash="true"` and `data-do-not-track="true"`;
   - with `UMAMI=real` on localhost (`an-host.mjs`), no beacon is sent on load or on click.
 
-  Verify with `an-track.mjs` (stub mode, in all locales), calling `track()` through a page hook exposed only in the test (the module's exports via a dynamic import of the built chunk):
+  Verify with `an-track.mjs` (stub mode, in all locales). It exercises `track()` through the click listener with injected probe elements, so the site needs no test hook:
   - `locale` is added from `<html lang>`;
   - an unknown name, an unknown field and a non-slug value send nothing;
   - with the stub served after a 1 s delay, events called before it loads are flushed once it does, in order;

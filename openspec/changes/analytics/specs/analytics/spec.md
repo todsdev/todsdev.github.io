@@ -7,11 +7,11 @@ Defines the site's cookieless visitor analytics: which tracker loads and where i
 ## ADDED Requirements
 
 ### Requirement: Cookieless tracker on every page
-Every page SHALL load the Umami Cloud tracker (`https://cloud.umami.is/script.js`) with website ID `22e09e62-a897-496c-9972-736ca18ac3ce`, deferred so it never blocks parsing or first paint. The site SHALL set no cookies and SHALL need no consent banner.
+Every page SHALL load the Umami Cloud tracker (`https://cloud.umami.is/script.js`) with website ID `22e09e62-a897-496c-9972-736ca18ac3ce`, asynchronously, so it never blocks parsing, first paint or the site's own scripts. The site SHALL set no cookies and SHALL need no consent banner.
 
 #### Scenario: Tracker on all pages
 - **WHEN** `index.html`, `pt-br/index.html`, `es/index.html` and `404.html` are inspected in the build
-- **THEN** each loads `https://cloud.umami.is/script.js` once, deferred, with `data-website-id="22e09e62-a897-496c-9972-736ca18ac3ce"`
+- **THEN** each loads `https://cloud.umami.is/script.js` once, `async`, with `data-website-id="22e09e62-a897-496c-9972-736ca18ac3ce"`
 
 #### Scenario: No cookies
 - **WHEN** a visitor loads the live home page and clicks a tracked action

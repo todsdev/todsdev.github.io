@@ -6,7 +6,7 @@ The site is live in three locales, but there is no way to know whether anyone vi
 
 ## What Changes
 
-- Load the Umami Cloud tracker (`https://cloud.umami.is/script.js`, website ID `22e09e62-a897-496c-9972-736ca18ac3ce`, given by the owner) on every page, deferred and outside the critical path. It only reports from `todsdev.github.io`, so local dev and preview never send data. The URL hash is excluded and Do Not Track is honored.
+- Load the Umami Cloud tracker (`https://cloud.umami.is/script.js`, website ID `22e09e62-a897-496c-9972-736ca18ac3ce`, given by the owner) on every page, async and outside the critical path. It only reports from `todsdev.github.io`, so local dev and preview never send data. The URL hash is excluded and Do Not Track is honored.
 - Page views come from Umami's automatic tracking, per path (`/`, `/pt-br/`, `/es/`). The 404 page also sends a `not_found` event with the requested path, because a page view alone can't tell it apart from a real page.
 - Click events, all tagged with the page locale:
   - `contact`: contact kind plus action (`mail`, `call`, `chat`, `open`, `copy`);
