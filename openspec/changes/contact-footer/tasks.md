@@ -55,7 +55,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
 
 ## 4. Footer
 
-- [ ] 4.1 Create `src/components/Footer.astro` with the hint slot and render it from `BaseLayout`. Verify with `k-footer.mjs` in all locales and on the 404 page:
+- [x] 4.1 Create `src/components/Footer.astro` with the hint slot and render it from `BaseLayout`. Verify with `k-footer.mjs` in all locales and on the 404 page:
   - credit text per locale and the repository link;
   - © year and name;
   - the build date localized with `datetime`;

@@ -1,0 +1,80 @@
+---
+/**
+ * Site footer on every page (rendered by BaseLayout): build credit linking to the source
+ * repository, © year and name, and the last build date. The terminal change fills the
+ * "hint" slot; while empty it renders nothing.
+ */
+import { months, t, type Locale } from "../i18n";
+import { getEntries } from "../lib/content";
+import { formatDay, isoDate } from "../lib/period";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const [profile] = await getEntries("profile", locale);
+if (!profile) throw new Error("src/content/profile must contain one entry");
+const built = new Date();
+const copyright = t(locale, "footer.copyright")
+  .replace("{year}", String(built.getUTCFullYear()))
+  .replace("{name}", profile.name);
+const repoLabel = `, ${t(locale, "footer.repo")} (${t(locale, "links.newTab")})`;
+---
+
+<footer class="site-footer">
+  <p class="site-footer__line">
+    {profile.sourceUrl ? (
+      <a
+        class="site-footer__link"
+        href={profile.sourceUrl}
+        target="_blank"
+        rel="noopener"
+      >
+        {t(locale, "footer.builtWith")}
+        <span class="visually-hidden">{repoLabel}</span>
+      </a>
+    ) : (
+      t(locale, "footer.builtWith")
+    )}
+  </p>
+  <p class="site-footer__line">
+    <span>{copyright}</span>
+    <span class="site-footer__sep" aria-hidden="true">
+      {" · "}
+    </span>
+    <span>
+      {t(locale, "footer.lastBuild")}:{" "}
+      <time datetime={isoDate(built)}>{formatDay(built, months(locale))}</time>
+    </span>
+  </p>
+  {Astro.slots.has("hint") && (
+    <div class="site-footer__hint">
+      <slot name="hint" />
+    </div>
+  )}
+</footer>
+
+<style>
+  .site-footer {
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding: var(--space-5) var(--space-4) var(--space-5) var(--thread-gutter);
+    border-top: 1px solid var(--surface-2);
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+  }
+
+  .site-footer__link {
+    color: var(--text-muted);
+    text-decoration-color: var(--text-muted);
+    /* Keyboard focus scrolls the link fully into view, outline included. */
+    scroll-margin-block: var(--space-4);
+  }
+
+  .site-footer__link:hover,
+  .site-footer__link:focus-visible {
+    color: var(--highlight);
+  }
+</style>
