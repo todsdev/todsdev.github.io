@@ -7,6 +7,7 @@
  */
 import { Picture } from "astro:assets";
 import { t, type Locale } from "../i18n";
+import { PROJECT_LINK, eventAttrs } from "../lib/analytics";
 import { getEntries } from "../lib/content";
 import {
   ownershipNotes,
@@ -80,7 +81,7 @@ const destination = (kind: ActionKind, title: string) =>
                   <li>
                     {/* No whitespace between the command and its hidden destination: it would read "play-store ,". */}
                     {/* prettier-ignore */}
-                    <a class="card__action" href={action.href} target="_blank" rel="noopener"><span aria-hidden="true">$ </span>{action.command}<span class="visually-hidden">{`, ${destination(action.kind, project.title)} (${newTab})`}</span></a>
+                    <a class="card__action" href={action.href} target="_blank" rel="noopener" {...eventAttrs(locale, "project_link", { project: project.id, link: PROJECT_LINK[action.kind] })}><span aria-hidden="true">$ </span>{action.command}<span class="visually-hidden">{`, ${destination(action.kind, project.title)} (${newTab})`}</span></a>
                   </li>
                 ))}
               </ul>

@@ -53,7 +53,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
   - an unknown name, an unknown field and a non-slug value send nothing;
   - with the stub served after a 1 s delay, events called before it loads are flushed once it does, in order;
   - with `UMAMI=block`, calls are no-ops with no `pageerror`.
-- [ ] 4.2 Add the event attributes:
+- [x] 4.2 Add the event attributes:
   - `nav_click` on the section links in `SiteNav.astro`;
   - contact actions, the vCard and the résumé in `Contact.astro`;
   - project links in `Projects.astro`;

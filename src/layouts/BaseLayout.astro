@@ -14,9 +14,17 @@ interface Props {
   description: string;
   /** Page has the animated hero intro: gate it before first paint. */
   heroIntro?: boolean;
+  /** Analytics event the page sends on load (src/scripts/analytics.ts). */
+  pageEvent?: "not_found";
 }
 
-const { locale, title, description, heroIntro = false } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  heroIntro = false,
+  pageEvent,
+} = Astro.props;
 const site = Astro.site ?? new URL("https://todsdev.github.io");
 const alternates = locales.map((l) => ({
   hreflang: langCode[l],
@@ -84,7 +92,7 @@ const xDefault = new URL(localePath("en"), site).href;
     ))}
     <link rel="alternate" hreflang="x-default" href={xDefault} />
   </head>
-  <body>
+  <body data-page-event={pageEvent}>
     <slot />
     <Footer locale={locale} />
     <script>
