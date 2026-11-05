@@ -125,18 +125,18 @@ New keys: `footer.analytics` (visible text) and `footer.analyticsPolicy` (destin
 
 ### 7. Verification without polluting stats
 
-- **Stub by default:** `lib.mjs` `browser()` stubs Umami for every page through cooperative request interception:
+- **Stub by default:** `lib.mjs` `browser()` makes Chrome resolve both Umami hosts to a local HTTPS server (`--host-resolver-rules`, a self-signed certificate, `--ignore-certificate-errors`). Puppeteer request interception isn't used, because seven existing suites install their own `request` handlers, and mixing legacy and cooperative handlers throws "Request is already handled". In the default mode:
   - `cloud.umami.is/script.js` is answered with a tiny stub that records calls in `window.__umami` and defines `umami.track`;
   - `gateway.umami.is` requests get an empty 204.
   - Pages therefore get no network errors (so `e2e.mjs` stays green), and local suites can assert events.
-- **Opt-outs:** `UMAMI=real` loads the real script but still answers the beacons locally and records their JSON bodies. That checks the real integration on live without counting a visit. `UMAMI=block` aborts both hosts, for the blocked-tracker check.
+- **Opt-outs:** `UMAMI=real` loads the real script but still answers the beacons locally and records their JSON bodies. That checks the real integration on live without counting a visit. `UMAMI=block` makes both hosts fail to resolve, for the blocked-tracker check. `an-live` sends its one deliberate real beacon from Node, replaying a captured page-view body to the real gateway.
 - **New suites:**
   - `an-markup` checks the attributes, the allowlist and the phone grep;
   - `an-events` checks each click with the stub, in all locales;
   - `an-sections` checks `section_view` order and uniqueness when scrolling down and back up, with a deep link, at 1280px and 320px, and with reduced motion;
   - `an-track` checks the `track()` interface on a built page: the locale is added, invalid events are dropped, and the queue flushes when the stub loads late;
   - `an-blocked` checks that everything works with Umami aborted;
-  - `an-live` (live only, `UMAMI=real`) checks the page view and event payloads (website ID, path without hash, event names and data) and that no cookie is set. It also lets exactly one page-view beacon through to the gateway and asserts a 2xx response, to confirm the website ID.
+  - `an-live` (live only, `UMAMI=real`) checks the page view and event payloads (website ID, path without hash, event names and data) and that no cookie is set. It also replays exactly one captured page-view beacon to the real gateway from Node and asserts a 2xx response, to confirm the website ID.
 - **`localhost` with `UMAMI=real`:** `data-domains` makes the real tracker send nothing. That proves the "production host only" requirement locally.
 
 ## Risks / Trade-offs

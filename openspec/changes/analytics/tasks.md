@@ -16,10 +16,10 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
 ## 2. Verification harness
 
-- [ ] 2.1 In `~/portfolio-verify-scripts/lib.mjs`, make `browser()` stub Umami on every page (design decision 5):
+- [x] 2.1 In `~/portfolio-verify-scripts/lib.mjs`, make `browser()` stub Umami on every page (design decision 5):
   - by default, the stub script records `umami.track` calls in `window.__umami`, and gateway requests get a 204;
   - `UMAMI=real` loads the real script and answers the beacons locally, recording their bodies;
-  - `UMAMI=block` aborts both hosts.
+  - `UMAMI=block` makes both hosts fail to resolve.
 
   Verify that a throwaway page loading `https://cloud.umami.is/script.js` gets the stub in default mode, records a beacon body with `UMAMI=real` and no request reaches the network, and logs no console errors. Verify that `e2e.mjs` and `kbd.mjs` still pass on `main`'s build.
 
