@@ -64,7 +64,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
   - every action has the expected `data-event` and `data-event-*` values, including `resume` `language` after fallback (with `resume-es.pdf` temporarily removed);
   - no `data-event-*` value contains `/`, `:`, `@` or a digit run of 4 or more;
   - the phone grep is clean: no phone digits, `tel:` or `wa.me/` in `dist/**/*.html`.
-- [ ] 4.3 Verify the events with `an-events.mjs` (stub mode) in all locales at 1280px and 320px:
+- [x] 4.3 Verify the events with `an-events.mjs` (stub mode) in all locales at 1280px and 320px:
   - each click, by mouse and by keyboard (Enter), records the event, name and data from the spec;
   - nav link clicks record `nav_click` with the section;
   - the 404 page records `not_found` with the path and no query.
