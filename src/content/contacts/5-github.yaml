@@ -1,0 +1,8 @@
+kind: github
+label:
+  en: github
+  pt-br: github
+  es: github
+value: github.com/todsdev
+url: https://github.com/todsdev
+order: 5

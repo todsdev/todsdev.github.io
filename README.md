@@ -54,8 +54,8 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 
 | Collection   | Fields (L = translatable)                                                                                                                                                        |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `availability` — single entry                                                                |
-| `contacts`   | `kind` (`email` \| `github` \| `linkedin` \| `other`), `label` (L), `url`                                                                                                        |
+| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `sourceUrl?`, `availability` — single entry                                                  |
+| `contacts`   | `kind` (`email` \| `phone` \| `whatsapp` \| `linkedin` \| `github` \| `instagram` \| `other`), `label` (L), `value`, `url`                                                       |
 | `experience` | `company`, `role` (L), `location` (L), `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?`                                                                |
 | `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `ownership` (`contributor` \| `owner`), `owner?`, `via?`, `url?`, `repoUrl?`, `stores?`, `screenshots[]?`, `tech[]` |
 | `skills`     | `category` (L), `items[]` — one entry per category                                                                                                                               |
@@ -134,6 +134,22 @@ Each project becomes a card in the projects section, featured projects first, th
 - `stores.playStore` must be a `https://play.google.com/` URL and `stores.appStore` an `https://apps.apple.com/` URL. Each link you set gets a `$ open play-store`, `$ open app-store`, `$ open site` (`url`) or `$ open repo` (`repoUrl`) action. `building` projects show `[building... ▓▓▓░░░]` instead of their store links.
 - `screenshots` are paths relative to the project YAML; the card shows the first one in a phone frame (9:19.5, e.g. 600×1300), in grayscale until hovered or focused. Strip metadata before committing. A missing file fails the build.
 - The ownership note under the cards is built from the contributor projects: one sentence pair per `owner`/`via` group, with titles joined in each locale's list format, e.g. "GloboPop, Premiere and Combate Play are owned by Globo. I contributed to them as an Android developer through act digital." Its wording lives in the `projects.note` dictionary templates; adding, hiding or renaming a contributor project updates it automatically.
+
+### Contact and footer
+
+Each contact is one line in the contact section: `label · value · actions`, in `order`. The actions depend on `kind`:
+
+- email: `$ mail` and `$ copy`;
+- phone: `$ call` and `$ copy`;
+- whatsapp: `$ chat`, which opens WhatsApp with a message in the page's language (`contact.whatsappText`);
+- linkedin, github and instagram: `$ open`.
+
+`value` is the text shown on the line; `url` is where the main action goes.
+
+- **Phone protection:** `phone` and `whatsapp` are protected kinds. Their value and url are never written to the HTML. The page carries only an encoded form, and an inline script fills the lines in before they're painted. Without JavaScript, those lines show "enable JavaScript to see the number". This stops HTML scrapers, not a determined reader: the number is still in this repository's YAML and in the résumés.
+- **`$ wget contact.vcf`:** downloads a vCard built from the profile and contacts (`/contact.vcf`, `/pt-br/contact.vcf`, `/es/contact.vcf`). The static files have no phone; with JavaScript, the downloaded card gets the phone added.
+- **`$ wget resume.pdf`:** downloads `public/resume/resume-<locale>.pdf`, falling back to `resume-en.pdf` when a locale's file is missing. Strip PDF metadata before committing a new résumé, as for certificates.
+- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, and the last build date. Its `hint` slot is reserved for the terminal hint.
 
 ### Courses
 

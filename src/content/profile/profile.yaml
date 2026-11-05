@@ -50,6 +50,7 @@ focus:
   pt-br: Android · Kotlin · Jetpack Compose
   es: Android · Kotlin · Jetpack Compose
 photo: ./photo.jpg
+sourceUrl: https://github.com/todsdev/todsdev.github.io
 availability:
   enabled: false
   label:
