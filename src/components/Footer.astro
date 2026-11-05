@@ -1,10 +1,12 @@
 ---
 /**
  * Site footer on every page (rendered by BaseLayout): build credit linking to the source
- * repository, © year and name, and the last build date. The terminal change fills the
+ * repository, © year and name, the last build date, and the analytics line linking to
+ * Umami's privacy policy. The terminal change fills the
  * "hint" slot; while empty it renders nothing.
  */
 import { months, t, type Locale } from "../i18n";
+import { UMAMI_PRIVACY } from "../lib/analytics";
 import { getEntries } from "../lib/content";
 import { formatDay, isoDate } from "../lib/period";
 
@@ -19,7 +21,9 @@ const built = new Date();
 const copyright = t(locale, "footer.copyright")
   .replace("{year}", String(built.getUTCFullYear()))
   .replace("{name}", profile.name);
-const repoLabel = `, ${t(locale, "footer.repo")} (${t(locale, "links.newTab")})`;
+const newTab = t(locale, "links.newTab");
+const repoLabel = `, ${t(locale, "footer.repo")} (${newTab})`;
+const policyLabel = `, ${t(locale, "footer.analyticsPolicy")} (${newTab})`;
 ---
 
 <footer class="site-footer">
@@ -47,6 +51,11 @@ const repoLabel = `, ${t(locale, "footer.repo")} (${t(locale, "links.newTab")})`
       {t(locale, "footer.lastBuild")}:{" "}
       <time datetime={isoDate(built)}>{formatDay(built, months(locale))}</time>
     </span>
+  </p>
+  <p class="site-footer__line">
+    {/* No whitespace between the text and its hidden destination: it would read "Umami ,". */}
+    {/* prettier-ignore */}
+    <a class="site-footer__link" href={UMAMI_PRIVACY} target="_blank" rel="noopener">{t(locale, "footer.analytics")}<span class="visually-hidden">{policyLabel}</span></a>
   </p>
   {Astro.slots.has("hint") && (
     <div class="site-footer__hint">

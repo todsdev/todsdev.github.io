@@ -124,6 +124,9 @@ export const en = {
     /** {year} is the build year, {name} the profile name. */
     copyright: "© {year} {name}",
     lastBuild: "last build",
+    analytics: "cookieless stats by Umami",
+    /** Accessible destination of the analytics link. */
+    analyticsPolicy: "Umami privacy policy",
   },
   switcher: {
     label: "Language",

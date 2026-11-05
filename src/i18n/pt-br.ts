@@ -106,6 +106,8 @@ export const ptBr = {
     repo: "código-fonte deste site",
     copyright: "© {year} {name}",
     lastBuild: "última build",
+    analytics: "estatísticas sem cookies pelo Umami",
+    analyticsPolicy: "política de privacidade do Umami",
   },
   switcher: {
     label: "Idioma",

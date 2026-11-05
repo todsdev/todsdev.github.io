@@ -11,6 +11,8 @@ import type { ActionKind } from "./projects";
 export const UMAMI_SCRIPT = "https://cloud.umami.is/script.js";
 export const WEBSITE_ID = "22e09e62-a897-496c-9972-736ca18ac3ce";
 export const TRACKED_HOST = "todsdev.github.io";
+/** Linked from the footer's analytics line. */
+export const UMAMI_PRIVACY = "https://umami.is/privacy";
 
 /** Every event and its fields. `locale` is added to all of them. */
 export const EVENTS = {

@@ -149,7 +149,7 @@ Each contact is one line in the contact section: `label · value · actions`, in
 - **Phone protection:** `phone` and `whatsapp` are protected kinds. Their value and url are never written to the HTML. The page carries only an encoded form, and an inline script fills the lines in before they're painted. Without JavaScript, those lines show "enable JavaScript to see the number". This stops HTML scrapers, not a determined reader: the number is still in this repository's YAML and in the résumés.
 - **`$ wget contact.vcf`:** downloads a vCard built from the profile and contacts (`/contact.vcf`, `/pt-br/contact.vcf`, `/es/contact.vcf`). The static files have no phone; with JavaScript, the downloaded card gets the phone added.
 - **`$ wget resume.pdf`:** downloads `public/resume/resume-<locale>.pdf`, falling back to `resume-en.pdf` when a locale's file is missing. Strip PDF metadata before committing a new résumé, as for certificates.
-- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, and the last build date. Its `hint` slot is reserved for the terminal hint.
+- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). Its `hint` slot is reserved for the terminal hint.
 
 ### Courses
 

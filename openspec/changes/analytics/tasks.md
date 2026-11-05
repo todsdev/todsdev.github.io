@@ -99,7 +99,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
 ## 5. Footer line
 
-- [ ] 5.1 Add `footer.analytics` and `footer.analyticsPolicy` to en, pt-br and es with the exact strings from the footer spec, and render the line in `Footer.astro`. Verify with `k-footer.mjs`, extended with these checks, in all locales and on the 404 page:
+- [x] 5.1 Add `footer.analytics` and `footer.analyticsPolicy` to en, pt-br and es with the exact strings from the footer spec, and render the line in `Footer.astro`. Verify with `k-footer.mjs`, extended with these checks, in all locales and on the 404 page:
   - the text, the href, `target` and `rel`;
   - the accessible name ends with the localized destination and new-tab note;
   - Tab reaches it with a visible outline;
