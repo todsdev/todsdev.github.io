@@ -34,7 +34,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
   - vCard fields with and without `TEL` and CRLF endings;
   - `formatDay` per locale, UTC-safe.
 - [x] 3.2 Add the vCard endpoints for the three locales. Verify that each built `.vcf` has the fields from the "Static card" scenario and no `TEL`
-- [ ] 3.3 Create `src/components/Contact.astro` (lines, protected-line markup, inline decode script, closing vCard and résumé actions with fallback) and `src/scripts/contact.ts` (copy, vCard download), and render the section. Verify in built HTML and with `k-markup.mjs`:
+- [x] 3.3 Create `src/components/Contact.astro` (lines, protected-line markup, inline decode script, closing vCard and résumé actions with fallback) and `src/scripts/contact.ts` (copy, vCard download), and render the section. Verify in built HTML and with `k-markup.mjs`:
   - order and line text;
   - actions per kind with hrefs, `target` and `rel`;
   - accessible names;
