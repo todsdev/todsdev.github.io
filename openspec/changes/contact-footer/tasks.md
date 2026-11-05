@@ -44,7 +44,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `k-*.mjs`. Files from `
   - without JS, the note shows and the other links work;
   - the résumé link per locale, plus the fallback with `resume-es.pdf` temporarily removed;
   - no hardcoded contact text (grep).
-- [ ] 3.4 Style the section per design.md. Verify with `k-layout.mjs` at 1280px and 320px in all locales:
+- [x] 3.4 Style the section per design.md. Verify with `k-layout.mjs` at 1280px and 320px in all locales:
   - columns at 1280px;
   - label and value on one line at 320px with actions below;
   - no overflow;

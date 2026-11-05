@@ -202,9 +202,102 @@ const vcardName = parts("vcard").before;
     display: none;
   }
 
+  /* Layout: label · value · actions columns on wide screens (subgrid, like the courses list). */
+  .contacts {
+    display: grid;
+    grid-template-columns: max-content max-content minmax(0, 1fr);
+    column-gap: 0.6em; /* one glyph: a cell's leading space collapses */
+    row-gap: var(--space-2);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  .contact {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: baseline;
+  }
+
+  .contact__label,
+  .contact__sep,
+  .contact__nojs {
+    color: var(--text-muted);
+  }
+
+  .contact__value {
+    color: var(--text);
+  }
+
+  /* The no-JS note takes the value and actions columns. */
+  .contact__nojs {
+    grid-column: 2 / -1;
+  }
+
+  .contact__action {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-muted);
+    font: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    /* Keyboard focus scrolls the action fully into view, outline included. */
+    scroll-margin-block: var(--space-4);
+  }
+
+  .contact__action:hover,
+  .contact__action:focus-visible {
+    color: var(--highlight);
+  }
+
+  .contact__files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-4);
+    margin: var(--space-4) 0 0;
+    padding: 0;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+  }
+
+  /* Phones: label and value on one line, actions below (their "·" would start the line). */
+  @media (max-width: 39.99rem) {
+    .contacts {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-3);
+    }
+
+    .contact {
+      grid-template-columns: max-content minmax(0, 1fr);
+      column-gap: 0.6em;
+    }
+
+    .contact__actions,
+    .contact__nojs {
+      grid-column: 1 / -1;
+    }
+
+    .contact__nojs {
+      grid-column: 2;
+    }
+
+    .contact__actions > .contact__sep {
+      display: none;
+    }
+  }
+
   /* "$ copy" and its feedback share one cell, so the button is always as wide as the longer one. */
   .contact__copy {
     display: inline-grid;
+    justify-items: start;
+    max-width: 100%;
+    text-align: start;
+    white-space: normal; /* a long translation wraps inside the column instead of overflowing */
+    vertical-align: top;
   }
 
   .contact__copy-idle,
