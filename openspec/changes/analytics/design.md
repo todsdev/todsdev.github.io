@@ -107,7 +107,6 @@ track("terminal_command", { command: terminalCommand(input, COMMANDS) });
 - **When it fires:** a `seen` set in `nav.ts` sends `track("section_view", { section })` the first time a section is either in the band or set active. "Set active" covers a short last section that never reaches the band.
 - **No new observer:** this adds no observer; the only new listeners are the passive jump-interrupt ones below. Nothing fires on the 404 page, which has no nav.
 - **Why not "any pixel visible":** the band is the same "being read" area the navigation already uses. With a plain viewport observer, the next section's top peeking in at the bottom would count it, which inflates scroll depth.
-- **Deep links:** a hash load jumps instantly, so skipped sections never enter the band and aren't counted.
 - **Nav jumps (owner decision):** a nav link click sets `jumpTarget` to that section in `nav.ts`, which already owns the links. While `jumpTarget` is set, only the target is recorded, at the moment `setActive` makes it active. Passed sections are not marked as seen, so they still count later if the visitor scrolls back to them normally.
 - **When a jump ends:** `jumpTarget` clears when any of these happens:
   - `scrollend` fires;
