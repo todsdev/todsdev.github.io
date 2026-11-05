@@ -88,7 +88,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
   Also verify that `l-navstable.mjs` and `kbd.mjs` still pass, and make one check fail against the build from task 4.3 to prove it isn't vacuous.
 - [x] 4.5 Verify the blocked tracker with `an-blocked.mjs` (`UMAMI=block`): scrolling, nav clicks and the same actions work, there is no `pageerror`, and copy, vCard and keyboard focus behave the same. Also run `k-stable.mjs` and `l-cls.mjs` (`RUNS=10`) in default mode and with `UMAMI=real`, and verify CLS 0 in both
-- [ ] 4.6 Document analytics in the README:
+- [x] 4.6 Document analytics in the README:
   - what is measured, with the event table (including `section_view`, `nav_click` and the terminal events);
   - the `track()` interface for client features, with the terminal contract (send only `terminalCommand(input, COMMANDS)`, never raw input);
   - where the website ID lives;
