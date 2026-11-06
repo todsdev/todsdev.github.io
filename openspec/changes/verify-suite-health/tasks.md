@@ -18,7 +18,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
   - it passes on the branch build and on the live site;
   - with a visible element temporarily injected past the column edge in `#courses` (through `evaluate`, not a site edit), it FAILs;
   - the control is recorded: on the unchanged `main` build, the old check fails only on the five `.visually-hidden` spans (1px past the edge).
-- [ ] 2.2 `h43b.mjs`: serve the built `/` with the role text rewritten to a role whose last word is lowercase (document-rewrite interception), and read the expected final role from that rewrite instead of hardcoding it. Verify:
+- [x] 2.2 `h43b.mjs`: serve the built `/` with the role text rewritten to a role whose last word is lowercase (document-rewrite interception), and read the expected final role from that rewrite instead of hardcoding it. Verify:
   - it passes three times in a row;
   - it FAILs when the rewrite is replaced by the real role, which has 9 erase steps, so it isn't vacuous;
   - `h43.mjs` (the real typo sequence) still passes.
