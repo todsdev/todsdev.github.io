@@ -7,6 +7,7 @@ import vt323Latin400 from "@fontsource/vt323/files/vt323-latin-400-normal.woff2?
 import Footer from "../components/Footer.astro";
 import { langCode, localePath, locales, type Locale } from "../i18n";
 import { TRACKED_HOST, UMAMI_SCRIPT, WEBSITE_ID } from "../lib/analytics";
+import { PHOSPHOR_THEMES, THEME_KEY } from "../lib/terminal";
 
 interface Props {
   locale: Locale;
@@ -40,6 +41,18 @@ const xDefault = new URL(localePath("en"), site).href;
     <slot name="head-start" />
     <script is:inline>
       document.documentElement.classList.replace("no-js", "js");
+    </script>
+    <script is:inline define:vars={{ key: THEME_KEY, themes: PHOSPHOR_THEMES }}>
+      // Phosphor theme chosen in the terminal (`theme green|amber`), applied before first
+      // paint so a themed visit never flashes gray. Blocked storage or any other value
+      // keeps the default gray theme.
+      try {
+        const theme = localStorage.getItem(key);
+        if (themes.includes(theme))
+          document.documentElement.dataset.theme = theme;
+      } catch {
+        // Storage unavailable: gray.
+      }
     </script>
     {heroIntro && <script is:inline>
       // Hide the hero's final text before first paint when its intro will

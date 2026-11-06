@@ -345,3 +345,10 @@ export function terminalContacts(
     isProtected(kind) ? { kind, label } : { kind, label, value, url },
   );
 }
+
+/** Storage key of the chosen phosphor theme (read before first paint by BaseLayout). */
+export const THEME_KEY = "theme";
+/** Themes set as `<html data-theme>`; "gray" is the default and stores nothing. */
+export const PHOSPHOR_THEMES = ["green", "amber"] as const;
+export const THEMES = ["green", "amber", "gray"] as const;
+export type Theme = (typeof THEMES)[number];

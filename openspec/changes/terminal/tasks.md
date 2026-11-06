@@ -51,7 +51,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 4. Themes
 
-- [ ] 4.1 Add the green and amber token overrides to `tokens.css` and the inline theme script to `BaseLayout`'s `<head>` (design decision 6). Verify with a new `tm-theme.mjs`:
+- [x] 4.1 Add the green and amber token overrides to `tokens.css` and the inline theme script to `BaseLayout`'s `<head>` (design decision 6). Verify with a new `tm-theme.mjs`:
   - with `localStorage.theme` set before load, `data-theme` is on `<html>` at `DOMContentLoaded` on `/`, `/es/` and `/404.html`;
   - computed `--text`, `--text-muted` and `--highlight` reach at least 4.5:1 on `--bg`, `--surface` and `--surface-2` in each theme, and `--text-dim` stays below 3:1;
   - an unknown stored value and blocked storage both give gray;

@@ -34,6 +34,32 @@
   --thread-gutter: 2.5rem;
 }
 
+/*
+ * Phosphor themes, chosen with the terminal's `theme` command and set on <html> by
+ * BaseLayout before first paint. Only the seven color tokens change. Contrast as in the
+ * gray theme: text, muted and highlight at least 4.5:1 on every surface; --text-dim stays
+ * below 3:1 (decorative only).
+ */
+:root[data-theme="green"] {
+  --bg: #0a0f0b;
+  --surface: #101812;
+  --surface-2: #16211a;
+  --text: #4af27a;
+  --text-muted: #2fae55;
+  --text-dim: #1d5c30;
+  --highlight: #b8ffcc;
+}
+
+:root[data-theme="amber"] {
+  --bg: #100c06;
+  --surface: #18120a;
+  --surface-2: #21190e;
+  --text: #ffb83d;
+  --text-muted: #c98a1f;
+  --text-dim: #6b4a12;
+  --highlight: #ffe2a8;
+}
+
 @media (max-width: 40rem) {
   :root {
     --thread-gutter: 0.75rem;
