@@ -7,20 +7,31 @@ import { ptBr } from "../i18n/pt-br.ts";
 import { terminalCommand } from "./analytics.ts";
 import {
   ADB,
+  BREW,
   COMMANDS,
+  E492,
   GRADLE,
   KNOWN,
   NEOFETCH_LOGO,
+  PING,
+  SECRETS,
+  VIM_EXITS,
+  VIM_PROMPT,
   VISIBLE,
   complete,
   fill,
   formatCerts,
   formatContact,
   formatExperience,
+  formatBlame,
+  formatBrew,
   formatHelp,
   formatHistory,
   formatLs,
   formatNeofetch,
+  formatObs,
+  formatPing,
+  formatSecrets,
   formatProjects,
   formatSkills,
   formatWhoami,
@@ -318,7 +329,7 @@ test("every visible command has a help description in every locale", () => {
 });
 
 test("help lists exactly the visible commands, aligned, in the page's language", () => {
-  const lines = texts(formatHelp(ptBr.terminal));
+  const lines = texts(formatHelp(ptBr.terminal)).slice(0, -1);
   assert.deepEqual(
     lines.map((l) => l.split(/\s+/)[0]),
     [...VISIBLE],
@@ -432,4 +443,131 @@ test("terminal.json contacts drop the value and url of protected kinds", () => {
     { kind: "whatsapp", label: "whatsapp" },
   ]);
   assert.doesNotMatch(JSON.stringify(out), /55 ?21|tel:|wa\.me/);
+});
+
+test("help ends with the dim hint to ls -a in every locale", () => {
+  const hints: Record<string, string> = {
+    en: "psst… not everything is listed. try ls -a",
+    "pt-br": "psst… nem tudo está na lista. tente ls -a",
+    es: "psst… no todo está en la lista. prueba ls -a",
+  };
+  for (const [locale, strings] of LOCALES) {
+    const lines = formatHelp(strings);
+    assert.deepEqual(lines.at(-1), { text: hints[locale], tone: "muted" });
+    assert.equal(lines.length, VISIBLE.length + 1, locale);
+  }
+});
+
+test("ls -a lists .secrets first; plain ls is unchanged", () => {
+  assert.deepEqual(texts(formatLs(SECTIONS, true)), [
+    ".secrets  about/  experience/  projects/  skills/  courses/  contact/",
+  ]);
+  assert.ok(!texts(formatLs(SECTIONS))[0]!.includes(".secrets"));
+});
+
+test("cat .secrets: header, every egg in order, one comment column", () => {
+  assert.deepEqual(
+    SECRETS.map(([command]) => command),
+    [
+      "adb devices",
+      "./gradlew build",
+      "neofetch",
+      "sudo hire-me",
+      "rm -rf /",
+      "matrix",
+      "./hello",
+      "ping thiago",
+      "git blame",
+      "brew coffee",
+      "vim",
+      "obs",
+    ],
+  );
+  const headers: Record<string, string> = {
+    en: "# .secrets — don't tell anyone",
+    "pt-br": "# .secrets — não conte pra ninguém",
+    es: "# .secrets — no se lo digas a nadie",
+  };
+  for (const [locale, strings] of LOCALES) {
+    const lines = formatSecrets(strings);
+    assert.deepEqual(lines[0], { text: headers[locale], tone: "muted" });
+    const body = texts(lines).slice(1);
+    assert.equal(body.length, 12, locale);
+    // Commands stay English; every "#" sits in the same column.
+    body.forEach((line, i) => assert.ok(line.startsWith(SECRETS[i]![0])));
+    assert.ok(
+      body.every((line) => line.indexOf("# ") === 17),
+      locale,
+    );
+  }
+  const en0 = texts(formatSecrets(en.terminal));
+  assert.equal(en0[1], "adb devices      # see who's connected");
+  assert.equal(en0[11], "vim              # good luck getting out");
+  assert.equal(
+    texts(formatSecrets(ptBr.terminal))[2],
+    "./gradlew build  # compile 3 anos de experiência",
+  );
+  assert.equal(
+    texts(formatSecrets(es.terminal))[10],
+    "brew coffee      # combustible para el build",
+  );
+});
+
+test("ping, brew and git blame: CLI lines in English, asides translated", () => {
+  assert.deepEqual(texts(formatPing(ptBr.terminal)), [
+    "PING thiago (todsdev.github.io): 56 data bytes",
+    "64 bytes from thiago: icmp_seq=0 time=24h",
+    "--- thiago ping statistics ---",
+    "1 packet transmitted, 1 received, 0% packet loss",
+    "dica: digite contact para falar comigo",
+  ]);
+  assert.equal(formatPing(en.terminal).at(-1)?.tone, "muted");
+  assert.equal(PING.length, 4);
+  assert.deepEqual(formatBrew(en.terminal), [
+    { text: "==> Brewing coffee..." },
+    { text: "Error: 418 I'm a teapot", tone: "error" },
+    { text: "(some things are not meant to be)", tone: "muted" },
+  ]);
+  assert.deepEqual(BREW, ["==> Brewing coffee...", "Error: 418 I'm a teapot"]);
+  assert.equal(
+    texts(formatBrew(es.terminal))[2],
+    "(no todo está destinado a ser)",
+  );
+  assert.deepEqual(texts(formatBlame(es.terminal, "Thiago Rodrigues")), [
+    "a1b2c3d (Thiago Rodrigues) todo en esta página. sí, incluso la errata del hero.",
+  ]);
+  assert.equal(
+    texts(formatBlame(en.terminal, "Thiago Rodrigues"))[0],
+    "a1b2c3d (Thiago Rodrigues) everything on this page. yes, even the typo in the hero.",
+  );
+});
+
+test("obs: counts filled in, then the tip; text only", () => {
+  const counts = { games: 8, years: 10 };
+  assert.deepEqual(texts(formatObs(en.terminal, counts)), [
+    "8 Olympic Games · 10 years · 0 medals · 100% uptime",
+    "tip: type experience for the full story",
+  ]);
+  assert.equal(
+    texts(formatObs(ptBr.terminal, counts))[0],
+    "8 Jogos Olímpicos · 10 anos · 0 medalhas · 100% de uptime",
+  );
+  assert.equal(
+    texts(formatObs(es.terminal, counts))[0],
+    "8 Juegos Olímpicos · 10 años · 0 medallas · 100% de uptime",
+  );
+  // No ring drawing or Olympic symbol anywhere in the eggs' text.
+  for (const [, strings] of LOCALES) {
+    const all = [
+      ...texts(formatObs(strings, counts)),
+      ...texts(formatSecrets(strings)),
+    ].join("\n");
+    assert.ok(!/ring|[○◯⭕⚪●◎⊙]|\p{Extended_Pictographic}/iu.test(all), all);
+  }
+});
+
+test("vim constants", () => {
+  assert.equal(E492, "E492: Not an editor command");
+  assert.deepEqual(VIM_EXITS, [":q", ":q!", ":wq", ":x"]);
+  assert.equal(VIM_PROMPT, "-- NORMAL --");
 });
