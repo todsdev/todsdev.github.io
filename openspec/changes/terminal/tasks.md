@@ -99,7 +99,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - `theme gray` removes the attribute and the stored key;
   - `theme` alone prints the current theme and the usage;
   - only the seven tokens differ between themes (compare computed layout boxes and fonts of a sample of elements).
-- [ ] 6.4 Add the easter eggs `adb devices`, `./gradlew build` (line by line, input read-only meanwhile), `neofetch`, `sudo hire-me`, other `sudo`, `rm` and `matrix`. Verify:
+- [x] 6.4 Add the easter eggs `adb devices`, `./gradlew build` (line by line, input read-only meanwhile), `neofetch`, `sudo hire-me`, other `sudo`, `rm` and `matrix`. Verify:
   - a new `tm-sudo.mjs`: the password is never in the log text, the input's displayed value, the history, the `history` output or any recorded event; `mailto:` with the localized subject per locale; `contact {email, mail}` recorded once, after Enter; Esc cancels the prompt and records no `contact`;
   - extend `tm-commands.mjs` with the easter-egg outputs in all three locales;
   - extend `tm-layout.mjs` (new): the `matrix` canvas stays inside the panel's box, the page's pixels outside the panel don't change, any key stops it, and focus returns to the input; under reduced motion there's no canvas and the note is printed, and `gradlew` prints at once.

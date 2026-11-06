@@ -6,8 +6,12 @@
 import { terminalCommand } from "../lib/analytics";
 import { decode } from "../lib/contact";
 import {
+  ADB,
+  GRADLE,
   KNOWN,
+  NEOFETCH_LOGO,
   PROMPT,
+  SUDO_PROMPT,
   complete,
   fill,
   formatCerts,
@@ -16,6 +20,7 @@ import {
   formatHelp,
   formatHistory,
   formatLs,
+  formatNeofetch,
   formatProjects,
   formatSkills,
   formatWhoami,
@@ -81,6 +86,146 @@ export function start(host: Host, data: TerminalData): Shell {
     return Object.fromEntries(
       [...lines].map((el) => [el.dataset.kind, decode(el.dataset.encValue!)]),
     );
+  }
+
+  const prompt = host.dialog.querySelector<HTMLElement>(
+    "[data-terminal-prompt]",
+  );
+  const label = host.dialog.querySelector<HTMLElement>("[data-terminal-label]");
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  /** Waiting for the `sudo hire-me` password line. */
+  let sudo = false;
+  /** A timed output (gradlew log) is printing: input is read-only. */
+  let busy = false;
+  /** Stops the running `matrix` animation, if any. */
+  let stopMatrix: (() => void) | undefined;
+
+  function setReadOnly(on: boolean): void {
+    input.readOnly = on;
+    input.dispatchEvent(new Event("input"));
+  }
+
+  /** Password mode for `sudo hire-me`: masked input, own label and prompt, nothing kept. */
+  function setSudo(on: boolean): void {
+    sudo = on;
+    input.value = "";
+    input.type = on ? "password" : "text";
+    if (prompt) prompt.textContent = on ? "[sudo]" : PROMPT;
+    if (label) {
+      label.textContent = on
+        ? (host.dialog.dataset.passwordLabel ?? "")
+        : (host.dialog.dataset.label ?? "");
+    }
+    input.dispatchEvent(new Event("input"));
+  }
+
+  function hireMe(): void {
+    setSudo(false);
+    say(s.accessGranted, "accent");
+    track("contact", { kind: "email", action: "mail" });
+    const link = document.createElement("a");
+    link.href = `mailto:${data.email}?subject=${encodeURIComponent(s.mailSubject)}`;
+    host.dialog.append(link); // the page behind is inert while the dialog is open
+    link.click();
+    link.remove();
+  }
+
+  function gradle(): void {
+    if (reduced()) {
+      print(GRADLE.map((text) => ({ text })));
+      return;
+    }
+    busy = true;
+    setReadOnly(true);
+    GRADLE.forEach((text, i) => {
+      window.setTimeout(
+        () => {
+          say(text, i === GRADLE.length - 1 ? "accent" : undefined);
+          if (i < GRADLE.length - 1) return;
+          busy = false;
+          setReadOnly(false);
+        },
+        (i + 1) * 150,
+      );
+    });
+  }
+
+  function neofetch(): void {
+    const card = document.createElement("div");
+    card.className = "term__card";
+    const logo = document.createElement("p");
+    logo.className = "term__out term__out--muted";
+    logo.setAttribute("aria-hidden", "true");
+    logo.textContent = NEOFETCH_LOGO.join("\n");
+    const info = document.createElement("div");
+    for (const line of formatNeofetch(s)) {
+      const p = document.createElement("p");
+      p.className = line.tone
+        ? `term__out term__out--${line.tone}`
+        : "term__out";
+      p.textContent = line.text;
+      info.append(p);
+    }
+    card.append(logo, info);
+    log.append(card);
+    log.scrollTop = log.scrollHeight;
+  }
+
+  /** Falling characters over the log, inside the panel only, for 3 s or until a key. */
+  function matrix(): void {
+    if (reduced()) {
+      say(s.matrixNote, "muted");
+      return;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.className = "term__matrix";
+    canvas.setAttribute("aria-hidden", "true");
+    Object.assign(canvas.style, {
+      top: `${log.offsetTop}px`,
+      left: `${log.offsetLeft}px`,
+      width: `${log.clientWidth}px`,
+      height: `${log.clientHeight}px`,
+    });
+    canvas.width = log.clientWidth;
+    canvas.height = log.clientHeight;
+    host.dialog.append(canvas);
+    const ctx = canvas.getContext("2d");
+    const css = getComputedStyle(document.documentElement);
+    const color = css.getPropertyValue("--text").trim();
+    const fade = css.getPropertyValue("--surface").trim();
+    const size = 14;
+    const glyphs = "アカサタナハマヤラワ0123456789kotlin<>{}";
+    const drops = Array.from(
+      { length: Math.ceil(canvas.width / (size * 0.6)) },
+      () => Math.floor(Math.random() * -20),
+    );
+    setReadOnly(true);
+    let frame = 0;
+    const started = performance.now();
+    const step = (now: number) => {
+      if (!ctx || now - started > 3000) return stop();
+      ctx.globalAlpha = 0.2;
+      ctx.fillStyle = fade;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = color;
+      ctx.font = `${size}px "IBM Plex Mono", monospace`;
+      drops.forEach((y, x) => {
+        const glyph = glyphs[Math.floor(Math.random() * glyphs.length)] ?? "0";
+        ctx.fillText(glyph, x * size * 0.6, y * size);
+        drops[x] = y * size > canvas.height && Math.random() > 0.95 ? 0 : y + 1;
+      });
+      frame = requestAnimationFrame(step);
+    };
+    function stop(): void {
+      cancelAnimationFrame(frame);
+      canvas.remove();
+      stopMatrix = undefined;
+      setReadOnly(false);
+      input.focus({ preventScroll: true });
+    }
+    stopMatrix = stop;
+    frame = requestAnimationFrame(step);
   }
 
   const commands: Record<string, Handler> = {
@@ -182,6 +327,26 @@ export function start(host: Host, data: TerminalData): Shell {
       }
       say(fill(s.themeSet, { theme }), "muted");
     },
+    adb: ([sub]) => {
+      if (sub?.toLowerCase() === "devices")
+        print(ADB.map((text) => ({ text })));
+      else usage("adb devices");
+    },
+    gradlew: ([task]) => {
+      if (task?.toLowerCase() === "build") gradle();
+      else usage("./gradlew build");
+    },
+    neofetch: () => neofetch(),
+    sudo: ([what]) => {
+      if (what?.toLowerCase() !== "hire-me") {
+        say(s.sudoDenied, "error");
+        return;
+      }
+      say(SUDO_PROMPT);
+      setSudo(true);
+    },
+    rm: () => say(s.rm),
+    matrix: () => matrix(),
     clear: () => log.replaceChildren(),
     history: () => print(formatHistory(history)),
     exit: () => host.close(),
@@ -204,6 +369,9 @@ export function start(host: Host, data: TerminalData): Shell {
 
   return {
     run(line) {
+      // The password line is never echoed, kept or reported: any input grants access.
+      if (sudo) return hireMe();
+      if (busy || stopMatrix) return;
       const command = line.trim();
       say(`${PROMPT} ${command}`, "echo");
       if (!command) return;
@@ -219,6 +387,7 @@ export function start(host: Host, data: TerminalData): Shell {
     },
 
     complete() {
+      if (sudo || busy) return;
       const { value, candidates } = complete(input.value, data.sections);
       if (candidates.length > 0) {
         say(`${PROMPT} ${input.value}`, "echo");
@@ -228,11 +397,23 @@ export function start(host: Host, data: TerminalData): Shell {
     },
 
     recall(step) {
+      if (sudo || busy) return;
       recallAt = Math.min(Math.max(recallAt + step, 0), history.length);
       setInput(history[recallAt] ?? "");
     },
 
-    cancel: () => false,
-    intercept: () => false,
+    cancel() {
+      if (!sudo) return false;
+      setSudo(false); // Esc cancels the password prompt; the terminal stays open
+      say("^C", "muted");
+      return true;
+    },
+
+    intercept(event) {
+      if (!stopMatrix) return false;
+      event.preventDefault(); // any key ends matrix (Esc too, without closing)
+      stopMatrix();
+      return true;
+    },
   };
 }
