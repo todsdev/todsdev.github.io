@@ -74,7 +74,7 @@ The shell gets a `vim` flag:
   - An exit line (`/^:(q!?|wq|x)$/` after trimming) leaves vim mode, prints `vimExit` and tracks `terminal_command {command: "vim"}` directly. `terminalCommand()` would report `unknown` for `:q`.
   - Any other line prints `E492` and tracks nothing.
 - **Esc:** `cancel()` leaves vim mode (`vimExit`, nothing tracked) and returns `true`, so the dialog stays open. The second Esc reaches `close()` as today.
-- **Mode line:** entering vim sets the prompt element's text to `-- NORMAL --` and adds a `term__prompt--mode` class (the `--text-dim` color, as in the dim output lines). Leaving restores `PROMPT` and removes the class. The echo uses the current prompt text. The prompt keeps its line box, and the input's block cursor follows via the existing `input` event.
+- **Mode line:** entering vim sets the prompt element's text to `-- NORMAL --` and adds a `term__mode` class (the `--text-muted` color of the dim output lines, such as the help hint; `--text-dim` is below 3:1 and too faint for text). Leaving restores `PROMPT` and removes the class. The echo uses the current prompt text. The prompt keeps its line box, and the input's block cursor follows via the existing `input` event.
 - **Inert keys:** `recall` and `complete` return early in vim mode, as they do for `sudo`.
 - **New `Shell.closed()` hook:** `terminal.ts` calls it from `close()`. It drops vim mode silently, so reopening shows the normal shell. Sudo already resets when cancelled, and nothing else needs the hook.
 

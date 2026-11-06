@@ -60,8 +60,8 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
   - the unknown example becomes `xyzzy`.
 
   It must fail against the live site before this change.
-- [ ] 4.2 Add vim mode (design "Vim mode"), including `Shell.closed()` called from `terminal.ts`'s `close()`. Verify with a new `tm-eggs.mjs`, in all three locales:
-  - `vim` prints the localized notice, and the prompt reads `-- NORMAL --` in `--text-dim` (computed color), with the input's top unchanged;
+- [x] 4.2 Add vim mode (design "Vim mode"), including `Shell.closed()` called from `terminal.ts`'s `close()`. Verify with a new `tm-eggs.mjs`, in all three locales:
+  - `vim` prints the localized notice, and the prompt reads `-- NORMAL --` in the dim lines' `--text-muted` (computed color), with the input's top unchanged;
   - lines typed in vim are echoed as `-- NORMAL -- <line>`;
   - every way out (`:q`, `:q!`, `:wq`, `:x`, Esc, close button) restores `visitor@todsdev:~$` in its normal color;
   - `exit`, `help` and `ls` each print `E492: Not an editor command`;

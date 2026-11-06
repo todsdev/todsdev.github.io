@@ -109,6 +109,7 @@ function setup(dialog: HTMLDialogElement): void {
   function close({ restoreFocus = true } = {}): void {
     if (!dialog.open) return;
     dialog.close();
+    shell?.closed();
     if (restoreFocus) opener?.focus({ preventScroll: true });
     else (document.activeElement as HTMLElement | null)?.blur();
     opener = null;

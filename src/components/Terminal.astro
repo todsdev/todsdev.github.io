@@ -190,6 +190,11 @@ const { locale } = Astro.props;
     line-height: 1;
   }
 
+  /* Vim mode's "-- NORMAL --" mode line, dim like the muted output lines. */
+  .term__mode {
+    color: var(--text-muted);
+  }
+
   .term__field {
     position: relative;
     flex: 1 1 auto;
