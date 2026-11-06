@@ -5,8 +5,8 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 ## 1. Setup and résumés
 
 - [x] 1.1 Create branch `feat/polish`, commit the artifacts and open a draft PR; verify the PR is draft and `openspec validate polish --strict` passes
-- [ ] 1.2 Copy `resume-en.pdf`, `resume-pt-br.pdf` and `resume-es.pdf` from `~/portfolio-inbox/` to a fresh scratch directory, stopping to ask if any is missing or named differently; verify they still match the inspection in `proposal.md`: the four URIs, Info present and no XMP (no repo change, so no commit)
-- [ ] 1.3 Write `pdf-links.mjs` with the four-link and metadata checks, and classify it in `full.sh`; verify it fails against the current `public/resume/` files (0 annotations), and that its metadata check fails against the inbox files (Info present)
+- [x] 1.2 Copy `resume-en.pdf`, `resume-pt-br.pdf` and `resume-es.pdf` from `~/portfolio-inbox/` to a fresh scratch directory, stopping to ask if any is missing or named differently; verify they still match the inspection in `proposal.md`: the four URIs, Info present and no XMP (no repo change, so no commit)
+- [x] 1.3 Write `pdf-links.mjs` with the four-link and metadata checks, and classify it in `full.sh`; verify it fails against the current `public/resume/` files (0 annotations), and that its metadata check fails against the inbox files (Info present)
 - [ ] 1.4 Rewrite the PDFs in scratch per design decision 1; verify `pdf-links` passes on the output, each file has one `startxref` and `%%EOF`, original metadata values are absent with streams expanded, and pages render pixel-identical to the originals (no repo change, so no commit)
 - [ ] 1.5 Install the rewritten files in `public/resume/`; verify `pdf-links` passes on the built `dist/resume/` files
 
