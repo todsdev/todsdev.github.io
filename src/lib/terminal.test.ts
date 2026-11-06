@@ -56,6 +56,8 @@ test("parse drops a leading ./ from the command name", () => {
     name: "gradlew",
     args: ["build"],
   });
+  assert.deepEqual(parse("./hello"), { name: "hello", args: [] });
+  assert.deepEqual(parse("hello"), { name: "hello", args: [] });
 });
 
 test("parse keeps arguments exactly as typed", () => {
@@ -85,7 +87,20 @@ test("help lists the visible commands in order, easter eggs hidden", () => {
   ]);
   assert.deepEqual(
     COMMANDS.filter((c) => c.hidden).map((c) => c.name),
-    ["adb", "gradlew", "neofetch", "sudo", "rm", "matrix"],
+    [
+      "adb",
+      "gradlew",
+      "neofetch",
+      "sudo",
+      "rm",
+      "matrix",
+      "hello",
+      "ping",
+      "git",
+      "brew",
+      "vim",
+      "obs",
+    ],
   );
 });
 
@@ -124,15 +139,23 @@ test("Tab on an empty input lists the help commands", () => {
   assert.deepEqual(candidates, [...VISIBLE].sort());
 });
 
-test("easter eggs complete only as the sole match and are never listed", () => {
-  assert.deepEqual(complete("neo", SECTIONS), {
-    value: "neofetch ",
-    candidates: [],
-  });
-  assert.deepEqual(complete("ma", SECTIONS), {
-    value: "matrix ",
-    candidates: [],
-  });
+test("easter eggs are never completed or listed", () => {
+  for (const input of [
+    "neo",
+    "ma",
+    "./h",
+    "vi",
+    "ob",
+    "ad",
+    "pi",
+    "gi",
+    "br",
+  ]) {
+    assert.deepEqual(complete(input, SECTIONS), {
+      value: input,
+      candidates: [],
+    });
+  }
   // "s" matches skills (visible) and sudo (hidden): the visible one wins.
   assert.deepEqual(complete("s", SECTIONS), {
     value: "skills ",
@@ -148,7 +171,7 @@ test("easter eggs complete only as the sole match and are never listed", () => {
   }
 });
 
-test("Tab completes arguments of cd, open, lang, theme and cat", () => {
+test("Tab completes arguments of cd, open, lang, theme, cat and ls", () => {
   assert.equal(complete("cd pro", SECTIONS).value, "cd projects");
   assert.equal(complete("cd ~/ab", SECTIONS).value, "cd ~/about");
   assert.deepEqual(complete("cd co", SECTIONS), {
@@ -160,6 +183,13 @@ test("Tab completes arguments of cd, open, lang, theme and cat", () => {
   assert.equal(complete("lang p", SECTIONS).value, "lang pt");
   assert.equal(complete("theme a", SECTIONS).value, "theme amber");
   assert.equal(complete("cat s", SECTIONS).value, "cat skills.txt");
+  assert.equal(complete("cat .", SECTIONS).value, "cat .secrets");
+  assert.deepEqual(complete("cat ", SECTIONS), {
+    value: "cat ",
+    candidates: [".secrets", "skills.txt"],
+  });
+  assert.equal(complete("ls ", SECTIONS).value, "ls -a");
+  assert.equal(complete("ls -", SECTIONS).value, "ls -a");
 });
 
 test("Tab leaves other inputs alone", () => {
@@ -178,6 +208,8 @@ test("suggestions: one edit for short names, two from seven characters", () => {
   assert.equal(suggest("histroy"), "history");
   assert.equal(suggest("hello"), undefined);
   assert.equal(suggest("xyzzy"), undefined);
+  // Suggestions may name an easter egg: part of discovering them.
+  assert.equal(suggest("gti"), "git");
 });
 
 test("section arguments", () => {
@@ -206,8 +238,20 @@ test("terminal_command reports only recognized command names", () => {
     ["sudo hire-me", "sudo"],
     ["rm -rf /", "rm"],
     ["matrix", "matrix"],
+    ["ls -a", "ls"],
+    ["cat .secrets", "cat"],
+    ["./hello", "hello"],
+    ["hello", "hello"],
+    ["ping thiago", "ping"],
+    ["git blame", "git"],
+    ["brew coffee", "brew"],
+    ["vim", "vim"],
+    ["vim notes.txt", "vim"],
+    ["obs", "obs"],
     ["xyzzy", "unknown"],
-    ["hello my name is Ana", "unknown"],
+    [":q", "unknown"],
+    [":wq", "unknown"],
+    ["hello my name is Ana", "hello"],
   ];
   for (const [input, command] of cases) {
     assert.equal(terminalCommand(input, KNOWN), command, input);

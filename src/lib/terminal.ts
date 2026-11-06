@@ -11,7 +11,7 @@ export const PROMPT = "visitor@todsdev:~$";
 
 export interface Command {
   name: string;
-  /** Easter eggs: left out of `help` and never listed by completion. */
+  /** Easter eggs: left out of `help` and never offered by completion. */
   hidden?: boolean;
   /** Arguments offered by Tab completion. Sections come from the caller. */
   args?: readonly string[] | "sections";
@@ -27,9 +27,9 @@ export const COMMANDS: readonly Command[] = [
   { name: "skills" },
   { name: "certs" },
   { name: "contact" },
-  { name: "ls" },
+  { name: "ls", args: ["-a"] },
   { name: "cd", args: "sections" },
-  { name: "cat", args: ["skills.txt"] },
+  { name: "cat", args: ["skills.txt", ".secrets"] },
   { name: "resume" },
   { name: "open", args: ["github", "linkedin", "instagram", "repo"] },
   { name: "lang", args: ["en", "pt", "es"] },
@@ -43,6 +43,12 @@ export const COMMANDS: readonly Command[] = [
   { name: "sudo", hidden: true },
   { name: "rm", hidden: true },
   { name: "matrix", hidden: true },
+  { name: "hello", hidden: true },
+  { name: "ping", hidden: true },
+  { name: "git", hidden: true },
+  { name: "brew", hidden: true },
+  { name: "vim", hidden: true },
+  { name: "obs", hidden: true },
 ];
 
 /** Names `terminalCommand()` (src/lib/analytics.ts) reports; anything else is "unknown". */
@@ -55,7 +61,7 @@ export const VISIBLE: readonly string[] = COMMANDS.filter((c) => !c.hidden).map(
 const byName = (name: string) => COMMANDS.find((c) => c.name === name);
 
 export interface Parsed {
-  /** Lowercased, with a leading "./" dropped ("./gradlew" → "gradlew"). */
+  /** Lowercased, with a leading "./" dropped ("./gradlew" → "gradlew", "./hello" → "hello"). */
   name: string;
   /** The remaining tokens exactly as typed. */
   args: string[];
@@ -103,13 +109,8 @@ export function complete(
   const tokens = input.trimStart().split(/\s+/);
   if (tokens.length === 1) {
     const prefix = (tokens[0] ?? "").toLowerCase();
+    // Easter eggs are never offered: they're found through `ls -a` and `cat .secrets`.
     const visible = VISIBLE.filter((n) => n.startsWith(prefix));
-    const hidden = prefix
-      ? COMMANDS.filter((c) => c.hidden && c.name.startsWith(prefix))
-      : [];
-    if (visible.length === 0 && hidden.length === 1) {
-      return { value: `${hidden[0]!.name} `, candidates: [] };
-    }
     if (visible.length === 1)
       return { value: `${visible[0]} `, candidates: [] };
     if (visible.length === 0) return none;

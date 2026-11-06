@@ -15,7 +15,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
 
 ## 2. Pure core and strings
 
-- [ ] 2.1 In `src/lib/terminal.ts` (design "Command table and completion"):
+- [x] 2.1 In `src/lib/terminal.ts` (design "Command table and completion"):
   - add the hidden `hello`, `ping`, `git`, `brew`, `vim` and `obs` entries, `cat` → `skills.txt`/`.secrets` and `ls` → `-a`;
   - remove hidden completion from `complete()`.
 
