@@ -34,7 +34,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
   - a run on `main` reports 0 failed, with only `h34b`, `h34c` and `h52` skipped;
   - a deliberately crashing scratch suite added to its list (temporarily) is reported failed;
   - every `.mjs` in the folder is either in the suite list or in an exclusion list (a check inside `full.sh` that fails on unlisted scripts).
-- [ ] 3.2 Update the verify `README.md`:
+- [x] 3.2 Update the verify `README.md`:
   - the categories (suites, live-only, fixture-only, tools, debug, obsolete);
   - `full.sh` and the `SKIP` convention;
   - the analytics suites;
