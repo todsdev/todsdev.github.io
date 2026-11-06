@@ -14,7 +14,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
 
 ## 2. Checks
 
-- [ ] 2.1 `l-width.mjs`: skip visually hidden elements and their descendants in the box scan. Verify:
+- [x] 2.1 `l-width.mjs`: skip visually hidden elements and their descendants in the box scan. Verify:
   - it passes on the branch build and on the live site;
   - with a visible element temporarily injected past the column edge in `#courses` (through `evaluate`, not a site edit), it FAILs;
   - the control is recorded: on the unchanged `main` build, the old check fails only on the five `.visually-hidden` spans (1px past the edge).
