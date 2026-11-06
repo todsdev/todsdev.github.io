@@ -209,7 +209,7 @@ export interface TerminalData {
 
 export interface Line {
   text: string;
-  tone?: "muted" | "accent" | "error";
+  tone?: "muted" | "accent" | "error" | "echo";
 }
 
 /** Replaces each `{key}` in a dictionary template. */

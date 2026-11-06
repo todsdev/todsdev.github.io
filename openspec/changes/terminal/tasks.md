@@ -76,7 +76,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 6. Shell and commands
 
-- [ ] 6.1 Implement `src/scripts/terminal-shell.ts`:
+- [x] 6.1 Implement `src/scripts/terminal-shell.ts`:
   - the core: rendering with `textContent`, the queued Enter, history, Tab and Shift+Tab, the unavailable line, and `track("terminal_command")` per submitted line;
   - the commands `help`, `whoami`, `about`, `experience`, `projects`, `skills`, `certs`, `contact` (with runtime phone decoding), `ls`, `cat`, `clear`, `history` and `exit`;
   - unknown commands with suggestions.
