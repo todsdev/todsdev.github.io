@@ -26,7 +26,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
   - each prints that line and exits 0 on the current build;
   - with `availability.enabled: true` temporarily set (built, then reverted, not committed), each runs its assertions instead of skipping, and the result is recorded.
 
-- [ ] 2.4 `an-live.mjs`: make the real beacon replay opt-in (`REPLAY=1`), so routine live runs never count a visit. Without it, print one `SKIP` line for the replay step. Verify that a live run without `REPLAY` sends no request to the real gateway (Node `fetch` isn't called; logged) and that every other check still passes
+- [x] 2.4 `an-live.mjs`: make the real beacon replay opt-in (`REPLAY=1`), so routine live runs never count a visit. Without it, print one `SKIP` line for the replay step. Verify that a live run without `REPLAY` sends no request to the real gateway (Node `fetch` isn't called; logged) and that every other check still passes
 
 ## 3. Full run and documentation
 
