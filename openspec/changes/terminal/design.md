@@ -86,8 +86,8 @@
 - `COMMANDS`: the table. Each command has its name, a `hidden` flag for the easter eggs, an optional `args` list for completion (sections, `open` targets, `en|pt|es`, `green|amber|gray`, `skills.txt`), and its `help` dictionary key.
 - `KNOWN`: every name `terminalCommand()` should recognize, including `adb`, `gradlew`, `sudo`, `rm` and `matrix`.
 - `parse(input)` returns `{ name, args }`. It trims, collapses spaces and lowercases the command name, but not the arguments to `sudo`. It maps `./gradlew` to `gradlew`.
-- `complete(input)` returns `{ value, candidates }`. Candidates come from visible commands only (easter eggs never show up through completion) and from the current command's `args`.
-- `suggest(name)`: the closest command by Levenshtein distance ≤ 2 (ties go to table order). It also covers hidden commands: someone who typed `neofech` already knows about it.
+- `complete(input)` returns `{ value, candidates }`. Candidates come from visible commands and the current command's `args`. A hidden command completes only when it's the sole match and no visible command matches (so `neo` gives `neofetch`); it's never listed.
+- `suggest(name)`: the closest command by edit distance (optimal string alignment, so a swap counts as one), at most 1 for names under 7 characters and 2 from 7 up (so `hello` doesn't suggest `help`); ties go to table order. It also covers hidden commands: someone who typed `neofech` already knows about it.
 - `sectionArg(arg)` normalizes `~/about/`, `about` and `./about`. `~`, `..`, `/` and `~/` map to `hero`.
 - **Formatters:** one pure function per content command, from the data and the dictionary to an array of lines (`{ text, tone?: "muted" | "accent", ariaHidden?: boolean }`):
   - `formatWhoami`, `formatExperience`, `formatProjects`, `formatSkills`, `formatCerts`, `formatContact`, `formatHelp`, `formatHistory`;

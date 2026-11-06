@@ -88,7 +88,7 @@ The terminal SHALL remember the commands run during the page load. ↑ SHALL rep
 - **THEN** the input reads `ls`; pressing ↓ twice then leaves it empty
 
 ### Requirement: Tab completion
-Tab SHALL complete the command name, or the argument of `cd`, `open`, `lang`, `theme` and `cat`, when exactly one candidate matches the text typed so far. When several match, it SHALL complete their common prefix and list the candidates. Tab SHALL never move focus out of the input. On an empty input it SHALL list the commands shown by `help`.
+Tab SHALL complete the command name, or the argument of `cd`, `open`, `lang`, `theme` and `cat`, when exactly one candidate matches the text typed so far. Hidden easter eggs complete only when no visible command matches, and are never listed. When several match, it SHALL complete their common prefix and list the candidates. Tab SHALL never move focus out of the input. On an empty input it SHALL list the commands shown by `help`.
 
 #### Scenario: Unique command
 - **WHEN** the visitor types `neo` and presses Tab
@@ -103,7 +103,7 @@ Tab SHALL complete the command name, or the argument of `cd`, `open`, `lang`, `t
 - **THEN** the input reads `cd projects`
 
 ### Requirement: Unknown commands and suggestions
-An unrecognized command SHALL print "command not found: <name>" (localized), followed by a hint to type `help`. When a known command is within two edits of the name, the hint SHALL instead ask "did you mean <command>?" (localized). The echoed name SHALL be shown as text, never interpreted as markup.
+An unrecognized command SHALL print "command not found: <name>" (localized), followed by a hint to type `help`. When a known command is within one edit of the name (two for names of seven or more characters), the hint SHALL instead ask "did you mean <command>?" (localized). The echoed name SHALL be shown as text, never interpreted as markup.
 
 #### Scenario: Typo
 - **WHEN** a visitor on `/es/` runs `whoamii`

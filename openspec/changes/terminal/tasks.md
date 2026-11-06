@@ -15,11 +15,11 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 2. Pure core
 
-- [ ] 2.1 Add `src/lib/terminal.ts` with `COMMANDS`, `KNOWN`, `parse`, `complete`, `suggest` and `sectionArg` (design decision 4), plus `src/lib/terminal.test.ts`. Cover:
+- [x] 2.1 Add `src/lib/terminal.ts` with `COMMANDS`, `KNOWN`, `parse`, `complete`, `suggest` and `sectionArg` (design decision 4), plus `src/lib/terminal.test.ts`. Cover:
   - case and spaces;
   - `./gradlew` → `gradlew`;
   - `sudo` arguments kept as typed;
-  - completion: unique, common prefix with candidates, arguments for `cd`, `open`, `lang`, `theme` and `cat`, an empty input listing the `help` commands, and easter eggs never offered;
+  - completion: unique, common prefix with candidates, arguments for `cd`, `open`, `lang`, `theme` and `cat`, an empty input listing the `help` commands, and easter eggs never listed (completed only as the sole match, like `neo` → `neofetch`);
   - suggestions: `whoamii` → `whoami`, `neofech` → `neofetch`, `hello` → none;
   - `sectionArg` for `~/about/`, `./about`, `~`, `..` and `/`;
   - `terminalCommand(input, KNOWN)` for every command in the spec, including `cd projects --fast` → `cd` and `xyzzy` → `unknown`.
