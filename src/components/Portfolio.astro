@@ -35,7 +35,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   {locale === "en" && <script is:inline slot="head-start">
     // Saved-language redirect for the unprefixed root only. Runs synchronously
     // in <head> before any stylesheet, so English is never painted first.
-    // Keep the key in sync with PREFERRED_LOCALE_KEY in src/scripts/locale.ts.
+    // Keep the key in sync with PREFERRED_LOCALE_KEY in src/lib/storage-keys.ts.
     // Never consults the browser language.
     (function () {
       try {

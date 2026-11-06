@@ -20,10 +20,12 @@ import {
   formatSkills,
   formatWhoami,
   parse,
+  sectionArg,
   suggest,
   type Line,
   type TerminalData,
 } from "../lib/terminal";
+import { PREFERRED_LOCALE_KEY } from "../lib/storage-keys";
 import type { Host } from "./terminal";
 import { track } from "./track";
 
@@ -39,6 +41,9 @@ export interface Shell {
   /** Any keydown in the dialog: true when the shell used it. */
   intercept(event: KeyboardEvent): boolean;
 }
+
+/** `lang` arguments → locale. */
+const LANGS: Record<string, string> = { en: "en", pt: "pt-br", es: "es" };
 
 /** Oldest lines are dropped beyond this, so a long session stays light. */
 const MAX_LINES = 500;
@@ -91,10 +96,74 @@ export function start(host: Host, data: TerminalData): Shell {
       else if (file.toLowerCase() === "skills.txt") print(formatSkills(data));
       else say(fill(s.catError, { name: file }), "error");
     },
+    cd: ([arg]) => {
+      const id = sectionArg(arg, data.sections);
+      if (!id) {
+        say(fill(s.cdError, { name: arg ?? "" }), "error");
+        return;
+      }
+      host.close({ restoreFocus: false });
+      // A jump for nav.ts (only the destination records section_view), then the same
+      // hash navigation a nav link does: smooth, or instant with reduced motion.
+      window.dispatchEvent(new CustomEvent("nav:jump", { detail: id }));
+      if (location.hash === `#${id}`)
+        document.getElementById(id)?.scrollIntoView();
+      else location.hash = id;
+    },
+    lang: ([arg]) => {
+      const target = LANGS[arg?.toLowerCase() ?? ""];
+      if (!target) {
+        usage("lang en|pt|es");
+        return;
+      }
+      const language = data.languages[target] ?? target;
+      if (target === document.documentElement.lang.toLowerCase()) {
+        say(fill(s.langCurrent, { language }), "muted");
+        return;
+      }
+      const active = document.querySelector<HTMLElement>(
+        "[data-nav-link].is-active",
+      )?.dataset.navLink;
+      const hash = active && active !== "hero" ? `#${active}` : "";
+      try {
+        localStorage.setItem(PREFERRED_LOCALE_KEY, target);
+      } catch {
+        // Storage unavailable: switching still works, just not remembered.
+      }
+      say(fill(s.langSwitch, { language }), "muted");
+      location.assign(`${target === "en" ? "/" : `/${target}/`}${hash}`);
+    },
+    resume: () => {
+      // Same file as the contact section's download, and the same `resume` event.
+      const link = document.createElement("a");
+      link.href = data.resume.href;
+      link.download = "resume.pdf";
+      host.dialog.append(link); // the page behind is inert while the dialog is open
+      link.click();
+      link.remove();
+      track("resume", { language: data.resume.language });
+      say(fill(s.resume, { file: data.resume.file }), "muted");
+    },
+    open: ([target]) => {
+      const url = openTarget(target?.toLowerCase() ?? "");
+      if (!url) {
+        usage("open github|linkedin|instagram|repo");
+        return;
+      }
+      window.open(url, "_blank", "noopener");
+      say(fill(s.opened, { url }), "muted");
+    },
     clear: () => log.replaceChildren(),
     history: () => print(formatHistory(history)),
     exit: () => host.close(),
   };
+
+  /** `open` targets: the contact profiles, and `repo` for the site's source repository. */
+  function openTarget(target: string): string | undefined {
+    if (target === "repo") return data.profile.sourceUrl;
+    if (!["github", "linkedin", "instagram"].includes(target)) return undefined;
+    return data.contacts.find((c) => c.kind === target)?.url;
+  }
 
   function notFound(name: string): void {
     say(fill(s.notFound, { name }), "error");

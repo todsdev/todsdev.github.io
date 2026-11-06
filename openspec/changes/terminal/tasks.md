@@ -85,7 +85,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - `tm-commands.mjs`: each command's output in all three locales, compared against values read from the content YAML and dictionaries; `contact` shows the decoded phone; `cat notes.txt`; the unknown-command and suggestion lines; the markup-injection input stays text;
   - `tm-shell.mjs`: history ↑↓, completion cases, `clear`, `history`, `exit`, `  WHOAMI `;
   - `tm-a11y.mjs`: dialog role and name, input label, a log announcement after `whoami` (AX tree with `interestingOnly: false`), and no overflow at 320px.
-- [ ] 6.2 Add `cd`, `lang`, `resume` and `open`. Verify with a new `tm-nav.mjs`:
+- [x] 6.2 Add `cd`, `lang`, `resume` and `open`. Verify with a new `tm-nav.mjs`:
   - `cd projects` from the top: the dialog closes, `#projects` is set, projects becomes active, and the recorded events are exactly `terminal_command {cd}` and `section_view {projects}`, with no `nav_click`;
   - `cd ~/about/`, `cd ~` and `cd blog`;
   - the same `cd` under reduced motion is instant;
