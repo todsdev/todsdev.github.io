@@ -17,7 +17,12 @@ import { formatMonth, formatPeriod } from "./period";
 import { sortProjects } from "./projects";
 import { resumeFor } from "./resume";
 import { sectionIds } from "./sections";
-import { terminalContacts, type TerminalData } from "./terminal";
+import {
+  OBS_ENTRY,
+  obsCounts,
+  terminalContacts,
+  type TerminalData,
+} from "./terminal";
 
 const strings = { en: en.terminal, "pt-br": ptBr.terminal, es: es.terminal };
 
@@ -30,6 +35,7 @@ export async function terminalData(locale: Locale): Promise<TerminalData> {
   const email = contacts.find((c) => c.kind === "email")?.value;
   if (!email) throw new Error("contacts must include an email entry");
   const resume = resumeFor(locale);
+  const experience = await getEntries("experience", locale);
 
   return {
     strings: strings[locale],
@@ -41,7 +47,7 @@ export async function terminalData(locale: Locale): Promise<TerminalData> {
       summary: profile.summary,
       sourceUrl: profile.sourceUrl,
     },
-    experience: (await getEntries("experience", locale)).map((e) => {
+    experience: experience.map((e) => {
       const { start, end } = formatPeriod(e.start, e.end, monthNames, present);
       return {
         period: `${start.text} – ${end.text}`,
@@ -78,6 +84,7 @@ export async function terminalData(locale: Locale): Promise<TerminalData> {
     languages: Object.fromEntries(
       locales.map((l) => [l, t(locale, `language.${l}`)]),
     ),
+    obs: obsCounts(experience.find((e) => e.id === OBS_ENTRY)),
   };
 }
 

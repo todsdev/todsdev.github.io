@@ -11,17 +11,26 @@ import {
   KNOWN,
   NEOFETCH_LOGO,
   PROMPT,
+  SECRETS_FILE,
   SUDO_PROMPT,
+  E492,
+  VIM_EXITS,
+  VIM_PROMPT,
   complete,
   fill,
   formatCerts,
+  formatBlame,
+  formatBrew,
   formatContact,
   formatExperience,
   formatHelp,
   formatHistory,
   formatLs,
   formatNeofetch,
+  formatObs,
+  formatPing,
   formatProjects,
+  formatSecrets,
   formatSkills,
   formatWhoami,
   parse,
@@ -47,6 +56,8 @@ export interface Shell {
   cancel(): boolean;
   /** Any keydown in the dialog: true when the shell used it. */
   intercept(event: KeyboardEvent): boolean;
+  /** The dialog closed: leave vim mode, so reopening shows the normal shell. */
+  closed(): void;
 }
 
 /** `lang` arguments → locale. */
@@ -97,6 +108,8 @@ export function start(host: Host, data: TerminalData): Shell {
   let sudo = false;
   /** A timed output (gradlew log) is printing: input is read-only. */
   let busy = false;
+  /** In vim mode: only the exit commands work; nothing typed is kept or reported. */
+  let vim = false;
   /** Stops the running `matrix` animation, if any. */
   let stopMatrix: (() => void) | undefined;
 
@@ -117,6 +130,35 @@ export function start(host: Host, data: TerminalData): Shell {
         : (host.dialog.dataset.label ?? "");
     }
     input.dispatchEvent(new Event("input"));
+  }
+
+  /** Vim mode: the prompt becomes vim's dim mode line. */
+  function setVim(on: boolean): void {
+    vim = on;
+    if (prompt) {
+      prompt.textContent = on ? VIM_PROMPT : PROMPT;
+      prompt.classList.toggle("term__mode", on);
+    }
+    input.dispatchEvent(new Event("input"));
+  }
+
+  function leaveVim(): void {
+    setVim(false);
+    say(s.vimExit, "muted");
+  }
+
+  /** A line typed in vim mode: echoed after the mode line, never stored or reported. */
+  function vimLine(line: string): void {
+    const typed = line.trim();
+    say(`${VIM_PROMPT} ${typed}`, "echo");
+    if (!typed) return;
+    if (!VIM_EXITS.includes(typed)) {
+      say(E492, "error");
+      return;
+    }
+    leaveVim();
+    // `:q` isn't a command name, so the shell reports the mode itself.
+    track("terminal_command", { command: "vim" });
   }
 
   function hireMe(): void {
@@ -228,6 +270,17 @@ export function start(host: Host, data: TerminalData): Shell {
     frame = requestAnimationFrame(step);
   }
 
+  /** Closes the terminal and goes to a section. */
+  function jump(id: string): void {
+    host.close({ restoreFocus: false });
+    // A jump for nav.ts (only the destination records section_view), then the same
+    // hash navigation a nav link does: smooth, or instant with reduced motion.
+    window.dispatchEvent(new CustomEvent("nav:jump", { detail: id }));
+    if (location.hash === `#${id}`)
+      document.getElementById(id)?.scrollIntoView();
+    else location.hash = id;
+  }
+
   const commands: Record<string, Handler> = {
     help: () => print(formatHelp(s)),
     whoami: () => print(formatWhoami(data)),
@@ -237,10 +290,12 @@ export function start(host: Host, data: TerminalData): Shell {
     skills: () => print(formatSkills(data)),
     certs: () => print(formatCerts(data)),
     contact: () => print(formatContact(data, decoded())),
-    ls: () => print(formatLs(data.sections)),
+    // `ls -a` shows the hidden file; any other argument lists as plain `ls`.
+    ls: ([flag]) => print(formatLs(data.sections, flag === "-a")),
     cat: ([file]) => {
       if (!file) usage("cat skills.txt");
       else if (file.toLowerCase() === "skills.txt") print(formatSkills(data));
+      else if (file.toLowerCase() === SECRETS_FILE) print(formatSecrets(s));
       else say(fill(s.catError, { name: file }), "error");
     },
     cd: ([arg]) => {
@@ -249,13 +304,7 @@ export function start(host: Host, data: TerminalData): Shell {
         say(fill(s.cdError, { name: arg ?? "" }), "error");
         return;
       }
-      host.close({ restoreFocus: false });
-      // A jump for nav.ts (only the destination records section_view), then the same
-      // hash navigation a nav link does: smooth, or instant with reduced motion.
-      window.dispatchEvent(new CustomEvent("nav:jump", { detail: id }));
-      if (location.hash === `#${id}`)
-        document.getElementById(id)?.scrollIntoView();
-      else location.hash = id;
+      jump(id);
     },
     lang: ([arg]) => {
       const target = LANGS[arg?.toLowerCase() ?? ""];
@@ -347,6 +396,29 @@ export function start(host: Host, data: TerminalData): Shell {
     },
     rm: () => say(s.rm),
     matrix: () => matrix(),
+    hello: () => {
+      jump("hero");
+      // src/scripts/hero.ts plays the intro again; with reduced motion, only the jump.
+      if (!reduced()) window.dispatchEvent(new CustomEvent("hero:replay"));
+    },
+    ping: ([host]) => {
+      if (host?.toLowerCase() === "thiago") print(formatPing(s));
+      else usage("ping thiago");
+    },
+    git: ([sub]) => {
+      if (sub?.toLowerCase() === "blame")
+        print(formatBlame(s, data.profile.name));
+      else usage("git blame");
+    },
+    brew: ([what]) => {
+      if (what?.toLowerCase() === "coffee") print(formatBrew(s));
+      else usage("brew coffee");
+    },
+    obs: () => print(formatObs(s, data.obs)),
+    vim: () => {
+      say(s.vimEnter, "muted");
+      setVim(true);
+    },
     clear: () => log.replaceChildren(),
     history: () => print(formatHistory(history)),
     exit: () => host.close(),
@@ -372,6 +444,7 @@ export function start(host: Host, data: TerminalData): Shell {
       // The password line is never echoed, kept or reported: any input grants access.
       if (sudo) return hireMe();
       if (busy || stopMatrix) return;
+      if (vim) return vimLine(line);
       const command = line.trim();
       say(`${PROMPT} ${command}`, "echo");
       if (!command) return;
@@ -387,7 +460,7 @@ export function start(host: Host, data: TerminalData): Shell {
     },
 
     complete() {
-      if (sudo || busy) return;
+      if (sudo || busy || vim) return;
       const { value, candidates } = complete(input.value, data.sections);
       if (candidates.length > 0) {
         say(`${PROMPT} ${input.value}`, "echo");
@@ -397,12 +470,16 @@ export function start(host: Host, data: TerminalData): Shell {
     },
 
     recall(step) {
-      if (sudo || busy) return;
+      if (sudo || busy || vim) return;
       recallAt = Math.min(Math.max(recallAt + step, 0), history.length);
       setInput(history[recallAt] ?? "");
     },
 
     cancel() {
+      if (vim) {
+        leaveVim(); // the first Esc leaves vim mode; the next one closes the terminal
+        return true;
+      }
       if (!sudo) return false;
       setSudo(false); // Esc cancels the password prompt; the terminal stays open
       say("^C", "muted");
@@ -414,6 +491,10 @@ export function start(host: Host, data: TerminalData): Shell {
       event.preventDefault(); // any key ends matrix (Esc too, without closing)
       stopMatrix();
       return true;
+    },
+
+    closed() {
+      if (vim) setVim(false);
     },
   };
 }

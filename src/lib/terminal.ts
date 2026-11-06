@@ -11,7 +11,7 @@ export const PROMPT = "visitor@todsdev:~$";
 
 export interface Command {
   name: string;
-  /** Easter eggs: left out of `help` and never listed by completion. */
+  /** Easter eggs: left out of `help` and never offered by completion. */
   hidden?: boolean;
   /** Arguments offered by Tab completion. Sections come from the caller. */
   args?: readonly string[] | "sections";
@@ -27,9 +27,9 @@ export const COMMANDS: readonly Command[] = [
   { name: "skills" },
   { name: "certs" },
   { name: "contact" },
-  { name: "ls" },
+  { name: "ls", args: ["-a"] },
   { name: "cd", args: "sections" },
-  { name: "cat", args: ["skills.txt"] },
+  { name: "cat", args: ["skills.txt", ".secrets"] },
   { name: "resume" },
   { name: "open", args: ["github", "linkedin", "instagram", "repo"] },
   { name: "lang", args: ["en", "pt", "es"] },
@@ -43,6 +43,12 @@ export const COMMANDS: readonly Command[] = [
   { name: "sudo", hidden: true },
   { name: "rm", hidden: true },
   { name: "matrix", hidden: true },
+  { name: "hello", hidden: true },
+  { name: "ping", hidden: true },
+  { name: "git", hidden: true },
+  { name: "brew", hidden: true },
+  { name: "vim", hidden: true },
+  { name: "obs", hidden: true },
 ];
 
 /** Names `terminalCommand()` (src/lib/analytics.ts) reports; anything else is "unknown". */
@@ -55,7 +61,7 @@ export const VISIBLE: readonly string[] = COMMANDS.filter((c) => !c.hidden).map(
 const byName = (name: string) => COMMANDS.find((c) => c.name === name);
 
 export interface Parsed {
-  /** Lowercased, with a leading "./" dropped ("./gradlew" → "gradlew"). */
+  /** Lowercased, with a leading "./" dropped ("./gradlew" → "gradlew", "./hello" → "hello"). */
   name: string;
   /** The remaining tokens exactly as typed. */
   args: string[];
@@ -103,13 +109,8 @@ export function complete(
   const tokens = input.trimStart().split(/\s+/);
   if (tokens.length === 1) {
     const prefix = (tokens[0] ?? "").toLowerCase();
+    // Easter eggs are never offered: they're found through `ls -a` and `cat .secrets`.
     const visible = VISIBLE.filter((n) => n.startsWith(prefix));
-    const hidden = prefix
-      ? COMMANDS.filter((c) => c.hidden && c.name.startsWith(prefix))
-      : [];
-    if (visible.length === 0 && hidden.length === 1) {
-      return { value: `${hidden[0]!.name} `, candidates: [] };
-    }
     if (visible.length === 1)
       return { value: `${visible[0]} `, candidates: [] };
     if (visible.length === 0) return none;
@@ -205,6 +206,8 @@ export interface TerminalData {
   email: string;
   /** Language names in the page's language, keyed by locale. */
   languages: Record<string, string>;
+  /** `obs`: Games and years, from the OBS experience entry (see `obsCounts`). */
+  obs: { games: number; years: number };
 }
 
 export interface Line {
@@ -227,15 +230,19 @@ const pad = (rows: readonly (readonly [string, string])[]): string[] => {
 const plain = (texts: readonly string[]): Line[] =>
   texts.map((text) => ({ text }));
 
+/** The visible commands, then the dim hint that starts the trail to `ls -a`. */
 export function formatHelp(strings: Strings): Line[] {
-  return plain(
-    pad(
-      VISIBLE.map((name) => [
-        name,
-        strings.help[name as keyof Strings["help"]] ?? "",
-      ]),
+  return [
+    ...plain(
+      pad(
+        VISIBLE.map((name) => [
+          name,
+          strings.help[name as keyof Strings["help"]] ?? "",
+        ]),
+      ),
     ),
-  );
+    { text: strings.trailHint, tone: "muted" },
+  ];
 }
 
 export function formatWhoami(d: TerminalData): Line[] {
@@ -278,8 +285,41 @@ export function formatContact(
   );
 }
 
-export function formatLs(sections: readonly string[]): Line[] {
-  return [{ text: sections.map((s) => `${s}/`).join("  ") }];
+/** The hidden file `ls -a` adds, first as dotfiles sort. */
+export const SECRETS_FILE = ".secrets";
+
+/** `all` (`ls -a`) adds the hidden file first, as dotfiles sort. */
+export function formatLs(sections: readonly string[], all = false): Line[] {
+  const names = sections.map((s) => `${s}/`);
+  return [{ text: (all ? [SECRETS_FILE, ...names] : names).join("  ") }];
+}
+
+/** `cat .secrets`: every easter egg as typed, with its dictionary comment key, in order. */
+export const SECRETS: readonly (readonly [
+  string,
+  Exclude<keyof Strings["secrets"], "header">,
+])[] = [
+  ["adb devices", "adb"],
+  ["./gradlew build", "gradlew"],
+  ["neofetch", "neofetch"],
+  ["sudo hire-me", "sudo"],
+  ["rm -rf /", "rm"],
+  ["matrix", "matrix"],
+  ["./hello", "hello"],
+  ["ping thiago", "ping"],
+  ["git blame", "git"],
+  ["brew coffee", "brew"],
+  ["vim", "vim"],
+  ["obs", "obs"],
+];
+
+/** A comment header, then each command padded to one column and its `# comment`. */
+export function formatSecrets(strings: Strings): Line[] {
+  const s = strings.secrets;
+  return [
+    { text: `# ${s.header}`, tone: "muted" },
+    ...plain(pad(SECRETS.map(([command, key]) => [command, `# ${s[key]}`]))),
+  ];
 }
 
 export function formatHistory(history: readonly string[]): Line[] {
@@ -347,6 +387,84 @@ export function terminalContacts(
   return contacts.map(({ kind, label, value, url }) =>
     isProtected(kind) ? { kind, label } : { kind, label, value, url },
   );
+}
+
+/** `ping thiago`, as ping prints it (English, like real CLI output). */
+export const PING: readonly string[] = [
+  "PING thiago (todsdev.github.io): 56 data bytes",
+  "64 bytes from thiago: icmp_seq=0 time=24h",
+  "--- thiago ping statistics ---",
+  "1 packet transmitted, 1 received, 0% packet loss",
+];
+
+export function formatPing(strings: Strings): Line[] {
+  return [...plain(PING), { text: strings.pingTip, tone: "muted" }];
+}
+
+/** `brew coffee`: Homebrew's output in English, then the translated aside. */
+export const BREW: readonly string[] = [
+  "==> Brewing coffee...",
+  "Error: 418 I'm a teapot",
+];
+
+export function formatBrew(strings: Strings): Line[] {
+  return [
+    { text: BREW[0]! },
+    { text: BREW[1]!, tone: "error" },
+    { text: strings.brewNote, tone: "muted" },
+  ];
+}
+
+/** The fake commit hash `git blame` prints. */
+export const BLAME_HASH = "a1b2c3d";
+
+export function formatBlame(strings: Strings, name: string): Line[] {
+  return [{ text: `${BLAME_HASH} (${name}) ${strings.gitBlame}` }];
+}
+
+/** Vim's answer to anything but an exit command in vim mode. */
+export const E492 = "E492: Not an editor command";
+/** The lines that leave vim mode. */
+export const VIM_EXITS: readonly string[] = [":q", ":q!", ":wq", ":x"];
+/** The prompt while in vim mode, like vim's mode line. */
+export const VIM_PROMPT = "-- NORMAL --";
+
+/** Experience entry whose Games `obs` counts. */
+export const OBS_ENTRY = "olympic-broadcasting-services";
+
+/**
+ * `obs` numbers from that entry: how many Games it lists, and the years from its start to
+ * its latest Games. Throws when there's nothing to count, so the build never prints a
+ * wrong number.
+ */
+export function obsCounts(
+  entry: { start: Date; events?: readonly { year: number }[] } | undefined,
+): { games: number; years: number } {
+  const events = entry?.events ?? [];
+  if (!entry || events.length === 0) {
+    throw new Error(`experience/${OBS_ENTRY} must exist and list its Games`);
+  }
+  const latest = Math.max(...events.map((e) => e.year));
+  return {
+    games: events.length,
+    years: latest - entry.start.getUTCFullYear(),
+  };
+}
+
+/** `obs`: the Games and years come from the OBS experience entry. Text only. */
+export function formatObs(
+  strings: Strings,
+  counts: { games: number; years: number },
+): Line[] {
+  return [
+    {
+      text: fill(strings.obs, {
+        games: String(counts.games),
+        years: String(counts.years),
+      }),
+    },
+    { text: strings.obsTip, tone: "muted" },
+  ];
 }
 
 /** Storage key of the chosen phosphor theme (read before first paint by BaseLayout). */
