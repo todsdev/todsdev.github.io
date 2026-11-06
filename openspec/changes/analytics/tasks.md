@@ -110,7 +110,13 @@ New browser checks go in `~/portfolio-verify-scripts` as `an-*.mjs`. That folder
 
 ## 6. Integration
 
-- [ ] 6.1 Run the full local suite in the background with the guard (a suite with no `PASS` counts as failed), plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+- [x] 6.1 Run the full local suite in the background with the guard (a suite with no `PASS` counts as failed), plus a clean `npm ci && npm run check && npm run lint && npm run format:check && npm test && npm run build`. Verify that everything passes and the PR checks are green
+  - Result: the clean install, gates and build pass, and the PR checks are green. Every analytics suite passes (`an-host`, `an-track`, `an-markup`, `an-events`, `an-sections`, `an-blocked`, `k-footer`).
+  - Five checks fail and are accepted by the owner: they fail identically against a `main` build (worktree, port 4322) and this branch, so this change didn't cause them. They are investigated in `fix/verify-suite-health`:
+    - `l-width`: 9 FAIL on both (Courses edges at 1280/1440/1920px);
+    - `h43b`: 1 FAIL on both;
+    - `h34b`, `h34c`, `h52`: crash on both (availability badge off, so the element is `null`).
+  - The other no-PASS scripts are debug (`dbg*`), screenshot (`*-shot`) or obsolete (`t31`–`t33`, `t83`) scripts, not suites.
 
 ## Workflow follow-up
 
