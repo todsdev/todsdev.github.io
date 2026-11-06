@@ -88,7 +88,7 @@ An unrecognized command SHALL print "command not found: <name>" (localized), fol
 - **THEN** the output is "cat: notes.txt: No such file or directory" (localized)
 
 ### Requirement: Listing and changing sections
-`ls` SHALL list the sections (`about`, `experience`, `projects`, `skills`, `courses`, `contact`). `ls -a` SHALL list the hidden file `.secrets` first, then the same sections; any other argument SHALL behave like plain `ls`. `cd <section>` SHALL close the terminal, scroll to that section the way a navigation click does (instantly with reduced motion) and update the hash. `~`, `..` and `/` SHALL go to the top. An unknown section SHALL print "cd: no such file or directory: <name>" (localized) and keep the terminal open.
+`ls` SHALL list the sections (`about`, `experience`, `projects`, `skills`, `courses`, `contact`), and `ls -a` SHALL add the hidden file `.secrets`. `cd <section>` SHALL close the terminal, scroll to that section the way a navigation click does (instantly with reduced motion) and update the hash. `~`, `..` and `/` SHALL go to the top. An unknown section SHALL print "cd: no such file or directory: <name>" (localized) and keep the terminal open.
 
 #### Scenario: Plain listing
 - **WHEN** `ls` is run
@@ -97,6 +97,10 @@ An unrecognized command SHALL print "command not found: <name>" (localized), fol
 #### Scenario: All files
 - **WHEN** `ls -a` is run
 - **THEN** the output is `.secrets  about/  experience/  projects/  skills/  courses/  contact/`
+
+#### Scenario: Other listing arguments
+- **WHEN** `ls --long` is run
+- **THEN** the output is the same as plain `ls`
 
 #### Scenario: Go to projects
 - **WHEN** a visitor at the top of `/` runs `cd projects`
@@ -111,11 +115,15 @@ An unrecognized command SHALL print "command not found: <name>" (localized), fol
 - **THEN** the terminal stays open and shows the localized error
 
 ### Requirement: Terminal analytics
-Each opening SHALL record one `terminal_open` event. Each command run SHALL record one `terminal_command` event whose `command` is the recognized command name, normalized (`./gradlew` → `gradlew`, `./hello` → `hello`, `ls -a` → `ls`, `cat .secrets` → `cat`, `ping thiago` → `ping`, `git blame` → `git`, `brew coffee` → `brew`), or `unknown`. In vim mode, each exit command (`:q`, `:q!`, `:wq`, `:x`) SHALL record `vim`, and any other line SHALL record nothing. Arguments and typed text SHALL never be recorded. Tab completion, history browsing, `Esc` and the `sudo` password line SHALL record nothing of their own.
+Each opening SHALL record one `terminal_open` event. Each command run SHALL record one `terminal_command` event whose `command` is the recognized command name, normalized, or `unknown`. In vim mode, each exit command SHALL record `vim`, and any other line SHALL record nothing. Arguments and typed text SHALL never be recorded. Tab completion, history browsing, `Esc` and the `sudo` password line SHALL record nothing of their own.
 
 #### Scenario: Session
 - **WHEN** a visitor opens the terminal, runs `cd projects --fast`, reopens it and runs `xyzzy`
 - **THEN** the events are `terminal_open`, `terminal_command {command: "cd"}`, `terminal_open`, `terminal_command {command: "unknown"}`, each with the page `locale`
+
+#### Scenario: Leading ./ dropped
+- **WHEN** the visitor runs `./gradlew build` and `./hello`
+- **THEN** the `command` values are `gradlew` and `hello`
 
 #### Scenario: Hint trail and eggs
 - **WHEN** the visitor runs `help`, `ls -a`, `cat .secrets`, `ping thiago`, `git blame`, `brew coffee` and `obs`

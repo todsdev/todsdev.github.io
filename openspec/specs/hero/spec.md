@@ -68,7 +68,7 @@ Any click or key press during the sequence SHALL immediately show the hero's fin
 - **THEN** nothing in the hero changes
 
 ### Requirement: Runs once per page load
-The sequence SHALL run at most once per page load. It SHALL NOT restart on scrolling, anchor navigation or resizing. If the page loads with a hash targeting a section other than the hero, the hero SHALL start in its final state.
+The sequence SHALL run at most once per page load on its own. It SHALL NOT restart on scrolling, anchor navigation or resizing. If the page loads with a hash targeting a section other than the hero, the hero SHALL start in its final state. The terminal's `./hello` command is the only exception: it SHALL replay the whole sequence, including the photo's power-on, with the same timing, skip behavior and reduced-motion fallback as on load.
 
 #### Scenario: Navigating back to the hero
 - **WHEN** the sequence has finished and the visitor scrolls away and back, or activates the Home link
@@ -77,6 +77,10 @@ The sequence SHALL run at most once per page load. It SHALL NOT restart on scrol
 #### Scenario: Deep link to another section
 - **WHEN** a visitor opens `/#skills`
 - **THEN** the hero is already in its final state when scrolled to
+
+#### Scenario: Replay from the terminal
+- **WHEN** a visitor who opened `/#skills` (so the intro never played) runs `./hello` in the terminal with motion allowed
+- **THEN** the hero plays the full sequence from the prompt line to the photo's power-on, and ends in the same final state as on load
 
 ### Requirement: Photo presentation
 The hero SHALL show the profile photo next to the title on wide viewports and above it on narrow viewports, rendered in grayscale with a subtle scanline overlay, optimized at build time into responsive modern formats, with translated alternative text that names the owner.
