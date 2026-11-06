@@ -27,6 +27,7 @@ import {
   parse,
   sectionArg,
   suggest,
+  terminalContacts,
   type Line,
   type Strings,
   type TerminalData,
@@ -364,4 +365,27 @@ test("fill replaces every placeholder", () => {
     fill(es.terminal.didYouMean, { command: "whoami" }),
     "¿quisiste decir whoami?",
   );
+});
+
+test("terminal.json contacts drop the value and url of protected kinds", () => {
+  const contacts = [
+    { kind: "email", label: "email", value: "a@b.c", url: "mailto:a@b.c" },
+    { kind: "phone", label: "phone", value: "+55 21 9", url: "tel:+55219" },
+    {
+      kind: "whatsapp",
+      label: "whatsapp",
+      value: "+55 21 9",
+      url: "https://wa.me/55219",
+    },
+  ];
+  const out = terminalContacts(
+    contacts,
+    (k) => k === "phone" || k === "whatsapp",
+  );
+  assert.deepEqual(out, [
+    { kind: "email", label: "email", value: "a@b.c", url: "mailto:a@b.c" },
+    { kind: "phone", label: "phone" },
+    { kind: "whatsapp", label: "whatsapp" },
+  ]);
+  assert.doesNotMatch(JSON.stringify(out), /55 ?21|tel:|wa\.me/);
 });

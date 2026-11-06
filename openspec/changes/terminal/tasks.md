@@ -42,7 +42,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 3. Data endpoint
 
-- [ ] 3.1 Move the résumé locale fallback from `Contact.astro` into a shared helper. Add `src/lib/terminal-data.ts` and the three `terminal.json` endpoints (design decision 3), with protected contacts reduced to `{ kind, label }`. Verify:
+- [x] 3.1 Move the résumé locale fallback from `Contact.astro` into a shared helper. Add `src/lib/terminal-data.ts` and the three `terminal.json` endpoints (design decision 3), with protected contacts reduced to `{ kind, label }`. Verify:
   - `npm run build`;
   - the three JSON files parse and hold each section's entries in the page's order;
   - the contact section's résumé link is unchanged;

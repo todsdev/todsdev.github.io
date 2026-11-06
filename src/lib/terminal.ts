@@ -330,3 +330,18 @@ export function formatNeofetch(strings: Strings): Line[] {
     { text: `${n.location}: Rio de Janeiro` },
   ];
 }
+
+/** Contacts for terminal.json: protected kinds keep only their kind and label. */
+export function terminalContacts(
+  contacts: readonly {
+    kind: string;
+    label: string;
+    value: string;
+    url: string;
+  }[],
+  isProtected: (kind: string) => boolean,
+): TerminalData["contacts"] {
+  return contacts.map(({ kind, label, value, url }) =>
+    isProtected(kind) ? { kind, label } : { kind, label, value, url },
+  );
+}
