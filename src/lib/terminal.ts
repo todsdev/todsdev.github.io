@@ -4,6 +4,7 @@
  * `node --test` (terminal.test.ts). The DOM side is src/scripts/terminal-shell.ts.
  * Commands and their arguments stay English in every locale.
  */
+import type { Dictionary } from "../i18n/en";
 
 export interface Command {
   name: string;
@@ -172,4 +173,160 @@ export function suggest(name: string): string | undefined {
     if (d > 0 && d <= max && (!best || d < best.d)) best = { name: known, d };
   }
   return best?.name;
+}
+
+/* ---------- Output ---------- */
+
+/** The page's terminal strings (the `terminal` dictionary group). */
+export type Strings = Dictionary["terminal"];
+
+/** Everything the content commands print, built per locale by src/lib/terminal-data.ts. */
+export interface TerminalData {
+  strings: Strings;
+  /** `cd` targets in page order, without "hero". */
+  sections: string[];
+  profile: {
+    name: string;
+    role: string;
+    location: string;
+    summary: string;
+    sourceUrl?: string;
+  };
+  experience: { period: string; company: string; role: string }[];
+  projects: { title: string; status: string; badge: string }[];
+  skills: { category: string; items: string[] }[];
+  certs: { date: string; title: string; issuer: string }[];
+  /** Protected kinds (phone, WhatsApp) carry no value or url: the shell decodes them from the page. */
+  contacts: { kind: string; label: string; value?: string; url?: string }[];
+  resume: { href: string; file: string; language: string };
+  email: string;
+  /** Language names in the page's language, keyed by locale. */
+  languages: Record<string, string>;
+}
+
+export interface Line {
+  text: string;
+  tone?: "muted" | "accent" | "error";
+}
+
+/** Replaces each `{key}` in a dictionary template. */
+export const fill = (template: string, vars: Record<string, string>): string =>
+  Object.entries(vars).reduce(
+    (s, [key, value]) => s.replaceAll(`{${key}}`, value),
+    template,
+  );
+
+const pad = (rows: readonly (readonly [string, string])[]): string[] => {
+  const width = Math.max(...rows.map(([left]) => left.length));
+  return rows.map(([left, right]) => `${left.padEnd(width)}  ${right}`);
+};
+
+const plain = (texts: readonly string[]): Line[] =>
+  texts.map((text) => ({ text }));
+
+export function formatHelp(strings: Strings): Line[] {
+  return plain(
+    pad(
+      VISIBLE.map((name) => [
+        name,
+        strings.help[name as keyof Strings["help"]] ?? "",
+      ]),
+    ),
+  );
+}
+
+export function formatWhoami(d: TerminalData): Line[] {
+  const { name, role, location, summary } = d.profile;
+  return [
+    { text: name, tone: "accent" },
+    { text: `${role} · ${location}`, tone: "muted" },
+    { text: "" },
+    { text: summary },
+  ];
+}
+
+export function formatExperience(d: TerminalData): Line[] {
+  return d.experience.flatMap((e) => [
+    { text: `${e.period}  ${e.company}` },
+    { text: `  ${e.role}`, tone: "muted" as const },
+  ]);
+}
+
+export function formatProjects(d: TerminalData): Line[] {
+  return plain(d.projects.map((p) => `${p.title}  [${p.status}]  ${p.badge}`));
+}
+
+/** Also the output of `cat skills.txt`. */
+export function formatSkills(d: TerminalData): Line[] {
+  return plain(d.skills.map((s) => `${s.category}: ${s.items.join(" · ")}`));
+}
+
+export function formatCerts(d: TerminalData): Line[] {
+  return plain(d.certs.map((c) => `${c.date}  ${c.title} — ${c.issuer}`));
+}
+
+/** `decoded` holds the protected values (phone, WhatsApp) read from the page, by kind. */
+export function formatContact(
+  d: TerminalData,
+  decoded: Readonly<Record<string, string>>,
+): Line[] {
+  return plain(
+    pad(d.contacts.map((c) => [c.label, c.value ?? decoded[c.kind] ?? ""])),
+  );
+}
+
+export function formatLs(sections: readonly string[]): Line[] {
+  return [{ text: sections.map((s) => `${s}/`).join("  ") }];
+}
+
+export function formatHistory(history: readonly string[]): Line[] {
+  const width = String(history.length).length;
+  return plain(
+    history.map((cmd, i) => `${String(i + 1).padStart(width)}  ${cmd}`),
+  );
+}
+
+export const ADB: readonly string[] = [
+  "List of devices attached",
+  "thiago-rodrigues    device",
+];
+
+/** Printed line by line with motion allowed; always ends in "BUILD SUCCESSFUL in 3y". */
+export const GRADLE: readonly string[] = [
+  "> Configure project :app",
+  "> Task :app:preBuild UP-TO-DATE",
+  "> Task :app:compileDebugKotlin",
+  "> Task :app:mergeDebugResources",
+  "> Task :app:compileDebugJavaWithJavac",
+  "> Task :app:dexBuilderDebug",
+  "> Task :app:packageDebug",
+  "> Task :app:assembleDebug",
+  "",
+  "BUILD SUCCESSFUL in 3y",
+];
+
+/** Prompt of `sudo hire-me`, as sudo prints it. */
+export const SUDO_PROMPT = "[sudo] password for recruiter:";
+
+/** Android head in characters; decorative (hidden from screen readers). */
+export const NEOFETCH_LOGO: readonly string[] = [
+  "  \\           /  ",
+  "   \\  _____  /   ",
+  "   .'       '.   ",
+  "  /  o     o  \\  ",
+  " |             | ",
+  " |_____________| ",
+];
+
+/** The labeled `neofetch` lines (fixed joke values; labels and unit localized). */
+export function formatNeofetch(strings: Strings): Line[] {
+  const n = strings.neofetch;
+  return [
+    { text: "visitor@todsdev", tone: "accent" },
+    { text: "---------------", tone: "muted" },
+    { text: `${n.os}: Android` },
+    { text: `${n.kernel}: Kotlin` },
+    { text: `${n.uptime}: ${fill(n.years, { n: "3" })}` },
+    { text: `${n.location}: Rio de Janeiro` },
+  ];
 }

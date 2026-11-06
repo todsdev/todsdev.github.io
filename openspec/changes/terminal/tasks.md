@@ -33,7 +33,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - the `neofetch` labels and "years" unit, the `sudo` lines and mail subject, the `matrix` note.
 
   Following the content conventions, commands and their arguments stay English and only the text around them is translated. Verify with `npm run check` (all three dictionaries have the same keys).
-- [ ] 2.3 Add the formatters to `src/lib/terminal.ts` (design decision 9): `whoami`, `experience`, `projects`, `skills` (also used by `cat skills.txt`), `certs`, `contact` (protected kinds filled from a value passed in), `ls`, `help`, `history`, and the `adb`, `gradlew` and `neofetch` outputs, with the `neofetch` logo lines marked `ariaHidden`. Test them with fixture data in all three locales, including:
+- [x] 2.3 Add the formatters to `src/lib/terminal.ts` (design decision 9): `whoami`, `experience`, `projects`, `skills` (also used by `cat skills.txt`), `certs`, `contact` (protected kinds filled from a value passed in), `ls`, `help`, `history`, and the `adb`, `gradlew` and `neofetch` outputs, with the `neofetch` logo lines marked `ariaHidden`. Test them with fixture data in all three locales, including:
   - `help` lists exactly the visible commands;
   - the `gradlew` log ends in "BUILD SUCCESSFUL in 3y";
   - the `neofetch` card has "3 anos" in Portuguese.
