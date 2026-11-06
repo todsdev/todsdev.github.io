@@ -34,7 +34,7 @@ When asked to "stop and report if anything fails", do exactly that. Don't work a
 
 ## Verification scripts
 
-The scripts live in `~/portfolio-verify-scripts`, outside the repo and not versioned. They use puppeteer-core with the system Chrome.
+The scripts live in `~/portfolio-verify-scripts`, outside this repo, and are versioned in the private repo `todsdev/portfolio-verify-scripts`. Commit and push every script change there too; record the evidence in that commit as well as in this repo's task commit. They use puppeteer-core with the system Chrome.
 
 - **Helpers:** `lib.mjs` provides `browser()`, `assert()` (prints `PASS` or `FAIL` and sets the exit code) and `BASE`.
   - `BASE` defaults to `http://localhost:4321`. Set `BASE=https://todsdev.github.io` for live runs.
