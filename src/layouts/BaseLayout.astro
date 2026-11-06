@@ -107,7 +107,14 @@ const xDefault = new URL(localePath("en"), site).href;
   </head>
   <body data-page-event={pageEvent}>
     <slot />
-    <Footer locale={locale} />
+    {/* Forward the hint only when the page has one, so the footer's slot stays empty otherwise. */}
+    {Astro.slots.has("footer-hint") ? (
+      <Footer locale={locale}>
+        <slot name="footer-hint" slot="hint" />
+      </Footer>
+    ) : (
+      <Footer locale={locale} />
+    )}
     <script>
       import "../scripts/analytics";
     </script>

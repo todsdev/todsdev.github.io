@@ -69,7 +69,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - `terminal_open` is recorded once per opening.
 
   Make sure `kbd`, `l-cls`, `t64` and `t65` still pass.
-- [ ] 5.2 Add the footer hint: a `footer-hint` slot through `BaseLayout` to `Footer`, and `TerminalHint` (design decision 7) filled by `Portfolio.astro`. Verify:
+- [x] 5.2 Add the footer hint: a `footer-hint` slot through `BaseLayout` to `Footer`, and `TerminalHint` (design decision 7) filled by `Portfolio.astro`. Verify:
   - extend `tm-open.mjs`: the desktop text appears in each locale, an emulated touch device (`hasTouch`, coarse pointer, no hover) shows only the button, the button opens the terminal and focus returns to it, the no-JS page shows neither, and the 404 footer has no hint element;
   - `k-footer` and `l-cls` still pass;
   - nothing overflows at 320px (`l-width`).

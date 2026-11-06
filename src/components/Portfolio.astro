@@ -11,6 +11,7 @@ import ScrollThread from "./ScrollThread.astro";
 import Skills from "./Skills.astro";
 import SiteNav from "./SiteNav.astro";
 import Terminal from "./Terminal.astro";
+import TerminalHint from "./TerminalHint.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t, type Locale } from "../i18n";
 import { reportMissingTranslations } from "../lib/content";
@@ -91,6 +92,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
     )}
   </main>
   <Terminal locale={locale} />
+  <TerminalHint slot="footer-hint" locale={locale} />
 </BaseLayout>
 
 <script>
