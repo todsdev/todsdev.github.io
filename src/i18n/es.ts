@@ -199,8 +199,9 @@ export const es = {
   },
   notFound: {
     title: "Página no encontrada",
-    heading: "404 — página no encontrada",
-    message: "La página que buscas no existe o fue movida.",
-    backHome: "Volver al inicio",
+    /** The one translated line under the terminal error. */
+    line: "La página que buscas no existe o fue movida.",
+    /** Accessible destination of the `$ cd ~` link. */
+    destination: "Volver al inicio",
   },
 } satisfies Dictionary;

@@ -13,7 +13,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 ## 2. 404 page
 
 - [x] 2.1 Write `nf-locale`, `nf-escape` and `nf-nojs` and classify them; verify they fail against the placeholder page
-- [ ] 2.2 Replace the `notFound` dictionary keys in all three locales (translated line, destination); verify `npm run check` passes with no missing key and each line starts with a capital
+- [x] 2.2 Replace the `notFound` dictionary keys in all three locales (translated line, destination); verify `npm run check` passes with no missing key and each line starts with a capital
 - [ ] 2.3 Add the `footer` slot and `noindex` mode to `BaseLayout`, with no change to locale pages; verify `k-footer` and `tm-theme` pass and the built locale HTML is otherwise unchanged
 - [ ] 2.4 Rewrite `404.astro` per design decisions 2 and 3; verify `nf-*`, `an-events`, `an-markup`, `an-sections`, `an-track`, `an-host` and `tm-open` pass
 - [ ] 2.5 Update `t91` for the intended behavior (terminal text instead of `404`, `lang` following the path), explaining it in the commit; verify it fails against the old build and passes on the new one

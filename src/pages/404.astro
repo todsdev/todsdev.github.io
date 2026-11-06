@@ -11,17 +11,17 @@ const locale = "en";
 <BaseLayout
   locale={locale}
   title={`${t(locale, "notFound.title")} — ${t(locale, "meta.title")}`}
-  description={t(locale, "notFound.message")}
+  description={t(locale, "notFound.line")}
   pageEvent="not_found"
 >
   <a class="skip-link" href="#main">
     {t(locale, "skipLink")}
   </a>
   <main id="main" class="not-found">
-    <h1>{t(locale, "notFound.heading")}</h1>
-    <p>{t(locale, "notFound.message")}</p>
+    <h1>{t(locale, "notFound.title")}</h1>
+    <p>{t(locale, "notFound.line")}</p>
     <p>
-      <a href={localePath(locale)}>{t(locale, "notFound.backHome")}</a>
+      <a href={localePath(locale)}>{t(locale, "notFound.destination")}</a>
     </p>
   </main>
 </BaseLayout>

@@ -229,9 +229,10 @@ export const en = {
   },
   notFound: {
     title: "Page not found",
-    heading: "404 — page not found",
-    message: "The page you are looking for does not exist or was moved.",
-    backHome: "Back to home",
+    /** The one translated line under the terminal error. */
+    line: "The page you are looking for does not exist or was moved.",
+    /** Accessible destination of the `$ cd ~` link. */
+    destination: "Back to home",
   },
 } as const;
 
