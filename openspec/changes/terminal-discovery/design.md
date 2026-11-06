@@ -90,8 +90,8 @@ The shell's `hello` handler:
 `hero.ts` is refactored so the sequence can run again:
 - **Lazy overlays:** `buildLine()` runs on first use and the overlays are kept.
 - **`replay()`:**
-  - waits until the hero is in view: the page has stopped scrolling (`scrollend`, or 2 s at most) and the hero's top is at or below the viewport top;
-  - removes `data-hero-poweron` and forces a reflow, so the CRT animation can run again;
+  - waits until the page has stopped scrolling: `scrollY` still for 150 ms, or 2 s at most (polled, because `scrollend` never fires when the page is already at the top);
+  - removes `data-hero-poweron`, so the CRT animation can run again (the attribute stays off for the whole typing state, so no forced reflow is needed);
   - resets every overlay character to hidden, sets `data-hero-state="typing"`, and runs the existing `play()` / `finish()` with a new `AbortController` and the same pointer and key skip listeners.
 - **No replay with reduced motion:** the shell doesn't send the event, and `replay()` also checks the media query as a guard.
 - **One replay at a time:** a second replay while one is running aborts the first.
@@ -106,7 +106,7 @@ The shell's `hello` handler:
 ## Risks / Trade-offs
 
 - **The replay starts while the page is still scrolling** (a long smooth scroll from the contact section) → it waits for `scrollend`, with a cap. The hero stays in its final state until then, so nothing flickers.
-- **Restarting the CSS animation** → the attribute is removed, then a reflow (`offsetWidth`) runs before setting it again. `tm-eggs` checks that the photo goes dark and comes back.
+- **Restarting the CSS animation** → the attribute is off during the whole typing state, then set again at the end. `tm-eggs` checks that the photo goes dark and comes back.
 - **The `obs` count goes stale** → derived from content (see above). A unit test pins 8 Games and 10 years for the current YAML.
 - **Discoverability through suggestions** (`gti` → `git`) → this is intended (proposal decision 9). Completion stays clean.
 - **A key that ends vim mode also skips something** → the hero's skip listener only exists during a replay, and the terminal is closed then, so the two never overlap.

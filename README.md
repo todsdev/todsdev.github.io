@@ -221,30 +221,46 @@ The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in 
 A hidden terminal for curious visitors. The site never depends on it: without JavaScript it doesn't exist, and its code and data load only when it's first opened.
 
 - **Opening:** press `/` (or `` ` ``, not advertised) outside a text field, or tap the `>_` button that replaces the footer hint on touch devices. The footer hint reads "press / to open the terminal" in the page's language.
-- **Closing:** `Esc`, `exit` or the `[x]` button; focus goes back to where it was. While it's open, focus stays inside (Tab completes, Shift+Tab reaches `[x]`) and the page behind is inert.
-- **Shell:** prompt `visitor@todsdev:~$`, ↑/↓ history (this page load only), Tab completion of commands and their arguments, and "did you mean …?" for typos. Commands are English; output follows the page's language.
+- **Closing:** `Esc` (in vim mode, the first `Esc` only leaves vim), `exit` or the `[x]` button; focus goes back to where it was. While it's open, focus stays inside (Tab completes, Shift+Tab reaches `[x]`) and the page behind is inert.
+- **Shell:** prompt `visitor@todsdev:~$`, ↑/↓ history (this page load only), Tab completion of the commands `help` lists and their arguments (including `.secrets` after `cat ` and `-a` after `ls `), and "did you mean …?" for typos. Commands are English; output follows the page's language.
 
-| Command                                                | Does                                                                                      |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| `help`                                                 | Lists the commands below with a description                                               |
-| `whoami`, `about`                                      | Name, role · location, summary                                                            |
-| `experience`, `projects`, `skills`, `certs`, `contact` | Compact text versions of the sections (`cat skills.txt` is `skills`)                      |
-| `ls`, `cd <section>`                                   | Lists the sections; closes the terminal and scrolls to one (`~` goes to the top)          |
-| `resume`                                               | Downloads the résumé of the page's language                                               |
-| `open github\|linkedin\|instagram\|repo`               | Opens the link in a new tab (`repo` is this site's source)                                |
-| `lang en\|pt\|es`                                      | Switches language, keeping the active section, and remembers it like the switcher         |
-| `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default |
-| `clear`, `history`, `exit`                             | As in a shell                                                                             |
+| Command                                                | Does                                                                                         |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| `help`                                                 | Lists the commands below with a description, then a dim hint to try `ls -a`                  |
+| `whoami`, `about`                                      | Name, role · location, summary                                                               |
+| `experience`, `projects`, `skills`, `certs`, `contact` | Compact text versions of the sections (`cat skills.txt` is `skills`)                         |
+| `ls`, `cd <section>`                                   | Lists the sections (`-a` adds `.secrets`); closes the terminal and scrolls to one (`~`: top) |
+| `resume`                                               | Downloads the résumé of the page's language                                                  |
+| `open github\|linkedin\|instagram\|repo`               | Opens the link in a new tab (`repo` is this site's source)                                   |
+| `lang en\|pt\|es`                                      | Switches language, keeping the active section, and remembers it like the switcher            |
+| `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default    |
+| `clear`, `history`, `exit`                             | As in a shell                                                                                |
 
-Not listed by `help` or Tab: `adb devices`, `./gradlew build`, `neofetch`, `sudo hire-me` (the password line is never shown, stored or reported), `rm -rf /` and `matrix`.
+Easter eggs are never listed by `help` or offered by Tab. The way to find them is a hint trail: `help` ends with a hint to try `ls -a`, which shows `.secrets`, and `cat .secrets` lists them all with a comment each.
+
+| Easter egg        | Does                                                                                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `adb devices`     | The device list                                                                                                                                   |
+| `./gradlew build` | A fake build log ending in `BUILD SUCCESSFUL in 3y`                                                                                               |
+| `neofetch`        | A system card with an Android logo in characters                                                                                                  |
+| `sudo hire-me`    | Asks for a password (never shown, stored or reported), then opens an email                                                                        |
+| `rm -rf /`        | `nice try.`                                                                                                                                       |
+| `matrix`          | Falling characters inside the panel                                                                                                               |
+| `./hello`         | Closes the terminal, scrolls to the top and replays the hero intro; a key or click skips it                                                       |
+| `ping thiago`     | A ping report (`time=24h`), then a tip to type `contact`                                                                                          |
+| `git blame`       | Who wrote everything on this page                                                                                                                 |
+| `brew coffee`     | `Error: 418 I'm a teapot`                                                                                                                         |
+| `vim`             | Vim mode: the prompt becomes a dim `-- NORMAL --`, only `:q`, `:q!`, `:wq`, `:x` or `Esc` get out, anything else is `E492: Not an editor command` |
+| `obs`             | The Olympic Games worked, as text only, then a tip to type `experience`                                                                           |
 
 How it's built:
 
-- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice.
+- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice. That includes `obs`: its numbers are the Games listed under the `olympic-broadcasting-services` experience entry and the years from its start to the latest one, and the build fails if that entry is missing.
 - **Phone:** like the contact section, the phone and WhatsApp values are never in the HTML or in `terminal.json`; `contact` decodes them from the contact section at runtime.
 - **Code:** `src/lib/terminal.ts` holds the command table, parsing, completion, suggestions and output formats (unit-tested); `src/scripts/terminal.ts` opens and closes the dialog; `src/scripts/terminal-shell.ts` runs the commands.
 - **Themes:** `src/styles/tokens.css` overrides only the seven color tokens under `<html data-theme>`, and an inline script in `BaseLayout` applies the stored theme before first paint. Every theme keeps AA contrast.
-- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once and `matrix` prints a note instead.
+- **Intro replay:** `./hello` sends a `hero:replay` event to `src/scripts/hero.ts`, which runs the same sequence as on load once the page has stopped scrolling.
+- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once, `matrix` prints a note instead and `./hello` only jumps to the top.
 - **Analytics:** see [Analytics](#analytics). `resume` and `sudo hire-me` also send the section's own `resume` and `contact` events.
 
 ## Analytics
@@ -257,20 +273,20 @@ The site uses [Umami Cloud](https://umami.is), which sets no cookies, so there's
 
 Page views come from Umami itself, per path (`/`, `/pt-br/`, `/es/`). On top of that, the site sends these events, each with the page `locale` (`en`, `pt-br`, `es`):
 
-| Event              | Fields            | Sent when                                                                                                              |
-| ------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `nav_click`        | `section`         | A navigation link is clicked                                                                                           |
-| `section_view`     | `section`         | A section first reaches the area that marks it active in the navigation (once per page load)                           |
-| `contact`          | `kind`, `action`  | A contact action is used (`mail`, `call`, `chat`, `open`, `copy`), or `sudo hire-me` in the terminal (`email`, `mail`) |
-| `vcard`            |                   | `$ wget contact.vcf`                                                                                                   |
-| `resume`           | `language`        | `$ wget resume.pdf` or the terminal's `resume` (the language of the file served, after fallback)                       |
-| `project_link`     | `project`, `link` | A project link is opened (`play-store`, `app-store`, `site`, `repo`); `project` is the entry id                        |
-| `certificate`      | `course`          | `$ open cert`; `course` is the entry id                                                                                |
-| `not_found`        | `path`            | The 404 page loads (path only, no query or hash)                                                                       |
-| `terminal_open`    |                   | The terminal opens (once per opening)                                                                                  |
-| `terminal_command` | `command`         | A terminal command runs: its name (`./gradlew` → `gradlew`), or `unknown`; never arguments                             |
+| Event              | Fields            | Sent when                                                                                                                                     |
+| ------------------ | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `nav_click`        | `section`         | A navigation link is clicked                                                                                                                  |
+| `section_view`     | `section`         | A section first reaches the area that marks it active in the navigation (once per page load)                                                  |
+| `contact`          | `kind`, `action`  | A contact action is used (`mail`, `call`, `chat`, `open`, `copy`), or `sudo hire-me` in the terminal (`email`, `mail`)                        |
+| `vcard`            |                   | `$ wget contact.vcf`                                                                                                                          |
+| `resume`           | `language`        | `$ wget resume.pdf` or the terminal's `resume` (the language of the file served, after fallback)                                              |
+| `project_link`     | `project`, `link` | A project link is opened (`play-store`, `app-store`, `site`, `repo`); `project` is the entry id                                               |
+| `certificate`      | `course`          | `$ open cert`; `course` is the entry id                                                                                                       |
+| `not_found`        | `path`            | The 404 page loads (path only, no query or hash)                                                                                              |
+| `terminal_open`    |                   | The terminal opens (once per opening)                                                                                                         |
+| `terminal_command` | `command`         | A terminal command runs: its name (`./gradlew` → `gradlew`, `ls -a` → `ls`, `:q` in vim → `vim`), or `unknown`; never arguments or typed text |
 
-`section_view` is the scroll-depth measure. While the page scrolls to a nav link's target, a deep link's or a terminal `cd`'s, only that target is recorded. The sections passed on the way count only if the visitor later scrolls through them.
+`section_view` is the scroll-depth measure. While the page scrolls to a nav link's target, a deep link's or a terminal `cd`'s or `./hello`'s, only that target is recorded. The sections passed on the way count only if the visitor later scrolls through them.
 
 ### Sending events from code
 

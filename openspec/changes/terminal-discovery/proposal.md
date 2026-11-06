@@ -89,6 +89,6 @@ None.
 - **Docs:** README's Terminal section.
 - **Verification** (`~/portfolio-verify-scripts`, versioned):
   - A new `tm-eggs` suite.
-  - Updates to `tm-commands` (help hint, `xyzzy`), `tm-shell` (completion), `tm-an` (names) and `tm-layout` (replay CLS).
+  - Updates to `tm-commands` (help hint, `xyzzy`), `tm-shell` (completion), `tm-an` (names). `tm-eggs` also covers the replay's layout shift.
   - `full.sh` and CLAUDE.md's live list.
 - **No new dependencies.** The hero's normal load behavior is unchanged.

@@ -84,7 +84,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
 
 ## 5. Documentation and full run
 
-- [ ] 5.1 Update `README.md`'s Terminal section:
+- [x] 5.1 Update `README.md`'s Terminal section:
   - the hint trail (`help` → `ls -a` → `cat .secrets`);
   - the new eggs;
   - vim mode;
