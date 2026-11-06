@@ -107,7 +107,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 7. Documentation and full run
 
-- [ ] 7.1 Update `README.md` with a Terminal section: how to open it, the commands, the easter eggs, themes, data sources, the phone protection and the analytics. Update the verify README with the `tm-*` suites. Verify with `npm run format:check` and a read-through against the specs.
+- [x] 7.1 Update `README.md` with a Terminal section: how to open it, the commands, the easter eggs, themes, data sources, the phone protection and the analytics. Update the verify README with the `tm-*` suites. Verify with `npm run format:check` and a read-through against the specs.
 - [ ] 7.2 Run `./full.sh` (in the background). Every suite must pass or skip; investigate any failure with the control method in `CLAUDE.md`. Record the totals in this task's commit message.
 
 ## Workflow follow-up

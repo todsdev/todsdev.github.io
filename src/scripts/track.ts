@@ -3,7 +3,7 @@
  *
  *   import { track } from "../scripts/track";
  *   track("terminal_open");
- *   track("terminal_command", { command: terminalCommand(input, COMMANDS) });
+ *   track("terminal_command", { command: terminalCommand(input, KNOWN) });
  *
  * Adds the page `locale`, drops anything outside the allowlist in src/lib/analytics.ts,
  * and queues events until the async Umami script has loaded. Never throws, and does
