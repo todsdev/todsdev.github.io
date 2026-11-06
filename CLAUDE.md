@@ -45,20 +45,22 @@ The scripts live in `~/portfolio-verify-scripts`, outside this repo, and are ver
   - `t*`, `e2e`, `kbd`: navigation, i18n, thread, keyboard;
   - `l-*`: layout, fonts and CLS (`l-cls` with `RUNS=10` is 60 loads);
   - `x-*` experience, `p-*` projects, `s-*` skills, `c-*` courses, `k-*` contact and footer;
-  - `an-*`: analytics.
+  - `an-*`: analytics;
+  - `tm-*`: terminal.
 - **Real suites only:** the `SUITES` list in `full.sh` is the source of truth. The other scripts aren't checks and never count:
   - live only: `an-live`;
   - fixture only: `t83`;
   - obsolete: `t31`–`t33`;
   - tools with no assertions: `*-shot`, `shot`, `l-baseline`, `l-fonts`, `l-latinext*`, `l-metrics`, `p-tagbox`, `s-copy`, `c-adobe`;
-  - debug: `dbg*`.
+  - debug: `dbg*`;
+  - helpers: `lib`, `tm-lib`.
 
   `full.sh` refuses to run while any script is unclassified, so classify a new script when you add it.
 
 - **The guard:** count a suite as failed if it exits non-zero, prints `FAIL`, or prints neither `PASS` nor `SKIP`. A crashed or aborted script otherwise looks like "0 failures".
   - A suite that can't apply to the current content (for example, the availability badge checks while the badge is off) prints one `SKIP <script>: <reason>` line and exits 0; it counts as skipped, not failed.
 - **Local full run:** `./full.sh` builds once and runs every real suite with the guard. It takes longer than 10 minutes, so run it in the background.
-- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*` (not the tools among them), plus `kbd`, `h42`, `l-navstable` and `an-live`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
+- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*` (not the tools among them), plus `kbd`, `h42`, `l-navstable`, `tm-open`, `tm-commands`, `tm-theme` and `an-live`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
   - `an-live` sends a real visit to Umami only with `REPLAY=1`; use that only to confirm a new website ID.
 - **Parallelism:** run suites sequentially. Parallel runs are only a stress tool: under CPU load, timing-sensitive checks can race (the `h42` caret race).
 

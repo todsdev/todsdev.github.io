@@ -128,6 +128,70 @@ export const en = {
     /** Accessible destination of the analytics link. */
     analyticsPolicy: "Umami privacy policy",
   },
+  terminal: {
+    /** Accessible name of the terminal dialog. */
+    name: "terminal",
+    inputLabel: "command",
+    passwordLabel: "sudo password",
+    close: "close terminal",
+    /** Accessible name of the footer's ">_" button (touch devices). */
+    open: "open terminal",
+    /** Footer hint; `{key}` is the "/" key, rendered as <kbd>. */
+    hint: "press {key} to open the terminal",
+    welcome: "type help to see the commands",
+    unavailable: "terminal unavailable. Reload the page to try again.",
+    /** One-line descriptions shown by `help`, keyed by command. */
+    help: {
+      help: "list the commands",
+      whoami: "who I am",
+      about: "short profile summary",
+      experience: "work experience",
+      projects: "projects",
+      skills: "skills",
+      certs: "courses and certificates",
+      contact: "contact details",
+      ls: "list the sections",
+      cd: "go to a section, e.g. cd projects",
+      cat: "print a file: cat skills.txt",
+      resume: "download my résumé (PDF)",
+      open: "open github, linkedin, instagram or repo",
+      lang: "switch language: lang en|pt|es",
+      theme: "color theme: theme green|amber|gray",
+      clear: "clear the screen",
+      history: "list the commands you ran",
+      exit: "close the terminal",
+    },
+    notFound: "command not found: {name}",
+    helpHint: "type help to see the commands",
+    didYouMean: "did you mean {command}?",
+    /** `{usage}` is the command syntax, e.g. "lang en|pt|es". */
+    usage: "usage: {usage}",
+    cdError: "cd: no such file or directory: {name}",
+    catError: "cat: {name}: no such file or directory",
+    langCurrent: "already in {language}",
+    langSwitch: "switching to {language}...",
+    resume: "downloading {file}...",
+    opened: "opening {url}...",
+    themeSet: "theme set to {theme}",
+    themeCurrent: "current theme: {theme}",
+    accessGranted: "Access granted.",
+    sudoDenied:
+      "visitor is not in the sudoers file. This incident will be reported.",
+    /** Subject of the email `sudo hire-me` opens. */
+    mailSubject: "Job opportunity (via the portfolio terminal)",
+    rm: "nice try.",
+    matrixNote: "matrix skipped: reduced motion is on",
+    /** Project status words in `projects`. */
+    live: "live",
+    neofetch: {
+      os: "OS",
+      kernel: "Kernel",
+      uptime: "Uptime",
+      location: "Location",
+      /** `{n}` is the number of years. */
+      years: "{n} years",
+    },
+  },
   switcher: {
     label: "Language",
   },

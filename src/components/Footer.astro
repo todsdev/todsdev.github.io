@@ -2,8 +2,8 @@
 /**
  * Site footer on every page (rendered by BaseLayout): build credit linking to the source
  * repository, © year and name, the last build date, and the analytics line linking to
- * Umami's privacy policy. The terminal change fills the
- * "hint" slot; while empty it renders nothing.
+ * Umami's privacy policy. The locale pages fill the "hint" slot with the terminal hint
+ * (TerminalHint.astro, through BaseLayout); while empty it renders nothing.
  */
 import { months, t, type Locale } from "../i18n";
 import { UMAMI_PRIVACY } from "../lib/analytics";

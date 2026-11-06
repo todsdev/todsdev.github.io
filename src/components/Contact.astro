@@ -10,8 +10,6 @@
  * filled-in state is the one painted. Without JavaScript, CSS shows the "enable JavaScript"
  * note instead (the <html> class is "no-js" until BaseLayout's head script swaps it).
  */
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 import { localePath, t, type Locale } from "../i18n";
 import { eventAttrs } from "../lib/analytics";
 import {
@@ -22,6 +20,7 @@ import {
   type Destination,
 } from "../lib/contact";
 import { getEntries } from "../lib/content";
+import { resumeFor } from "../lib/resume";
 
 interface Props {
   locale: Locale;
@@ -48,12 +47,7 @@ const parts = (
 };
 
 // Résumé in the page's language, falling back to English when the file is missing.
-const resumeLocale: Locale = existsSync(
-  join(process.cwd(), "public", "resume", `resume-${locale}.pdf`),
-)
-  ? locale
-  : "en";
-const resumeHref = `/resume/resume-${resumeLocale}.pdf`;
+const { locale: resumeLocale, href: resumeHref } = resumeFor(locale);
 const resumeName = parts("resume", {
   language: t(locale, `language.${resumeLocale}`),
 }).before;

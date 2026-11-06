@@ -1,0 +1,76 @@
+---
+/**
+ * Footer hint for the terminal (Portfolio.astro → BaseLayout's "footer-hint" slot → the
+ * footer's "hint" slot). Devices with a fine pointer that can hover see "press / to open
+ * the terminal"; touch devices see only the ">_" button. Both are in the HTML and CSS picks
+ * one before first paint; without JavaScript neither shows, because the terminal can't work.
+ * "`" also opens the terminal but isn't advertised.
+ */
+import { t, type Locale } from "../i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const [before = "", after = ""] = t(locale, "terminal.hint").split("{key}");
+---
+
+<p class="term-hint">
+  <span class="term-hint__text">
+    {before}
+    <kbd class="term-hint__key">/</kbd>
+    {after}
+  </span>
+  <button
+    type="button"
+    class="term-hint__button"
+    data-terminal-open
+    aria-label={t(locale, "terminal.open")}
+  >
+    &gt;_
+  </button>
+</p>
+
+<style>
+  .term-hint {
+    margin: 0;
+  }
+
+  .term-hint__key {
+    color: var(--text);
+    font: inherit;
+  }
+
+  .term-hint__button {
+    display: none;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    padding: 0 var(--space-2);
+    border: 1px solid var(--surface-2);
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-title);
+    font-size: 1.25rem;
+    cursor: pointer;
+  }
+
+  .term-hint__button:hover,
+  .term-hint__button:focus-visible {
+    color: var(--highlight);
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .term-hint__text {
+      display: none;
+    }
+
+    .term-hint__button {
+      display: inline-block;
+    }
+  }
+
+  :global(.no-js) .term-hint {
+    display: none;
+  }
+</style>

@@ -4,7 +4,9 @@
  * locale's home page.
  */
 
-export const PREFERRED_LOCALE_KEY = "preferred-locale";
+import { PREFERRED_LOCALE_KEY } from "../lib/storage-keys";
+
+export { PREFERRED_LOCALE_KEY };
 
 const links = document.querySelectorAll<HTMLAnchorElement>("a[data-locale]");
 

@@ -10,6 +10,8 @@ import Section from "./Section.astro";
 import ScrollThread from "./ScrollThread.astro";
 import Skills from "./Skills.astro";
 import SiteNav from "./SiteNav.astro";
+import Terminal from "./Terminal.astro";
+import TerminalHint from "./TerminalHint.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t, type Locale } from "../i18n";
 import { reportMissingTranslations } from "../lib/content";
@@ -33,7 +35,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   {locale === "en" && <script is:inline slot="head-start">
     // Saved-language redirect for the unprefixed root only. Runs synchronously
     // in <head> before any stylesheet, so English is never painted first.
-    // Keep the key in sync with PREFERRED_LOCALE_KEY in src/scripts/locale.ts.
+    // Keep the key in sync with PREFERRED_LOCALE_KEY in src/lib/storage-keys.ts.
     // Never consults the browser language.
     (function () {
       try {
@@ -89,6 +91,8 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
       ),
     )}
   </main>
+  <Terminal locale={locale} />
+  <TerminalHint slot="footer-hint" locale={locale} />
 </BaseLayout>
 
 <script>

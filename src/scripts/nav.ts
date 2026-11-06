@@ -130,6 +130,11 @@ if (sections.length > 0) {
   for (const [id, link] of links) {
     link.addEventListener("click", () => startJump(id));
   }
+  // The terminal's `cd` is a jump too (src/scripts/terminal-shell.ts), with no nav_click.
+  window.addEventListener("nav:jump", (event) => {
+    const id = (event as CustomEvent<string>).detail;
+    if (links.has(id)) startJump(id);
+  });
   // A deep link is a jump too: the sections above its target were never shown.
   const target = decodeURIComponent(location.hash.slice(1));
   if (links.has(target) && target !== sections[0]?.id) startJump(target);
