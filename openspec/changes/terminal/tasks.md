@@ -25,7 +25,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - `terminalCommand(input, KNOWN)` for every command in the spec, including `cd projects --fast` → `cd` and `xyzzy` → `unknown`.
 
   Verify with `npm test`.
-- [ ] 2.2 Add the `terminal` dictionary group in `en`, `pt-br` and `es`:
+- [x] 2.2 Add the `terminal` dictionary group in `en`, `pt-br` and `es`:
   - the dialog name, input label, close label, unavailable line, hint text and button name;
   - help descriptions;
   - errors and usages (`command not found`, `did you mean`, the help hint, `cd`, `cat`, `lang`, `open`, `theme`, other `sudo` commands);
