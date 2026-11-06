@@ -41,7 +41,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
   - the `lib.mjs` Umami modes (stub, real, block) and the Local Network Access flag.
 
   Verify that every script named in the README exists, and that the suite list matches `full.sh`.
-- [ ] 3.3 Update `CLAUDE.md`:
+- [x] 3.3 Update `CLAUDE.md`:
   - the full local run is `./full.sh`, and only its suites count;
   - the guard includes `SKIP`;
   - the suite names gain `an-*`, plus `an-live` in the live run.
