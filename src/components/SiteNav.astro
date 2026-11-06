@@ -1,5 +1,6 @@
 ---
 import { t, type Locale } from "../i18n";
+import { eventAttrs } from "../lib/analytics";
 import { sectionIds } from "../lib/sections";
 
 interface Props {
@@ -14,7 +15,12 @@ const { locale } = Astro.props;
     <ul class="site-nav__list" role="list">
       {sectionIds.map((id) => (
         <li>
-          <a class="site-nav__link" href={`#${id}`} data-nav-link={id}>
+          <a
+            class="site-nav__link"
+            href={`#${id}`}
+            data-nav-link={id}
+            {...eventAttrs(locale, "nav_click", { section: id })}
+          >
             {t(locale, `nav.${id}` as const)}
           </a>
         </li>

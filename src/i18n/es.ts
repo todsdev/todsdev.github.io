@@ -106,6 +106,8 @@ export const es = {
     repo: "código fuente de este sitio",
     copyright: "© {year} {name}",
     lastBuild: "última compilación",
+    analytics: "estadísticas sin cookies con Umami",
+    analyticsPolicy: "política de privacidad de Umami",
   },
   switcher: {
     label: "Idioma",

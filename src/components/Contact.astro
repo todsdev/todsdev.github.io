@@ -13,6 +13,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { localePath, t, type Locale } from "../i18n";
+import { eventAttrs } from "../lib/analytics";
 import {
   COMMANDS,
   actionsFor,
@@ -99,6 +100,10 @@ const vcardName = parts("vcard").before;
             const label = parts(action.destination, {
               ...(guarded ? {} : { value: contact.value }),
             });
+            const track = eventAttrs(locale, "contact", {
+              kind: contact.kind,
+              action: action.command,
+            });
             const hidden = (
               <span class="visually-hidden">
                 {`, ${label.before}`}
@@ -114,6 +119,7 @@ const vcardName = parts("vcard").before;
                   class="contact__action contact__copy"
                   data-copy={guarded ? undefined : contact.value}
                   data-copy-fill={guarded ? "" : undefined}
+                  {...track}
                 >
                   <span class="contact__copy-idle">
                     <span aria-hidden="true">$ </span>
@@ -131,6 +137,7 @@ const vcardName = parts("vcard").before;
                   data-fill-href={guarded ? "" : undefined}
                   target={action.external ? "_blank" : undefined}
                   rel={action.external ? "noopener" : undefined}
+                  {...track}
                 >
                   <span aria-hidden="true">$ </span>
                   {action.command}
@@ -173,11 +180,11 @@ const vcardName = parts("vcard").before;
   <li>
     {/* No whitespace between the command and its hidden destination: it would read "vcf ,". */}
     {/* prettier-ignore */}
-    <a class="contact__action" href={vcardHref} download="contact.vcf" data-vcard><span aria-hidden="true">$ </span>{COMMANDS.vcard}<span class="visually-hidden">{`, ${vcardName}`}</span></a>
+    <a class="contact__action" href={vcardHref} download="contact.vcf" data-vcard {...eventAttrs(locale, "vcard")}><span aria-hidden="true">$ </span>{COMMANDS.vcard}<span class="visually-hidden">{`, ${vcardName}`}</span></a>
   </li>
   <li>
     {/* prettier-ignore */}
-    <a class="contact__action" href={resumeHref} download="resume.pdf"><span aria-hidden="true">$ </span>{COMMANDS.resume}<span class="visually-hidden">{`, ${resumeName}`}</span></a>
+    <a class="contact__action" href={resumeHref} download="resume.pdf" {...eventAttrs(locale, "resume", { language: resumeLocale })}><span aria-hidden="true">$ </span>{COMMANDS.resume}<span class="visually-hidden">{`, ${resumeName}`}</span></a>
   </li>
 </ul>
 <p class="visually-hidden" aria-live="polite" data-copy-status></p>

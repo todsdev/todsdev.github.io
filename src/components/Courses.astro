@@ -5,6 +5,7 @@
  * Everything comes from the courses collection; order is in src/lib/courses.ts.
  */
 import { months, t, type Locale } from "../i18n";
+import { eventAttrs } from "../lib/analytics";
 import { getEntries } from "../lib/content";
 import { OPEN_CERT, sortCourses } from "../lib/courses";
 import { formatMonth, isoDate } from "../lib/period";
@@ -41,7 +42,7 @@ const destination = (title: string) =>
       </span>
       {/* No whitespace between the command and its hidden destination: it would read "cert ,". */}
       {/* prettier-ignore */}
-      <a class="ls__action" href={course.certificateUrl} target="_blank" rel="noopener"><span aria-hidden="true">$ </span>{OPEN_CERT}<span class="visually-hidden">{`, ${destination(course.title)} (${newTab})`}</span></a>
+      <a class="ls__action" href={course.certificateUrl} target="_blank" rel="noopener" {...eventAttrs(locale, "certificate", { course: course.id })}><span aria-hidden="true">$ </span>{OPEN_CERT}<span class="visually-hidden">{`, ${destination(course.title)} (${newTab})`}</span></a>
     </li>
   ))}
 </ul>

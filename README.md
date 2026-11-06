@@ -149,7 +149,7 @@ Each contact is one line in the contact section: `label · value · actions`, in
 - **Phone protection:** `phone` and `whatsapp` are protected kinds. Their value and url are never written to the HTML. The page carries only an encoded form, and an inline script fills the lines in before they're painted. Without JavaScript, those lines show "enable JavaScript to see the number". This stops HTML scrapers, not a determined reader: the number is still in this repository's YAML and in the résumés.
 - **`$ wget contact.vcf`:** downloads a vCard built from the profile and contacts (`/contact.vcf`, `/pt-br/contact.vcf`, `/es/contact.vcf`). The static files have no phone; with JavaScript, the downloaded card gets the phone added.
 - **`$ wget resume.pdf`:** downloads `public/resume/resume-<locale>.pdf`, falling back to `resume-en.pdf` when a locale's file is missing. Strip PDF metadata before committing a new résumé, as for certificates.
-- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, and the last build date. Its `hint` slot is reserved for the terminal hint.
+- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). Its `hint` slot is reserved for the terminal hint.
 
 ### Courses
 
@@ -215,6 +215,48 @@ The scroll thread (`src/components/ScrollThread.astro`) is a decorative line in 
   ></span>
 </ScrollThread>
 ```
+
+## Analytics
+
+The site uses [Umami Cloud](https://umami.is), which sets no cookies, so there's no consent banner. `BaseLayout` loads `https://cloud.umami.is/script.js` async on every page. The settings live in `src/lib/analytics.ts`: `WEBSITE_ID` and `TRACKED_HOST` (`todsdev.github.io`).
+
+- **Production only:** the tracker reports only from `TRACKED_HOST`, so `npm run dev` and `npm run preview` never send data.
+- **Privacy:** the URL hash isn't sent, and visitors with Do Not Track enabled aren't counted. Event data is limited to the fields below. Each value must be a lowercase slug, so a URL, an email, a phone number or free text never leaves the page.
+- **Your own visits:** to stop counting them, run `localStorage.setItem("umami.disabled", 1)` in the browser console on the live site (once per browser).
+
+Page views come from Umami itself, per path (`/`, `/pt-br/`, `/es/`). On top of that, the site sends these events, each with the page `locale` (`en`, `pt-br`, `es`):
+
+| Event              | Fields            | Sent when                                                                                       |
+| ------------------ | ----------------- | ----------------------------------------------------------------------------------------------- |
+| `nav_click`        | `section`         | A navigation link is clicked                                                                    |
+| `section_view`     | `section`         | A section first reaches the area that marks it active in the navigation (once per page load)    |
+| `contact`          | `kind`, `action`  | A contact action is used (`mail`, `call`, `chat`, `open`, `copy`)                               |
+| `vcard`            |                   | `$ wget contact.vcf`                                                                            |
+| `resume`           | `language`        | `$ wget resume.pdf` (the language of the file served, after fallback)                           |
+| `project_link`     | `project`, `link` | A project link is opened (`play-store`, `app-store`, `site`, `repo`); `project` is the entry id |
+| `certificate`      | `course`          | `$ open cert`; `course` is the entry id                                                         |
+| `not_found`        | `path`            | The 404 page loads (path only, no query or hash)                                                |
+| `terminal_open`    |                   | Reserved for the terminal                                                                       |
+| `terminal_command` | `command`         | Reserved for the terminal: a recognized command name, or `unknown`                              |
+
+`section_view` is the scroll-depth measure. While the page scrolls to a nav link's target, or to a deep link's, only that target is recorded. The sections passed on the way count only if the visitor later scrolls through them.
+
+### Sending events from code
+
+Markup declares click events with `{...eventAttrs(locale, name, data)}` from `src/lib/analytics.ts`; one listener in `src/scripts/analytics.ts` sends them. Scripts call `track()` from `src/scripts/track.ts`, the only code that talks to Umami. It adds `locale`, drops any event that isn't in `EVENTS` or has an invalid value, queues events until the tracker loads, and does nothing when the tracker is blocked.
+
+To add an event, add it to `EVENTS` (with tests) and to the table above. The terminal must report commands like this, and never pass raw input:
+
+```ts
+import { terminalCommand } from "../lib/analytics";
+import { track } from "./track";
+
+track("terminal_open");
+// "cd ~/about --verbose" → "cd"; anything the terminal doesn't recognize → "unknown".
+track("terminal_command", { command: terminalCommand(input, COMMANDS) });
+```
+
+The browser verification scripts (`~/portfolio-verify-scripts`, not in this repo) replace Umami with a local stub by default, so test runs, including those against the live site, are never counted.
 
 ## Deployment
 
