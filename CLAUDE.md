@@ -39,14 +39,27 @@ The scripts live in `~/portfolio-verify-scripts`, outside the repo and not versi
 - **Helpers:** `lib.mjs` provides `browser()`, `assert()` (prints `PASS` or `FAIL` and sets the exit code) and `BASE`.
   - `BASE` defaults to `http://localhost:4321`. Set `BASE=https://todsdev.github.io` for live runs.
 - **Local runs:** `./run.sh <script>.mjs [--no-build]` builds the site (unless `--no-build`), starts `astro preview` on :4321, runs the script and stops the preview. It refuses to run if port 4321 is busy, so kill your own preview first.
+- **Umami:** `lib.mjs` replaces Umami with a local stub by default (`UMAMI=stub`; also `real` and `block`), so test runs never count as visits, live runs included.
 - **Suite names:** prefixed by area:
   - `h*` hero, `a*` about;
   - `t*`, `e2e`, `kbd`: navigation, i18n, thread, keyboard;
   - `l-*`: layout, fonts and CLS (`l-cls` with `RUNS=10` is 60 loads);
-  - `x-*` experience, `p-*` projects, `s-*` skills, `c-*` courses, `k-*` contact and footer.
-- **The guard:** when looping over suites, count a suite as failed if it exits non-zero or prints no `PASS` at all. A crashed or aborted script otherwise looks like "0 failures".
-- **Local full run:** every suite against a fresh build. It takes longer than 10 minutes, so run it in the background.
-- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*`, plus `kbd`, `h42` and `l-navstable`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
+  - `x-*` experience, `p-*` projects, `s-*` skills, `c-*` courses, `k-*` contact and footer;
+  - `an-*`: analytics.
+- **Real suites only:** the `SUITES` list in `full.sh` is the source of truth. The other scripts aren't checks and never count:
+  - live only: `an-live`;
+  - fixture only: `t83`;
+  - obsolete: `t31`–`t33`;
+  - tools with no assertions: `*-shot`, `shot`, `l-baseline`, `l-fonts`, `l-latinext*`, `l-metrics`, `p-tagbox`, `s-copy`, `c-adobe`;
+  - debug: `dbg*`.
+
+  `full.sh` refuses to run while any script is unclassified, so classify a new script when you add it.
+
+- **The guard:** count a suite as failed if it exits non-zero, prints `FAIL`, or prints neither `PASS` nor `SKIP`. A crashed or aborted script otherwise looks like "0 failures".
+  - A suite that can't apply to the current content (for example, the availability badge checks while the badge is off) prints one `SKIP <script>: <reason>` line and exits 0; it counts as skipped, not failed.
+- **Local full run:** `./full.sh` builds once and runs every real suite with the guard. It takes longer than 10 minutes, so run it in the background.
+- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*` (not the tools among them), plus `kbd`, `h42`, `l-navstable` and `an-live`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
+  - `an-live` sends a real visit to Umami only with `REPLAY=1`; use that only to confirm a new website ID.
 - **Parallelism:** run suites sequentially. Parallel runs are only a stress tool: under CPU load, timing-sensitive checks can race (the `h42` caret race).
 
 ### Measurement pitfalls already hit
