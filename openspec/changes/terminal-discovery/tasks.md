@@ -93,7 +93,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
   - completion never offering eggs.
 
   Update the verify README with `tm-eggs`, and CLAUDE.md's live list with `tm-eggs`. Verify with `npm run format:check` and a read-through against the specs.
-- [ ] 5.2 Run `./full.sh` (in the background). Every suite must pass or skip; investigate any failure with the control method in `CLAUDE.md`. Record the totals in this task's commit message.
+- [x] 5.2 Run `./full.sh` (in the background). Every suite must pass or skip; investigate any failure with the control method in `CLAUDE.md`. Record the totals in this task's commit message.
 
 ## Workflow follow-up
 
