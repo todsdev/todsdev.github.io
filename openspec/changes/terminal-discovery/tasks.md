@@ -44,7 +44,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
 
 ## 3. Data
 
-- [ ] 3.1 Add `obs: { games, years }` to `terminalData()`, derived from the `olympic-broadcasting-services` experience entry; the build fails if it's missing (design "OBS counts from content"). Verify:
+- [x] 3.1 Add `obs: { games, years }` to `terminalData()`, derived from the `olympic-broadcasting-services` experience entry; the build fails if it's missing (design "OBS counts from content"). Verify:
   - a unit test of the derivation (8 Games and 10 years for the current events; a fixture with a 2028 event gives 9 and 12);
   - `npm run build`, and the three `terminal.json` files hold `"obs":{"games":8,"years":10}`;
   - a grep of `dist/**/*.html` and `dist/**/terminal.json` still finds no phone digits, `tel:` or `wa.me/`.

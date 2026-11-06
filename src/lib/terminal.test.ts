@@ -13,6 +13,7 @@ import {
   GRADLE,
   KNOWN,
   NEOFETCH_LOGO,
+  OBS_ENTRY,
   PING,
   SECRETS,
   VIM_EXITS,
@@ -35,6 +36,7 @@ import {
   formatProjects,
   formatSkills,
   formatWhoami,
+  obsCounts,
   parse,
   sectionArg,
   suggest,
@@ -312,6 +314,7 @@ const data = (strings: Strings): TerminalData => ({
   },
   email: "a@b.c",
   languages: { en: "English", "pt-br": "Português (Brasil)", es: "Español" },
+  obs: { games: 8, years: 10 },
 });
 
 test("every visible command has a help description in every locale", () => {
@@ -570,4 +573,25 @@ test("vim constants", () => {
   assert.equal(E492, "E492: Not an editor command");
   assert.deepEqual(VIM_EXITS, [":q", ":q!", ":wq", ":x"]);
   assert.equal(VIM_PROMPT, "-- NORMAL --");
+});
+
+test("obs counts the OBS entry's Games and years from the content", async () => {
+  const { readFileSync } = await import("node:fs");
+  const yaml = readFileSync(
+    new URL(`../content/experience/${OBS_ENTRY}.yaml`, import.meta.url),
+    "utf8",
+  );
+  // The current entry: started 2016-08-01, Games from 2016 to 2026.
+  const start = new Date(`${/^start: (\S+)/m.exec(yaml)![1]}T00:00:00Z`);
+  const events = [...yaml.matchAll(/^ {2}- year: (\d+)/gm)].map((m) => ({
+    year: Number(m[1]),
+  }));
+  assert.deepEqual(obsCounts({ start, events }), { games: 8, years: 10 });
+  // Another Games in 2028 updates both numbers.
+  assert.deepEqual(obsCounts({ start, events: [{ year: 2028 }, ...events] }), {
+    games: 9,
+    years: 12,
+  });
+  assert.throws(() => obsCounts(undefined), /olympic-broadcasting-services/);
+  assert.throws(() => obsCounts({ start, events: [] }));
 });

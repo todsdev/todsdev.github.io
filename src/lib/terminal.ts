@@ -206,6 +206,8 @@ export interface TerminalData {
   email: string;
   /** Language names in the page's language, keyed by locale. */
   languages: Record<string, string>;
+  /** `obs`: Games and years, from the OBS experience entry (see `obsCounts`). */
+  obs: { games: number; years: number };
 }
 
 export interface Line {
@@ -426,6 +428,28 @@ export const E492 = "E492: Not an editor command";
 export const VIM_EXITS: readonly string[] = [":q", ":q!", ":wq", ":x"];
 /** The prompt while in vim mode, like vim's mode line. */
 export const VIM_PROMPT = "-- NORMAL --";
+
+/** Experience entry whose Games `obs` counts. */
+export const OBS_ENTRY = "olympic-broadcasting-services";
+
+/**
+ * `obs` numbers from that entry: how many Games it lists, and the years from its start to
+ * its latest Games. Throws when there's nothing to count, so the build never prints a
+ * wrong number.
+ */
+export function obsCounts(
+  entry: { start: Date; events?: readonly { year: number }[] } | undefined,
+): { games: number; years: number } {
+  const events = entry?.events ?? [];
+  if (!entry || events.length === 0) {
+    throw new Error(`experience/${OBS_ENTRY} must exist and list its Games`);
+  }
+  const latest = Math.max(...events.map((e) => e.year));
+  return {
+    games: events.length,
+    years: latest - entry.start.getUTCFullYear(),
+  };
+}
 
 /** `obs`: the Games and years come from the OBS experience entry. Text only. */
 export function formatObs(
