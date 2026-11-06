@@ -103,7 +103,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - a new `tm-sudo.mjs`: the password is never in the log text, the input's displayed value, the history, the `history` output or any recorded event; `mailto:` with the localized subject per locale; `contact {email, mail}` recorded once, after Enter; Esc cancels the prompt and records no `contact`;
   - extend `tm-commands.mjs` with the easter-egg outputs in all three locales;
   - extend `tm-layout.mjs` (new): the `matrix` canvas stays inside the panel's box, the page's pixels outside the panel don't change, any key stops it, and focus returns to the input; under reduced motion there's no canvas and the note is printed, and `gradlew` prints at once.
-- [ ] 6.5 Add a new `tm-an.mjs` for the analytics sequences from the terminal and analytics specs (`cd projects --fast`, reopen, `xyzzy`; `resume`; `sudo hire-me`; `open linkedin`). Confirm that no event value contains visitor text. Make sure `an-events`, `an-track` and `an-blocked` still pass, the last also with the terminal used while Umami is blocked.
+- [x] 6.5 Add a new `tm-an.mjs` for the analytics sequences from the terminal and analytics specs (`cd projects --fast`, reopen, `xyzzy`; `resume`; `sudo hire-me`; `open linkedin`). Confirm that no event value contains visitor text. Make sure `an-events`, `an-track` and `an-blocked` still pass, the last also with the terminal used while Umami is blocked.
 
 ## 7. Documentation and full run
 
