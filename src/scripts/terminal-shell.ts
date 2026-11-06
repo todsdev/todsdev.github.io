@@ -11,17 +11,23 @@ import {
   KNOWN,
   NEOFETCH_LOGO,
   PROMPT,
+  SECRETS_FILE,
   SUDO_PROMPT,
   complete,
   fill,
   formatCerts,
+  formatBlame,
+  formatBrew,
   formatContact,
   formatExperience,
   formatHelp,
   formatHistory,
   formatLs,
   formatNeofetch,
+  formatObs,
+  formatPing,
   formatProjects,
+  formatSecrets,
   formatSkills,
   formatWhoami,
   parse,
@@ -237,10 +243,12 @@ export function start(host: Host, data: TerminalData): Shell {
     skills: () => print(formatSkills(data)),
     certs: () => print(formatCerts(data)),
     contact: () => print(formatContact(data, decoded())),
-    ls: () => print(formatLs(data.sections)),
+    // `ls -a` shows the hidden file; any other argument lists as plain `ls`.
+    ls: ([flag]) => print(formatLs(data.sections, flag === "-a")),
     cat: ([file]) => {
       if (!file) usage("cat skills.txt");
       else if (file.toLowerCase() === "skills.txt") print(formatSkills(data));
+      else if (file.toLowerCase() === SECRETS_FILE) print(formatSecrets(s));
       else say(fill(s.catError, { name: file }), "error");
     },
     cd: ([arg]) => {
@@ -347,6 +355,20 @@ export function start(host: Host, data: TerminalData): Shell {
     },
     rm: () => say(s.rm),
     matrix: () => matrix(),
+    ping: ([host]) => {
+      if (host?.toLowerCase() === "thiago") print(formatPing(s));
+      else usage("ping thiago");
+    },
+    git: ([sub]) => {
+      if (sub?.toLowerCase() === "blame")
+        print(formatBlame(s, data.profile.name));
+      else usage("git blame");
+    },
+    brew: ([what]) => {
+      if (what?.toLowerCase() === "coffee") print(formatBrew(s));
+      else usage("brew coffee");
+    },
+    obs: () => print(formatObs(s, data.obs)),
     clear: () => log.replaceChildren(),
     history: () => print(formatHistory(history)),
     exit: () => host.close(),

@@ -51,7 +51,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
 
 ## 4. Shell
 
-- [ ] 4.1 Wire the trail and the text eggs in `terminal-shell.ts`: `ls -a`, `cat .secrets`, `ping`, `git`, `brew` and `obs`, with their usages. Update `tm-commands.mjs`:
+- [x] 4.1 Wire the trail and the text eggs in `terminal-shell.ts`: `ls -a`, `cat .secrets`, `ping`, `git`, `brew` and `obs`, with their usages. Update `tm-commands.mjs`:
   - the help hint in all three locales;
   - `ls` versus `ls -a`;
   - `cat .secrets` in all three locales against the dictionaries;
