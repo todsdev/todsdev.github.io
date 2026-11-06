@@ -17,6 +17,8 @@ interface Props {
   heroIntro?: boolean;
   /** Analytics event the page sends on load (src/scripts/analytics.ts). */
   pageEvent?: "not_found";
+  /** Keep the page out of search: adds `noindex` and omits the `hreflang` alternates. */
+  noindex?: boolean;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   description,
   heroIntro = false,
   pageEvent,
+  noindex = false,
 } = Astro.props;
 const site = Astro.site ?? new URL("https://todsdev.github.io");
 const alternates = locales.map((l) => ({
@@ -100,15 +103,24 @@ const xDefault = new URL(localePath("en"), site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {alternates.map((a) => (
-      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        {alternates.map((a) => (
+          <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={xDefault} />
+      </>
+    )}
   </head>
   <body data-page-event={pageEvent}>
     <slot />
+    {/* A page may replace the footer entirely (the 404 page renders one per locale). */}
     {/* Forward the hint only when the page has one, so the footer's slot stays empty otherwise. */}
-    {Astro.slots.has("footer-hint") ? (
+    {Astro.slots.has("footer") ? (
+      <slot name="footer" />
+    ) : Astro.slots.has("footer-hint") ? (
       <Footer locale={locale}>
         <slot name="footer-hint" slot="hint" />
       </Footer>
