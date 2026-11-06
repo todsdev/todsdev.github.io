@@ -21,6 +21,14 @@ All footer text SHALL come from the dictionaries, the profile and the build; non
 - **WHEN** the 404 page is shown
 - **THEN** it has the same footer
 
+### Requirement: Analytics line
+Every footer SHALL end with the analytics line "cookieless stats by Umami" ("estatísticas sem cookies pelo Umami" / "estadísticas sin cookies con Umami"), linking to `https://umami.is/privacy` in a new tab. Its accessible name SHALL add the localized destination ("Umami privacy policy" / "política de privacidade do Umami" / "política de privacidad de Umami") and the locale's new-tab note.
+
+#### Scenario: Analytics line
+- **WHEN** the Spanish page is shown
+- **THEN** its footer has a line reading "estadísticas sin cookies con Umami" that links to `https://umami.is/privacy` with `target="_blank"` and `rel="noopener"`, and whose accessible name ends with "política de privacidad de Umami (se abre en una pestaña nueva)"
+- **AND** Tab reaches it with a visible outline, and at 320px nothing overflows
+
 ### Requirement: Last build date
 The footer SHALL show the last build date as day, short month (from the locale's month dictionary) and year, in a `<time>` element whose `datetime` is the full `YYYY-MM-DD` date.
 

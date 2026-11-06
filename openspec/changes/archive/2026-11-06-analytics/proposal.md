@@ -31,7 +31,7 @@ The site is live in three locales, but there is no way to know whether anyone vi
 
 ### Modified Capabilities
 
-- `footer`: "Footer content" gains the localized analytics privacy line, linking to Umami's privacy policy.
+- `footer`: a new "Analytics line" requirement adds the localized privacy line linking to Umami's privacy policy. Archive moved it out of "Footer content" so each requirement states one behavior.
 
 ## Impact
 
