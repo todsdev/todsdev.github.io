@@ -61,7 +61,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
 
 ## 5. Dialog, loader and hint
 
-- [ ] 5.1 Add `src/components/Terminal.astro` (dialog markup and styles, design decisions 1 and 8) and `src/scripts/terminal.ts` (loader, decision 2), rendered only by `Portfolio.astro`, and a `nav:jump` listener in `nav.ts`. The shell module can be a stub that echoes input. Verify with a new `tm-open.mjs`:
+- [x] 5.1 Add `src/components/Terminal.astro` (dialog markup and styles, design decisions 1 and 8) and `src/scripts/terminal.ts` (loader, decision 2), rendered only by `Portfolio.astro`, and a `nav:jump` listener in `nav.ts`. The shell module can be a stub that echoes input. Verify with a new `tm-open.mjs`:
   - `` ` `` and `/` open the dialog from the body and from a link, but not from a text field (use a temporary `evaluate`-injected input) or with Ctrl or Meta;
   - Esc and the close button close it, focus returns with no scroll, the focus trap holds, and reopening keeps the log;
   - the shell chunk and `terminal.json` aren't requested before the first opening;

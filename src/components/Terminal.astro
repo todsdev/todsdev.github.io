@@ -1,0 +1,241 @@
+---
+/**
+ * The hidden terminal (rendered by Portfolio.astro on the locale pages): a modal dialog
+ * with a log and a prompt. src/scripts/terminal.ts opens it with "/" or "`" (or the footer's
+ * ">_" button) and loads the shell (src/scripts/terminal-shell.ts) and the locale's
+ * terminal.json on the first opening. Output lines are added as text only.
+ */
+import { localePath, t, type Locale } from "../i18n";
+import { PROMPT } from "../lib/terminal";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+---
+
+<dialog
+  class="term"
+  aria-labelledby="terminal-name"
+  data-terminal
+  data-src={`${localePath(locale)}terminal.json`}
+  data-unavailable={t(locale, "terminal.unavailable")}
+  data-label={t(locale, "terminal.inputLabel")}
+  data-password-label={t(locale, "terminal.passwordLabel")}
+>
+  <div class="term__bar">
+    <span id="terminal-name" class="visually-hidden">
+      {t(locale, "terminal.name")}
+    </span>
+    <span class="term__title" aria-hidden="true">
+      {PROMPT.replace(/\$$/, "")}
+    </span>
+    <button
+      type="button"
+      class="term__close"
+      data-terminal-close
+      aria-label={t(locale, "terminal.close")}
+    >
+      [x]
+    </button>
+  </div>
+  <div class="term__log" role="log" aria-live="polite" data-terminal-log></div>
+  <form class="term__line" data-terminal-form>
+    {/* prettier-ignore */}
+    <label class="term__prompt" for="terminal-input"><span aria-hidden="true" data-terminal-prompt>{PROMPT}</span><span class="visually-hidden" data-terminal-label>{t(locale, "terminal.inputLabel")}</span></label>
+    <span class="term__field">
+      <input
+        id="terminal-input"
+        class="term__input"
+        type="text"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        enterkeyhint="send"
+        data-terminal-input
+      />
+      <span class="term__cursor" aria-hidden="true" data-terminal-cursor></span>
+    </span>
+  </form>
+</dialog>
+
+<script>
+  import "../scripts/terminal";
+</script>
+
+<style is:global>
+  /* Global: the shell adds log lines at runtime, outside Astro's scoped styles. */
+  .term {
+    position: fixed;
+    inset: var(--space-3) 0 auto;
+    width: min(100% - 2 * var(--space-3), var(--content-max));
+    max-width: none;
+    max-height: min(70dvh, 34rem);
+    margin: 0 auto;
+    padding: 0;
+    border: 1px solid var(--surface-2);
+    background: var(--surface);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    flex-direction: column;
+  }
+
+  .term[open] {
+    display: flex;
+  }
+
+  .term::backdrop {
+    background: color-mix(in srgb, var(--bg) 60%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .term[open] {
+      transition:
+        opacity 120ms ease-out,
+        translate 120ms ease-out;
+
+      @starting-style {
+        opacity: 0;
+        translate: 0 -8px;
+      }
+    }
+  }
+
+  .term__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
+    border-bottom: 1px solid var(--surface-2);
+  }
+
+  .term__title {
+    overflow: hidden;
+    color: var(--text-muted);
+    font-family: var(--font-title);
+    font-size: 1.125rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .term__close {
+    flex: none;
+    padding: var(--space-1) var(--space-2);
+    border: 0;
+    background: none;
+    color: var(--text-muted);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .term__close:hover,
+  .term__close:focus-visible {
+    color: var(--highlight);
+  }
+
+  .term__close:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .term__log {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 6rem;
+    padding: var(--space-2) var(--space-3) 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .term__out {
+    margin: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .term__out--muted {
+    color: var(--text-muted);
+  }
+
+  .term__out--accent {
+    color: var(--highlight);
+  }
+
+  .term__out--echo {
+    color: var(--text-muted);
+  }
+
+  .term__card {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-4);
+    margin: var(--space-1) 0;
+  }
+
+  .term__line {
+    display: flex;
+    align-items: baseline;
+    gap: 1ch;
+    padding: var(--space-2) var(--space-3) var(--space-3);
+  }
+
+  .term__prompt {
+    flex: none;
+    color: var(--highlight);
+    font-family: var(--font-title);
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .term__field {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .term__input {
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    caret-color: transparent;
+    outline: none;
+  }
+
+  /* Block cursor at the caret (monospace: one `ch` per character); steady under reduced motion. */
+  .term__cursor {
+    position: absolute;
+    top: 0.15em;
+    left: calc(var(--caret, 0) * 1ch - var(--scroll, 0) * 1px);
+    width: 1ch;
+    height: 1.2em;
+    background: var(--highlight);
+    opacity: 0.85;
+    pointer-events: none;
+    animation: term-cursor-blink 1s steps(1) infinite;
+  }
+
+  .term__input:not(:focus) + .term__cursor,
+  .term__input[readonly] + .term__cursor {
+    visibility: hidden;
+  }
+
+  @keyframes term-cursor-blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .term__matrix {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--surface);
+  }
+</style>

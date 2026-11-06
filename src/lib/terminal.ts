@@ -6,6 +6,9 @@
  */
 import type { Dictionary } from "../i18n/en";
 
+/** The prompt shown before every input line. */
+export const PROMPT = "visitor@todsdev:~$";
+
 export interface Command {
   name: string;
   /** Easter eggs: left out of `help` and never listed by completion. */
