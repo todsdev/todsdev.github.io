@@ -119,7 +119,7 @@ Tests in `src/lib/terminal.test.ts` cover parsing, completion, suggestions, sect
   - It reads the active section from `[data-nav-link].is-active`.
   - It builds `localePath(target, id === "hero" ? "" : "#" + id)` and saves the choice under the shared key.
   - Then `location.assign()`.
-- **Shared language key:** `PREFERRED_LOCALE_KEY` moves to `src/i18n/index.ts`, and `locale.ts` re-exports it. Importing `locale.ts` would re-run its side effects.
+- **Shared language key:** `PREFERRED_LOCALE_KEY` moves to a side-effect-free `src/lib/storage-keys.ts`, and `locale.ts` re-exports it. Importing `locale.ts` would re-run its side effects, and importing `src/i18n/index.ts` would bundle every dictionary into the lazy shell chunk.
 - **`resume`:** a temporary `<a href download>` click, plus `track("resume", { language })`, with the language from the same fallback helper as the contact section.
 - **`open`:** `window.open(url, "_blank", "noopener")`, called synchronously inside the Enter keydown so the user activation counts.
 

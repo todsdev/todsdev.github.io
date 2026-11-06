@@ -94,7 +94,7 @@ New browser checks go in `~/portfolio-verify-scripts` as `tm-*.mjs`. Add each on
   - `open linkedin` opens a new tab at that URL with no opener and records only `terminal_command`; `open repo` opens `sourceUrl`; `open site` and `open` print the usage.
 
   Make sure `an-sections` still passes.
-- [ ] 6.3 Add `theme`. Verify by extending `tm-theme.mjs`:
+- [x] 6.3 Add `theme`. Verify by extending `tm-theme.mjs`:
   - `theme amber` recolors the page at once, and a reload of `/pt-br/` stays amber from the first paint;
   - `theme gray` removes the attribute and the stored key;
   - `theme` alone prints the current theme and the usage;

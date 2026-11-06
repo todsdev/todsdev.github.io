@@ -21,6 +21,8 @@ import {
   formatWhoami,
   parse,
   sectionArg,
+  THEME_KEY,
+  THEMES,
   suggest,
   type Line,
   type TerminalData,
@@ -152,6 +154,33 @@ export function start(host: Host, data: TerminalData): Shell {
       }
       window.open(url, "_blank", "noopener");
       say(fill(s.opened, { url }), "muted");
+    },
+    theme: ([arg]) => {
+      const root = document.documentElement;
+      if (!arg) {
+        say(
+          fill(s.themeCurrent, { theme: root.dataset.theme ?? "gray" }),
+          "muted",
+        );
+        usage("theme green|amber|gray");
+        return;
+      }
+      const theme = THEMES.find((name) => name === arg.toLowerCase());
+      if (!theme) {
+        usage("theme green|amber|gray");
+        return;
+      }
+      // Tokens only (src/styles/tokens.css); BaseLayout re-applies the stored theme before
+      // first paint on every page. Gray is the default, so it stores nothing.
+      if (theme === "gray") delete root.dataset.theme;
+      else root.dataset.theme = theme;
+      try {
+        if (theme === "gray") localStorage.removeItem(THEME_KEY);
+        else localStorage.setItem(THEME_KEY, theme);
+      } catch {
+        // Storage unavailable: the theme applies to this page only.
+      }
+      say(fill(s.themeSet, { theme }), "muted");
     },
     clear: () => log.replaceChildren(),
     history: () => print(formatHistory(history)),
