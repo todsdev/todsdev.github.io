@@ -22,7 +22,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
   - it passes three times in a row;
   - it FAILs when the rewrite is replaced by the real role, which has 9 erase steps, so it isn't vacuous;
   - `h43.mjs` (the real typo sequence) still passes.
-- [ ] 2.3 `h34b.mjs`, `h34c.mjs`, `h52.mjs`: check for `.hero__status` first, and when it's absent print one `SKIP <script>: availability badge is off (profile availability.enabled: false)` line and exit 0. Verify:
+- [x] 2.3 `h34b.mjs`, `h34c.mjs`, `h52.mjs`: check for `.hero__status` first, and when it's absent print one `SKIP <script>: availability badge is off (profile availability.enabled: false)` line and exit 0. Verify:
   - each prints that line and exits 0 on the current build;
   - with `availability.enabled: true` temporarily set (built, then reverted, not committed), each runs its assertions instead of skipping, and the result is recorded.
 
