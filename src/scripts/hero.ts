@@ -3,8 +3,10 @@
  * truth; this script lays an aria-hidden, per-character overlay exactly over each
  * `[data-type]` element and animates that overlay instead.
  *
- * Runs only when the inline head gate set `html.hero-pending` (JS on, motion
- * allowed, no deep link to another section) and that gate is still pending.
+ * On load it runs only when the inline head gate set `html.hero-pending` (JS on,
+ * motion allowed, no deep link to another section) and that gate is still pending.
+ * The terminal's `./hello` replays it with a `hero:replay` event, once the page has
+ * scrolled back to the hero.
  */
 
 interface Line {
@@ -157,22 +159,35 @@ function finish(lines: { name: Line; role: Line }, powerOn: boolean): void {
   root.classList.remove("hero-pending");
 }
 
-function start(): void {
-  if (!hero || !root.classList.contains("hero-pending")) return;
+type Lines = { name: Line; role: Line };
+
+/** Built on first use and kept: a replay types into the same overlays. */
+let built: Lines | undefined;
+
+function buildLines(): Lines | undefined {
+  if (built || !hero) return built;
   const name = hero.querySelector<HTMLElement>('[data-type="name"]');
   const role = hero.querySelector<HTMLElement>('[data-type="role"]');
-  if (!name || !role) return;
-  const lines = { name: buildLine(name), role: buildLine(role) };
-  const controller = new AbortController();
+  if (name && role) built = { name: buildLine(name), role: buildLine(role) };
+  return built;
+}
 
-  // Any click or key press skips to the final state. No preventDefault: the
-  // interaction still does its normal job (follow a link, move focus, ...).
+/** The running sequence, if any: a new replay aborts it. */
+let running: AbortController | undefined;
+
+/** Runs `before`, then the sequence. Any click or key press skips to the final state. */
+function run(lines: Lines, before?: (signal: AbortSignal) => Promise<void>) {
+  const controller = new AbortController();
+  running = controller;
+
+  // No preventDefault: the interaction still does its normal job (follow a link, ...).
   const skip = () => controller.abort();
   const options = { capture: true, passive: true } as const;
   window.addEventListener("pointerdown", skip, options);
   window.addEventListener("keydown", skip, options);
 
-  play(lines, controller.signal)
+  (before?.(controller.signal) ?? Promise.resolve())
+    .then(() => play(lines, controller.signal))
     .then(
       () => true,
       () => false, // aborted by a skip
@@ -183,5 +198,42 @@ function start(): void {
       finish(lines, completed);
     });
 }
+
+function start(): void {
+  if (!hero || !root.classList.contains("hero-pending")) return;
+  const lines = buildLines();
+  if (lines) run(lines);
+}
+
+const SCROLL_STILL = 150;
+const SCROLL_CAP = 2000;
+
+/** Resolves once the page has stopped scrolling (a smooth jump back to the top), or at the cap. */
+async function scrollSettled(signal: AbortSignal): Promise<void> {
+  const started = performance.now();
+  let last = window.scrollY;
+  let still = 0;
+  while (still < SCROLL_STILL && performance.now() - started < SCROLL_CAP) {
+    await sleep(50, signal);
+    still = window.scrollY === last ? still + 50 : 0;
+    last = window.scrollY;
+  }
+}
+
+/** The whole sequence again, photo power-on included. The hero stays final until it starts. */
+function replay(): void {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const lines = buildLines();
+  if (!lines) return;
+  running?.abort();
+  run(lines, async (signal) => {
+    await scrollSettled(signal);
+    if (hero) delete hero.dataset.heroPoweron;
+    reveal(lines.name, 0);
+    reveal(lines.role, 0);
+  });
+}
+
+window.addEventListener("hero:replay", replay);
 
 start();

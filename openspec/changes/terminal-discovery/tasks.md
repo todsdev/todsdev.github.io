@@ -72,7 +72,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
   - the analytics are exactly two `terminal_command {vim}` events for `vim` … `:wq`, with no typed text.
 
   Update `tm-shell.mjs` for the completion rules (eggs never offered, `cat .`, `ls `).
-- [ ] 4.3 Add `./hello` in the shell and the replay in `hero.ts` (design "`./hello` and the hero replay"). Extend `tm-eggs.mjs` at 1280px and 320px:
+- [x] 4.3 Add `./hello` in the shell and the replay in `hero.ts` (design "`./hello` and the hero replay"). Extend `tm-eggs.mjs` at 1280px and 320px:
   - from the contact section, `./hello` closes the terminal, scrolls to the top and replays: the state goes to `typing`, the name is retyped, the role passes through `Android developer` and ends `Android Developer`, and the photo is hidden and then powers on;
   - the same after opening `/#skills`, where no intro ever ran;
   - a key press mid-replay shows the final state at once;

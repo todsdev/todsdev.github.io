@@ -270,6 +270,17 @@ export function start(host: Host, data: TerminalData): Shell {
     frame = requestAnimationFrame(step);
   }
 
+  /** Closes the terminal and goes to a section. */
+  function jump(id: string): void {
+    host.close({ restoreFocus: false });
+    // A jump for nav.ts (only the destination records section_view), then the same
+    // hash navigation a nav link does: smooth, or instant with reduced motion.
+    window.dispatchEvent(new CustomEvent("nav:jump", { detail: id }));
+    if (location.hash === `#${id}`)
+      document.getElementById(id)?.scrollIntoView();
+    else location.hash = id;
+  }
+
   const commands: Record<string, Handler> = {
     help: () => print(formatHelp(s)),
     whoami: () => print(formatWhoami(data)),
@@ -293,13 +304,7 @@ export function start(host: Host, data: TerminalData): Shell {
         say(fill(s.cdError, { name: arg ?? "" }), "error");
         return;
       }
-      host.close({ restoreFocus: false });
-      // A jump for nav.ts (only the destination records section_view), then the same
-      // hash navigation a nav link does: smooth, or instant with reduced motion.
-      window.dispatchEvent(new CustomEvent("nav:jump", { detail: id }));
-      if (location.hash === `#${id}`)
-        document.getElementById(id)?.scrollIntoView();
-      else location.hash = id;
+      jump(id);
     },
     lang: ([arg]) => {
       const target = LANGS[arg?.toLowerCase() ?? ""];
@@ -391,6 +396,11 @@ export function start(host: Host, data: TerminalData): Shell {
     },
     rm: () => say(s.rm),
     matrix: () => matrix(),
+    hello: () => {
+      jump("hero");
+      // src/scripts/hero.ts plays the intro again; with reduced motion, only the jump.
+      if (!reduced()) window.dispatchEvent(new CustomEvent("hero:replay"));
+    },
     ping: ([host]) => {
       if (host?.toLowerCase() === "thiago") print(formatPing(s));
       else usage("ping thiago");
