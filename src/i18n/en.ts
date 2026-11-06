@@ -191,6 +191,33 @@ export const en = {
       /** `{n}` is the number of years. */
       years: "{n} years",
     },
+    /** Last, dim line of `help`: the start of the hint trail. */
+    trailHint: "psst… not everything is listed. try ls -a",
+    /** `cat .secrets`: the header (after "# ") and one comment per easter egg. */
+    secrets: {
+      header: ".secrets — don't tell anyone",
+      adb: "see who's connected",
+      gradlew: "compile 3 years of experience",
+      neofetch: "system specs, human edition",
+      sudo: "you know you want to",
+      rm: "go ahead, try it",
+      matrix: "characters falling, no pills needed",
+      hello: "replay the intro",
+      ping: "check if I'm online",
+      git: "find out who wrote this",
+      brew: "fuel for the build",
+      vim: "good luck getting out",
+      obs: "where it all started",
+    },
+    pingTip: "tip: type contact to reach me",
+    /** After "a1b2c3d (<name>) ". */
+    gitBlame: "everything on this page. yes, even the typo in the hero.",
+    brewNote: "(some things are not meant to be)",
+    vimEnter: "you are now in vim. to exit, type :q",
+    vimExit: "you escaped vim. most people never do.",
+    /** `{games}` and `{years}` come from the OBS experience entry. */
+    obs: "{games} Olympic Games · {years} years · 0 medals · 100% uptime",
+    obsTip: "tip: type experience for the full story",
   },
   switcher: {
     label: "Language",

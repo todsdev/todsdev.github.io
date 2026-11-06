@@ -27,7 +27,7 @@ New and changed browser checks go in `~/portfolio-verify-scripts`. Add any new s
   - `gti` suggests `git`.
 
   Verify with `npm test`.
-- [ ] 2.2 Add the new `terminal` strings to `en`, `pt-br` and `es` (design "Text sources"): `trailHint`, `secrets.*`, `pingTip`, `gitBlame`, `brewNote`, `vimEnter`, `vimExit`, `obs`, `obsTip`. Use the request's wording verbatim, and proposal decision 4 for `obsTip`. Verify with `npm run check` (all three dictionaries have the same keys) and a diff read against the proposal.
+- [x] 2.2 Add the new `terminal` strings to `en`, `pt-br` and `es` (design "Text sources"): `trailHint`, `secrets.*`, `pingTip`, `gitBlame`, `brewNote`, `vimEnter`, `vimExit`, `obs`, `obsTip`. Use the request's wording verbatim, and proposal decision 4 for `obsTip`. Verify with `npm run check` (all three dictionaries have the same keys) and a diff read against the proposal.
 - [ ] 2.3 Add the formatters and constants (design "Text sources"):
   - `formatHelp` ends in the dim hint;
   - `formatLs(sections, all)`, `formatSecrets`, `formatPing`, `formatBrew`, `formatBlame`, `formatObs`;
