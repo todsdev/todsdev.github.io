@@ -30,7 +30,7 @@ All work happens on `fix/verify-suite-health`. Never push directly to `main`. Af
 
 ## 3. Full run and documentation
 
-- [ ] 3.1 Add `~/portfolio-verify-scripts/full.sh`. It builds once, runs only the real suites sequentially on :4321, and reports passed, skipped and failed suites. The guard counts a suite as failed if it exits non-zero, prints `FAIL`, or prints neither `PASS` nor `SKIP`. The excluded scripts from proposal.md are listed by name with their category. Verify:
+- [x] 3.1 Add `~/portfolio-verify-scripts/full.sh`. It builds once, runs only the real suites sequentially on :4321, and reports passed, skipped and failed suites. The guard counts a suite as failed if it exits non-zero, prints `FAIL`, or prints neither `PASS` nor `SKIP`. The excluded scripts from proposal.md are listed by name with their category. Verify:
   - a run on `main` reports 0 failed, with only `h34b`, `h34c` and `h52` skipped;
   - a deliberately crashing scratch suite added to its list (temporarily) is reported failed;
   - every `.mjs` in the folder is either in the suite list or in an exclusion list (a check inside `full.sh` that fails on unlisted scripts).
