@@ -30,7 +30,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 
 ## 4. README and license
 
-- [ ] 4.1 Add `LICENSE` (plain MIT text, `Copyright (c) 2026 Thiago Rodrigues`) and `NOTICE.md`; verify `LICENSE` matches the standard MIT text word for word except the copyright line
+- [x] 4.1 Add `LICENSE` (plain MIT text, `Copyright (c) 2026 Thiago Rodrigues`) and `NOTICE.md`; verify `LICENSE` matches the standard MIT text word for word except the copyright line
 - [ ] 4.2 Write `readme-shot`, classify it as a tool and save the settled hero to `docs/assets/hero.png`; verify the image by eye and that nothing was added under `dist/` or `public/`
 - [ ] 4.3 Add the visitor introduction and license section to the README, using current counts, with no GIF; verify the links resolve and the existing technical documentation is intact below it
 - [ ] 4.4 Move the hidden commands into a collapsed `<details>` spoilers block, as listed in the proposal; verify every command from `cat .secrets` is in it and the block renders collapsed on the PR
