@@ -28,10 +28,13 @@ const strings = { en: en.terminal, "pt-br": ptBr.terminal, es: es.terminal };
 
 /** The locale's terminal strings; `help.certs` is dropped while the courses section is off. */
 function stringsFor(locale: Locale, courses: boolean): TerminalData["strings"] {
-  const { certs, ...help } = strings[locale].help;
+  const all = strings[locale];
+  // `help` is replaced in place and filtered, so the key order matches the flag-on file.
   return {
-    ...strings[locale],
-    help: courses ? { ...help, certs } : help,
+    ...all,
+    help: Object.fromEntries(
+      Object.entries(all.help).filter(([name]) => courses || name !== "certs"),
+    ) as TerminalData["strings"]["help"],
   };
 }
 
