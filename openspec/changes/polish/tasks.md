@@ -17,7 +17,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 - [x] 2.3 Add the `footer` slot and `noindex` mode to `BaseLayout`, with no change to locale pages; verify `k-footer` and `tm-theme` pass and the built locale HTML is otherwise unchanged
 - [x] 2.4 Rewrite `404.astro` per design decisions 2 and 3; verify `nf-*`, `an-events`, `an-markup`, `an-sections`, `an-track`, `an-host` and `tm-open` pass
 - [x] 2.5 Update `t91` for the intended behavior (terminal text instead of `404`, `lang` following the path), explaining it in the commit; verify it fails against the old build and passes on the new one
-- [ ] 2.6 Update the README's Footer and 404 text; verify `npm run format:check` passes
+- [x] 2.6 Update the README's Footer and 404 text; verify `npm run format:check` passes
 
 ## 3. Sharing and SEO
 

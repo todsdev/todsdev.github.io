@@ -149,7 +149,7 @@ Each contact is one line in the contact section: `label · value · actions`, in
 - **Phone protection:** `phone` and `whatsapp` are protected kinds. Their value and url are never written to the HTML. The page carries only an encoded form, and an inline script fills the lines in before they're painted. Without JavaScript, those lines show "enable JavaScript to see the number". This stops HTML scrapers, not a determined reader: the number is still in this repository's YAML and in the résumés.
 - **`$ wget contact.vcf`:** downloads a vCard built from the profile and contacts (`/contact.vcf`, `/pt-br/contact.vcf`, `/es/contact.vcf`). The static files have no phone; with JavaScript, the downloaded card gets the phone added.
 - **`$ wget resume.pdf`:** downloads `public/resume/resume-<locale>.pdf`, falling back to `resume-en.pdf` when a locale's file is missing. Strip PDF metadata before committing a new résumé, as for certificates.
-- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). On the locale pages it ends with the terminal hint (see [Terminal](#terminal)); the 404 page has none.
+- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). On the locale pages it ends with the terminal hint (see [Terminal](#terminal)); the 404 page has none and shows the footer in its own language (see [404 page](#404-page)).
 
 ### Courses
 
@@ -305,6 +305,16 @@ track("terminal_command", { command: terminalCommand(input, KNOWN) });
 ```
 
 The browser verification scripts (`~/portfolio-verify-scripts`, versioned in the private repo `todsdev/portfolio-verify-scripts`) replace Umami with a local stub by default, so test runs, including those against the live site, are never counted.
+
+## 404 page
+
+GitHub Pages serves one `404.html` for every unknown path, so the page works out its language in the browser. It shows `bash: <path>: command not found`, one translated line and a `$ cd ~` link to the matching home.
+
+- **Language:** from the first segment of the requested path only: `/pt-br/…` gives Portuguese, `/es/…` Spanish and anything else English (`/espresso` is English). Saved preferences and the browser language are never used. `<html lang>`, the title, the skip link, the line, the link and the footer all follow it. The error line itself stays in English, like the rest of the terminal.
+- **Path:** shown as plain text, decoded when possible, cut at 80 characters with `…`, and wrapped instead of overflowing.
+- **No visible swap:** a small script in `<head>` sets `lang` before first paint, and the page pre-renders every locale's text and shows the matching one with CSS. Without JavaScript the page is English with the path `/this-page`.
+- **Text:** `notFound.title`, `notFound.line` and `notFound.destination` in the dictionaries (see [Languages](#languages)). The destination is only the link's accessible name.
+- **Search and analytics:** the page is `noindex`, with no canonical or `hreflang`. The `not_found` event carries the detected locale (see [Analytics](#analytics)).
 
 ## Deployment
 
