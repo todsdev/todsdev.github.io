@@ -5,6 +5,9 @@ export const es = {
     title: "Thiago Rodrigues — Desarrollador Android",
     description:
       "Portafolio de Thiago Rodrigues, Desarrollador Android: experiencia, proyectos, habilidades y cursos.",
+    jobTitle: "Desarrollador Android",
+    ogImageAlt:
+      "Thiago Rodrigues, Desarrollador Android: una tarjeta estilo terminal con el prompt ~/portfolio $ ./hello",
   },
   skipLink: "Saltar al contenido",
   nav: {

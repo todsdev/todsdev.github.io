@@ -7,6 +7,11 @@ export const en = {
     title: "Thiago Rodrigues — Android Developer",
     description:
       "Portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses.",
+    /** The job title as `meta.title` words it: the hero's `profile.role` stays English everywhere. */
+    jobTitle: "Android Developer",
+    /** Alt text of the share image. */
+    ogImageAlt:
+      "Thiago Rodrigues, Android Developer: a terminal-style card with the prompt ~/portfolio $ ./hello",
   },
   skipLink: "Skip to content",
   nav: {

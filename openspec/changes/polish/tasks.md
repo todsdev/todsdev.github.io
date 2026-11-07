@@ -21,7 +21,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 
 ## 3. Sharing and SEO
 
-- [ ] 3.1 Add `meta.jobTitle` and `meta.ogImageAlt` to the three dictionaries, and `src/lib/seo.ts` with unit tests (tags, sitemap, robots, JSON-LD, `<` escaping, `meta.title` ending with the job title); verify `npm test` passes
+- [x] 3.1 Add `meta.jobTitle` and `meta.ogImageAlt` to the three dictionaries, and `src/lib/seo.ts` with unit tests (tags, sitemap, robots, JSON-LD, `<` escaping, `meta.title` ending with the job title); verify `npm test` passes
 - [ ] 3.2 Write `seo-meta`, `seo-sitemap`, `seo-jsonld` and `seo-phone` and classify them; verify `seo-meta`, `seo-sitemap` and `seo-jsonld` fail on the current build, and that `seo-phone` fails on a temporary copy of a built page, and of a `terminal.json`, with the number added
 - [ ] 3.3 Render the tags and JSON-LD in `BaseLayout` for locale pages; verify `seo-meta`, `seo-jsonld` and `seo-phone` pass except the image checks, and no tag appears on the 404 page
 - [ ] 3.4 Add `sitemap.xml` and `robots.txt` endpoints; verify `seo-sitemap` passes
