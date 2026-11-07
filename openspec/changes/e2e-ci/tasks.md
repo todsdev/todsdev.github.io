@@ -18,7 +18,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 3. CI workflow
 
 - [x] 3.1 Add `ci.yml` per decision 5; verify the workflow runs on the PR, every step reports, and the check is named `Gates and browser tests`
-- [ ] 3.2 Show that each gate blocks: push a temporary commit that fails lint, format or a unit test, and one that fails a browser test, then revert them; verify the check fails each time and the HTML report artifact appears only for the browser test failure
+- [x] 3.2 Show that each gate blocks: push a temporary commit that fails lint, format or a unit test, and one that fails a browser test, then revert them; verify the check fails each time and the HTML report artifact appears only for the browser test failure
 - [ ] 3.3 Document in the README's Deployment section what runs on a PR; verify `npm run format:check` passes
 
 ## 4. Hero tests
