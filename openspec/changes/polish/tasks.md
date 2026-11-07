@@ -48,7 +48,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 
 ## 7. Project docs and full run
 
-- [ ] 7.1 Update `CLAUDE.md` (suite names, real-suite list, live-run list with `nf-*`, `seo-*` and `pdf-links`) and the verification repo's README; verify `full.sh` reports no unclassified scripts
+- [x] 7.1 Update `CLAUDE.md` (suite names, real-suite list, live-run list with `nf-*`, `seo-*` and `pdf-links`) and the verification repo's README; verify `full.sh` reports no unclassified scripts
 - [ ] 7.2 Run `./full.sh` in the background; verify it reports 0 failed, and record the counts in the commit
 
 ## Workflow follow-up
