@@ -51,7 +51,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 - [x] 9.1 Write E1–E5 in `seo.spec.ts`; verify they pass and fail against their breakages
 - [x] 9.2 Write B1 and B2 in `build-output.spec.ts`; verify they run once per run and fail against their breakages
-- [ ] 9.3 Write `support/phone.ts`, B3 and B4 per decision 4, reading the number from `2-phone.yaml` at test time, with a fictional number in B4; verify B3 passes on `dist/`, fails naming the file on a scratch doctored copy for the international, national and subscriber forms with separators, for JSON-LD, each `terminal.json`, `tel:` and `wa.me/`, and fails on an empty `DIST`
+- [x] 9.3 Write `support/phone.ts`, B3 and B4 per decision 4, reading the number from `2-phone.yaml` at test time, with a fictional number in B4; verify B3 passes on `dist/`, fails naming the file on a scratch doctored copy for the international, national and subscriber forms with separators, for JSON-LD, each `terminal.json`, `tel:` and `wa.me/`, and fails on an empty `DIST`
 - [ ] 9.4 Search the output and HTML report of the failing runs from 9.3 for the real digits, printing only whether they match; verify there is no match, and that `tests/e2e` and the CI workflow hold no copy of the number
 
 ## 10. Deploy workflow and smoke
@@ -127,8 +127,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | E5 | Add a `telephone` field with a fictional number | The keys included `telephone`, expected absent, in desktop |
 | B1 | Add the 404 page to the sitemap | The `<loc>` list had one extra entry (`/404.html`) compared with the three homes (`toEqual`), in desktop. The file runs once per run: the mobile project ignores it (2 tests ran, not 4) |
 | B2 | Remove the sitemap line from robots | `Sitemap: https://todsdev.github.io/sitemap.xml` was missing from `[User-agent: *, Allow: /]`, in desktop |
-| B3 | Write the number from the YAML into a scratch doctored copy (each form and file, per 9.3) | |
-| B4 | Remove the separator tolerance from the matcher | |
+| B3 | Write the number from the YAML into a scratch doctored copy (each form and file, per 9.3) | On a scratch copy of `dist/` (deleted afterwards), a script read the number at run time and wrote it into seven places. `DIST=<copy>` failed B3 with the masked findings `index.html: international form, shape ## ## #####-####`; `pt-br/index.html: national form, shape ##) #####-####` (with parentheses); `es/index.html: subscriber form, shape ##### ####` (non-breaking space); `404.html: tel: link`; `terminal.json: international form`; `pt-br/terminal.json: wa.me/ link`; `es/terminal.json: national form`. A second copy with the number in the JSON-LD `telephone` of `index.html` failed with `index.html: international form`. An empty `DIST` failed on `files read` (expected 7, received 0). On the real `dist/` B3 passes |
+| B4 | Remove the separator tolerance from the matcher | With `SEP` set to the empty string, `found("+99 88 97777-0001")` expected `international`, received `undefined`, and the shape test received `undefined` (the "must not match" test still passed, as it should) |
 | M1 | Doctored preview: wrong `lang` | |
 | M2 | Doctored preview: remove the 404 script | |
 | M3 | Doctored preview: remove `og/en.png` | |
