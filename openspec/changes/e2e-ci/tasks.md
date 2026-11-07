@@ -6,7 +6,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 1. Setup
 
-- [ ] 1.1 Create branch `feat/e2e-ci`, commit the artifacts and open a draft PR; verify the PR is draft and `openspec validate e2e-ci --strict` passes
+- [x] 1.1 Create branch `feat/e2e-ci`, commit the artifacts and open a draft PR; verify the PR is draft and `openspec validate e2e-ci --strict` passes
 
 ## 2. Playwright scaffolding
 
