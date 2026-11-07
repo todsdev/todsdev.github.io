@@ -81,7 +81,7 @@ The section SHALL offer `$ wget contact.vcf`, linking to a vCard built at build 
 - **THEN** the downloaded `contact.vcf` has the same fields plus `TEL` `+5521971470428`
 
 ### Requirement: Résumé download
-The section SHALL offer `$ wget resume.pdf`, linking to `/resume/resume-<locale>.pdf` for the page's locale. If that file doesn't exist at build time, it links to the English file. The published résumés SHALL carry no document metadata (no Info dictionary entries and no XMP).
+The section SHALL offer `$ wget resume.pdf`, linking to `/resume/resume-<locale>.pdf` for the page's locale. If that file doesn't exist at build time, it links to the English file. The published résumés SHALL carry no document metadata (no Info dictionary entries and no XMP). Each SHALL have extractable text and exactly four URI link annotations.
 
 #### Scenario: Locale file
 - **WHEN** the Portuguese page is built with all three résumés present
@@ -90,6 +90,18 @@ The section SHALL offer `$ wget resume.pdf`, linking to `/resume/resume-<locale>
 #### Scenario: Fallback
 - **WHEN** `resume-es.pdf` is missing at build time
 - **THEN** the Spanish page's `$ wget resume.pdf` links to `/resume/resume-en.pdf`
+
+#### Scenario: Links survive
+- **WHEN** the annotations of any published résumé are read
+- **THEN** there are exactly four URI annotations: `mailto:trod.dev@gmail.com`, `https://www.linkedin.com/in/tods/`, `https://github.com/todsdev` and `https://todsdev.github.io/?utm_source=cv`
+
+#### Scenario: Phone number exception
+- **WHEN** the published résumés are read
+- **THEN** they may contain the phone number, a deliberate exception to the protection that applies to the site's pages
+
+#### Scenario: Metadata can't be recovered
+- **WHEN** the bytes of any published résumé are inspected, with compressed streams expanded
+- **THEN** it was written as a full rewrite: no Info dictionary, no XMP and a single cross-reference section, and none of the original file's metadata values appear
 
 ### Requirement: Accessible and stable contact list
 The contacts SHALL be one list with one item per contact. The ` · ` separators and `$` prompts are hidden from assistive technology. All text SHALL meet AA contrast. Every action SHALL be reachable by keyboard with a visible focus indicator at 320px, and nothing SHALL overflow. Loading (including the runtime phone lines), scrolling, focus and copy feedback SHALL cause no layout shift.

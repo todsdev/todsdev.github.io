@@ -1,6 +1,21 @@
 # todsdev.github.io
 
-One-page personal portfolio of Thiago Rodrigues (Android Developer), built with [Astro](https://astro.build) and served by GitHub Pages at <https://todsdev.github.io/>.
+One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses, in English, Portuguese and Spanish. Live at <https://todsdev.github.io/>.
+
+![The portfolio's hero: the name, "Android Developer" and a photo on a dark terminal-style page](docs/assets/hero.png)
+
+**Stack:** [Astro](https://astro.build) and TypeScript, built to static HTML with no UI framework, served by GitHub Pages and deployed by GitHub Actions. Content lives in YAML and the UI text in typed dictionaries, so adding a project or a translation never touches a component. Analytics are cookieless ([Umami](https://umami.is)).
+
+## How it was built
+
+The site was specified before it was coded, using Spec-Driven Development with [OpenSpec](https://github.com/Fission-AI/OpenSpec): every change starts as a proposal with requirements and scenarios, then becomes tasks, and the specs stay as the record of what the site does.
+
+- **Specs:** 20 capabilities in [`openspec/specs/`](openspec/specs/).
+- **Changes:** 18 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
+- **One commit per task:** every task is a Conventional Commit on a feature branch, merged to `main` with a merge commit, so the history reads as the plan.
+- **Automated browser verification:** 92 headless-Chrome suites cover layout, fonts, layout shift, language switching, keyboard use, accessibility and analytics. They run from a separate private repository against a local build before a merge and against the live site after each deploy.
+
+The sections below document the project itself.
 
 ## Prerequisites
 
@@ -47,6 +62,8 @@ All user-visible UI text comes from the dictionaries; never hardcode text in com
 1. Add the key to `src/i18n/en.ts` (the source of truth).
 2. Add the same key to `src/i18n/pt-br.ts` and `src/i18n/es.ts`. A missing or extra key fails `npm run check`.
 3. Use it in a component with `t(locale, "group.key")` from `src/i18n/index.ts`; keys are type-checked.
+
+The job title has its own key, `meta.jobTitle`, because the hero's `profile.role` is "Android Developer" in every locale (see [Search and sharing](#search-and-sharing)).
 
 ## Content
 
@@ -149,7 +166,7 @@ Each contact is one line in the contact section: `label · value · actions`, in
 - **Phone protection:** `phone` and `whatsapp` are protected kinds. Their value and url are never written to the HTML. The page carries only an encoded form, and an inline script fills the lines in before they're painted. Without JavaScript, those lines show "enable JavaScript to see the number". This stops HTML scrapers, not a determined reader: the number is still in this repository's YAML and in the résumés.
 - **`$ wget contact.vcf`:** downloads a vCard built from the profile and contacts (`/contact.vcf`, `/pt-br/contact.vcf`, `/es/contact.vcf`). The static files have no phone; with JavaScript, the downloaded card gets the phone added.
 - **`$ wget resume.pdf`:** downloads `public/resume/resume-<locale>.pdf`, falling back to `resume-en.pdf` when a locale's file is missing. Strip PDF metadata before committing a new résumé, as for certificates.
-- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). On the locale pages it ends with the terminal hint (see [Terminal](#terminal)); the 404 page has none.
+- **Footer:** every page ends with a footer showing "built with Astro + OpenSpec", linked to the profile's `sourceUrl`, then © year and name, the last build date, and the analytics line ("cookieless stats by Umami") linked to Umami's privacy policy (see [Analytics](#analytics)). On the locale pages it ends with the terminal hint (see [Terminal](#terminal)); the 404 page has none and shows the footer in its own language (see [404 page](#404-page)).
 
 ### Courses
 
@@ -236,6 +253,11 @@ A hidden terminal for curious visitors. The site never depends on it: without Ja
 | `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default    |
 | `clear`, `history`, `exit`                             | As in a shell                                                                                |
 
+Some commands are left out of `help` on purpose. They are listed below, behind a spoiler.
+
+<details>
+<summary>spoilers</summary>
+
 Easter eggs are never listed by `help` or offered by Tab. The way to find them is a hint trail: `help` ends with a hint to try `ls -a`, which shows `.secrets`, and `cat .secrets` lists them all with a comment each.
 
 | Easter egg        | Does                                                                                                                                              |
@@ -253,15 +275,22 @@ Easter eggs are never listed by `help` or offered by Tab. The way to find them i
 | `vim`             | Vim mode: the prompt becomes a dim `-- NORMAL --`, only `:q`, `:q!`, `:wq`, `:x` or `Esc` get out, anything else is `E492: Not an editor command` |
 | `obs`             | The Olympic Games worked, as text only, then a tip to type `experience`                                                                           |
 
+How the hidden commands are built:
+
+- **Intro replay:** `./hello` sends a `hero:replay` event to `src/scripts/hero.ts`, which runs the same sequence as on load once the page has stopped scrolling.
+- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once, `matrix` prints a note instead and `./hello` only jumps to the top.
+- **Data:** That includes `obs`: its numbers are the Games listed under the `olympic-broadcasting-services` experience entry and the years from its start to the latest one, and the build fails if that entry is missing.
+- **Analytics:** `sudo hire-me` also sends the section's own `contact` event.
+
+</details>
+
 How it's built:
 
-- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice. That includes `obs`: its numbers are the Games listed under the `olympic-broadcasting-services` experience entry and the years from its start to the latest one, and the build fails if that entry is missing.
+- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice.
 - **Phone:** like the contact section, the phone and WhatsApp values are never in the HTML or in `terminal.json`; `contact` decodes them from the contact section at runtime.
 - **Code:** `src/lib/terminal.ts` holds the command table, parsing, completion, suggestions and output formats (unit-tested); `src/scripts/terminal.ts` opens and closes the dialog; `src/scripts/terminal-shell.ts` runs the commands.
 - **Themes:** `src/styles/tokens.css` overrides only the seven color tokens under `<html data-theme>`, and an inline script in `BaseLayout` applies the stored theme before first paint. Every theme keeps AA contrast.
-- **Intro replay:** `./hello` sends a `hero:replay` event to `src/scripts/hero.ts`, which runs the same sequence as on load once the page has stopped scrolling.
-- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once, `matrix` prints a note instead and `./hello` only jumps to the top.
-- **Analytics:** see [Analytics](#analytics). `resume` and `sudo hire-me` also send the section's own `resume` and `contact` events.
+- **Analytics:** see [Analytics](#analytics). `resume` also sends the section's own `resume` event.
 
 ## Analytics
 
@@ -306,6 +335,27 @@ track("terminal_command", { command: terminalCommand(input, KNOWN) });
 
 The browser verification scripts (`~/portfolio-verify-scripts`, versioned in the private repo `todsdev/portfolio-verify-scripts`) replace Umami with a local stub by default, so test runs, including those against the live site, are never counted.
 
+## Search and sharing
+
+What search engines and link previews read comes from one place, `src/lib/seo.ts`, and `BaseLayout` renders it on the three locale pages (the 404 page gets none of it):
+
+- **Metadata:** a localized description (`meta.description`), a canonical URL with the trailing slash GitHub Pages serves (`https://todsdev.github.io/`, `/pt-br/`, `/es/`), `hreflang` alternates, Open Graph tags (`og:locale` is `en_US`, `pt_BR` or `es_ES`) and Twitter `summary_large_image` tags with the same values.
+- **Structured data:** a JSON-LD `Person` with the name, job title, URL, email and the LinkedIn, GitHub and Instagram links. It is built from named fields only, so the phone number can't reach it.
+- **Sitemap and robots:** `/sitemap.xml` lists the three locale homes with their alternates, and `/robots.txt` allows everything and points to it.
+- **Job title:** `meta.jobTitle` ("Android Developer", "Desenvolvedor Android", "Desarrollador Android") feeds the JSON-LD and the share image. The hero's `profile.role` stays "Android Developer" in every locale on purpose (the typo animation needs it), so `meta.title` must end with `meta.jobTitle`; a unit test checks it. `meta.ogImageAlt` is the share image's alt text.
+- **Share images:** `/og/en.png`, `/og/pt-br.png` and `/og/es.png` are generated at build time, 1200×630, in the gray theme: the hero's prompt line, the name and the job title. The glyphs of the bundled fonts become SVG paths (`opentype.js`) and `sharp` rasterizes them, so the result doesn't depend on the fonts installed on the build machine, and the PNGs carry no metadata. Keep `opentype.js` on 1.x: 2.0.0 returns broken coordinates for VT323.
+- **Phone number:** it never appears in built HTML or `terminal.json`, structured data included (see [Contact and footer](#contact-and-footer)).
+
+## 404 page
+
+GitHub Pages serves one `404.html` for every unknown path, so the page works out its language in the browser. It shows `bash: <path>: command not found`, one translated line and a `$ cd ~` link to the matching home.
+
+- **Language:** from the first segment of the requested path only: `/pt-br/…` gives Portuguese, `/es/…` Spanish and anything else English (`/espresso` is English). Saved preferences and the browser language are never used. `<html lang>`, the title, the skip link, the line, the link and the footer all follow it. The error line itself stays in English, like the rest of the terminal.
+- **Path:** shown as plain text, decoded when possible, cut at 80 characters with `…`, and wrapped instead of overflowing.
+- **No visible swap:** a small script in `<head>` sets `lang` before first paint, and the page pre-renders every locale's text and shows the matching one with CSS. Without JavaScript the page is English with the path `/this-page`.
+- **Text:** `notFound.title`, `notFound.line` and `notFound.destination` in the dictionaries (see [Languages](#languages)). The destination is only the link's accessible name.
+- **Search and analytics:** the page is `noindex`, with no canonical or `hreflang`. The `not_found` event carries the detected locale (see [Analytics](#analytics)).
+
 ## Deployment
 
 The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
@@ -315,3 +365,7 @@ The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the rep
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
 - **Rollback:** open a PR that reverts the offending merge and merge it; the workflow redeploys the previous state.
+
+## License
+
+The code is released under the [MIT License](LICENSE). The personal content (texts, photo, résumés and certificates) is not: all rights are reserved, and app screenshots and names belong to their owners. See [NOTICE.md](NOTICE.md) for the split.

@@ -5,8 +5,10 @@ import "../styles/global.css";
 import plexMonoLatin400 from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
 import vt323Latin400 from "@fontsource/vt323/files/vt323-latin-400-normal.woff2?url";
 import Footer from "../components/Footer.astro";
-import { langCode, localePath, locales, type Locale } from "../i18n";
+import { langCode, localePath, locales, t, type Locale } from "../i18n";
 import { TRACKED_HOST, UMAMI_SCRIPT, WEBSITE_ID } from "../lib/analytics";
+import { getEntries } from "../lib/content";
+import { jsonLdScript, pageUrl, personJsonLd, shareTags } from "../lib/seo";
 import { PHOSPHOR_THEMES, THEME_KEY } from "../lib/terminal";
 
 interface Props {
@@ -17,6 +19,8 @@ interface Props {
   heroIntro?: boolean;
   /** Analytics event the page sends on load (src/scripts/analytics.ts). */
   pageEvent?: "not_found";
+  /** Keep the page out of search: adds `noindex` and omits the `hreflang` alternates. */
+  noindex?: boolean;
 }
 
 const {
@@ -25,6 +29,7 @@ const {
   description,
   heroIntro = false,
   pageEvent,
+  noindex = false,
 } = Astro.props;
 const site = Astro.site ?? new URL("https://todsdev.github.io");
 const alternates = locales.map((l) => ({
@@ -32,6 +37,28 @@ const alternates = locales.map((l) => ({
   href: new URL(localePath(l), site).href,
 }));
 const xDefault = new URL(localePath("en"), site).href;
+
+// Search and sharing metadata (src/lib/seo.ts) is for the indexable locale pages only.
+const [profile] = noindex ? [] : await getEntries("profile", locale);
+const contacts = noindex ? [] : await getEntries("contacts", locale);
+const share = noindex
+  ? []
+  : shareTags(locale, {
+      title,
+      description,
+      imageAlt: t(locale, "meta.ogImageAlt"),
+    });
+const personLd =
+  noindex || !profile
+    ? null
+    : jsonLdScript(
+        personJsonLd({
+          locale,
+          name: profile.name,
+          jobTitle: t(locale, "meta.jobTitle"),
+          contacts,
+        }),
+      );
 ---
 
 <html lang={langCode[locale]} class="no-js">
@@ -100,15 +127,29 @@ const xDefault = new URL(localePath("en"), site).href;
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    {alternates.map((a) => (
-      <link rel="alternate" hreflang={a.hreflang} href={a.href} />
-    ))}
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={pageUrl(locale)} />
+        {alternates.map((a) => (
+          <link rel="alternate" hreflang={a.hreflang} href={a.href} />
+        ))}
+        <link rel="alternate" hreflang="x-default" href={xDefault} />
+        {share.map((m) => (
+          <meta {...{ [m.attr]: m.key }} content={m.content} />
+        ))}
+        {personLd && <script type="application/ld+json" set:html={personLd} />}
+      </>
+    )}
   </head>
   <body data-page-event={pageEvent}>
     <slot />
+    {/* A page may replace the footer entirely (the 404 page renders one per locale). */}
     {/* Forward the hint only when the page has one, so the footer's slot stays empty otherwise. */}
-    {Astro.slots.has("footer-hint") ? (
+    {Astro.slots.has("footer") ? (
+      <slot name="footer" />
+    ) : Astro.slots.has("footer-hint") ? (
       <Footer locale={locale}>
         <slot name="footer-hint" slot="hint" />
       </Footer>

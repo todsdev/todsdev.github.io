@@ -7,6 +7,11 @@ export const en = {
     title: "Thiago Rodrigues — Android Developer",
     description:
       "Portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses.",
+    /** The job title as `meta.title` words it: the hero's `profile.role` stays English everywhere. */
+    jobTitle: "Android Developer",
+    /** Alt text of the share image. */
+    ogImageAlt:
+      "Thiago Rodrigues, Android Developer: a terminal-style card with the prompt ~/portfolio $ ./hello",
   },
   skipLink: "Skip to content",
   nav: {
@@ -221,6 +226,12 @@ export const en = {
   },
   switcher: {
     label: "Language",
+    /** Accessible names of the switcher links: the visible code first (WCAG 2.5.3), the same in every locale. */
+    names: {
+      en: "EN — English",
+      "pt-br": "PT — Português",
+      es: "ES — Español",
+    },
   },
   language: {
     en: "English",
@@ -229,9 +240,10 @@ export const en = {
   },
   notFound: {
     title: "Page not found",
-    heading: "404 — page not found",
-    message: "The page you are looking for does not exist or was moved.",
-    backHome: "Back to home",
+    /** The one translated line under the terminal error. */
+    line: "The page you are looking for does not exist or was moved.",
+    /** Accessible destination of the `$ cd ~` link. */
+    destination: "Back to home",
   },
 } as const;
 

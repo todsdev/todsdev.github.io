@@ -1,50 +1,134 @@
 ---
-// Placeholder not-found page. GitHub Pages serves a single root 404.html for
-// every locale, so it uses the English dictionary. A terminal-style 404 is a
-// separate change.
+// Terminal-style not-found page. GitHub Pages serves one root 404.html for every path, so the
+// locale is known only in the browser: everything that depends on it (skip link, translated
+// line, `cd` link, footer) is rendered once per locale, marked `data-nf-locale`, and the CSS
+// below shows the one matching <html lang>. A blocking script in <head> sets `lang` from the
+// first path segment before first paint; without JavaScript the page stays English.
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { localePath, t } from "../i18n";
+import Footer from "../components/Footer.astro";
+import { langCode, localePath, locales, t } from "../i18n";
 
-const locale = "en";
+const titles = Object.fromEntries(
+  locales.map((l) => [
+    langCode[l],
+    `${t(l, "notFound.title")} — ${t(l, "meta.title")}`,
+  ]),
+);
 ---
 
 <BaseLayout
-  locale={locale}
-  title={`${t(locale, "notFound.title")} — ${t(locale, "meta.title")}`}
-  description={t(locale, "notFound.message")}
+  locale="en"
+  title={titles.en}
+  description={t("en", "notFound.line")}
   pageEvent="not_found"
+  noindex
 >
-  <a class="skip-link" href="#main">
-    {t(locale, "skipLink")}
-  </a>
+  <script is:inline slot="head-start">
+    // Locale from the path alone (never saved preferences or the browser language), set
+    // before any stylesheet so no other locale is painted. The first segment must be exactly
+    // "pt-br" or "es". Keep in sync with `locales` and `langCode` in src/i18n/index.ts.
+    (function () {
+      const first = location.pathname.split("/")[1];
+      document.documentElement.lang =
+        first === "pt-br" ? "pt-BR" : first === "es" ? "es" : "en";
+    })();
+  </script>
+  {locales.map((l) => (
+    <a class="skip-link" href="#main" data-nf-locale={l}>
+      {t(l, "skipLink")}
+    </a>
+  ))}
   <main id="main" class="not-found">
-    <h1>{t(locale, "notFound.heading")}</h1>
-    <p>{t(locale, "notFound.message")}</p>
-    <p>
-      <a href={localePath(locale)}>{t(locale, "notFound.backHome")}</a>
-    </p>
+    <h1 lang="en">
+      bash:{" "}
+      <span class="not-found__path" data-nf-path>
+        /this-page
+      </span>
+      : command not found
+    </h1>
+    <script is:inline define:vars={{ titles }}>
+      // Right after the path span, so the path is in place before paint. Plain text only,
+      // never innerHTML; a malformed escape keeps the raw path; the cut is by code point.
+      (function () {
+        let path = location.pathname;
+        try {
+          path = decodeURIComponent(path);
+        } catch {
+          // Keep the raw path.
+        }
+        const chars = Array.from(path);
+        if (chars.length > 80) path = chars.slice(0, 80).join("") + "…";
+        document.querySelector("[data-nf-path]").textContent = path;
+        document.title = titles[document.documentElement.lang] || titles.en;
+      })();
+    </script>
+    {locales.map((l) => (
+      <div class="not-found__rest" data-nf-locale={l}>
+        <p>{t(l, "notFound.line")}</p>
+        <p>
+          {/* No whitespace between the command and its hidden destination: it would read "~ ,". */}
+          {/* prettier-ignore */}
+          <a class="not-found__cd" href={localePath(l)}><span aria-hidden="true">$ </span>cd ~<span class="visually-hidden">{`, ${t(l, "notFound.destination")}`}</span></a>
+        </p>
+      </div>
+    ))}
   </main>
+  {locales.map((l) => (
+    <div slot="footer" data-nf-locale={l}>
+      <Footer locale={l} />
+    </div>
+  ))}
 </BaseLayout>
+
+<style is:global>
+  /* Show only the locale <html lang> names. English is the default (no JavaScript). */
+  html:not([lang="pt-BR"]) [data-nf-locale="pt-br"],
+  html:not([lang="es"]) [data-nf-locale="es"],
+  html:is([lang="pt-BR"], [lang="es"]) [data-nf-locale="en"] {
+    display: none;
+  }
+</style>
 
 <style>
   .not-found {
     display: grid;
     align-content: center;
     gap: var(--space-3);
-    min-height: 100vh;
+    min-height: 80vh;
     max-width: var(--content-max);
     margin-inline: auto;
     padding: var(--space-5) var(--space-4);
   }
 
   h1 {
-    font-family: var(--font-title);
-    font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+    font-family: var(--font-body);
+    font-size: 1.125rem;
     font-weight: 400;
-    line-height: 1.1;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .not-found__path {
+    color: var(--highlight);
+  }
+
+  .not-found__rest {
+    display: grid;
+    gap: var(--space-3);
   }
 
   p {
     color: var(--text-muted);
+  }
+
+  .not-found__cd {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .not-found__cd:hover,
+  .not-found__cd:focus-visible {
+    color: var(--highlight);
+    text-decoration: underline;
   }
 </style>

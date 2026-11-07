@@ -5,6 +5,9 @@ export const ptBr = {
     title: "Thiago Rodrigues — Desenvolvedor Android",
     description:
       "Portfólio de Thiago Rodrigues, Desenvolvedor Android: experiência, projetos, habilidades e cursos.",
+    jobTitle: "Desenvolvedor Android",
+    ogImageAlt:
+      "Thiago Rodrigues, Desenvolvedor Android: um cartão em estilo de terminal com o prompt ~/portfolio $ ./hello",
   },
   skipLink: "Pular para o conteúdo",
   nav: {
@@ -191,6 +194,11 @@ export const ptBr = {
   },
   switcher: {
     label: "Idioma",
+    names: {
+      en: "EN — English",
+      "pt-br": "PT — Português",
+      es: "ES — Español",
+    },
   },
   language: {
     en: "English",
@@ -199,8 +207,9 @@ export const ptBr = {
   },
   notFound: {
     title: "Página não encontrada",
-    heading: "404 — página não encontrada",
-    message: "A página que você procura não existe ou foi movida.",
-    backHome: "Voltar ao início",
+    /** The one translated line under the terminal error. */
+    line: "A página que você procura não existe ou foi movida.",
+    /** Accessible destination of the `$ cd ~` link. */
+    destination: "Voltar ao início",
   },
 } satisfies Dictionary;

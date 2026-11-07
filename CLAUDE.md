@@ -46,12 +46,14 @@ The scripts live in `~/portfolio-verify-scripts`, outside this repo, and are ver
   - `l-*`: layout, fonts and CLS (`l-cls` with `RUNS=10` is 60 loads);
   - `x-*` experience, `p-*` projects, `s-*` skills, `c-*` courses, `k-*` contact and footer;
   - `an-*`: analytics;
-  - `tm-*`: terminal.
+  - `tm-*`: terminal;
+  - `nf-*`: the 404 page, `seo-*`: search and sharing, `pdf-links`: résumé PDFs;
+  - `lh-*`: Lighthouse and contrast (`lh-contrast` is a suite, `lh-table` a tool).
 - **Real suites only:** the `SUITES` list in `full.sh` is the source of truth. The other scripts aren't checks and never count:
   - live only: `an-live`;
   - fixture only: `t83`;
   - obsolete: `t31`–`t33`;
-  - tools with no assertions: `*-shot`, `shot`, `l-baseline`, `l-fonts`, `l-latinext*`, `l-metrics`, `p-tagbox`, `s-copy`, `c-adobe`;
+  - tools with no assertions: `*-shot` (including `readme-shot`), `shot`, `l-baseline`, `l-fonts`, `l-latinext*`, `l-metrics`, `lh-table`, `p-tagbox`, `s-copy`, `c-adobe`;
   - debug: `dbg*`;
   - helpers: `lib`, `tm-lib`.
 
@@ -60,7 +62,7 @@ The scripts live in `~/portfolio-verify-scripts`, outside this repo, and are ver
 - **The guard:** count a suite as failed if it exits non-zero, prints `FAIL`, or prints neither `PASS` nor `SKIP`. A crashed or aborted script otherwise looks like "0 failures".
   - A suite that can't apply to the current content (for example, the availability badge checks while the badge is off) prints one `SKIP <script>: <reason>` line and exits 0; it counts as skipped, not failed.
 - **Local full run:** `./full.sh` builds once and runs every real suite with the guard. It takes longer than 10 minutes, so run it in the background.
-- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*` (not the tools among them), plus `kbd`, `h42`, `l-navstable`, `tm-open`, `tm-commands`, `tm-eggs`, `tm-theme` and `an-live`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
+- **Live run** after each deploy: `l-cls`, the section suites `x-*`, `p-*`, `s-*`, `c-*` and `k-*` (not the tools among them), plus `kbd`, `h42`, `l-navstable`, `tm-open`, `tm-commands`, `tm-eggs`, `tm-theme`, `an-live`, `nf-*`, `seo-*` and `pdf-links`. Add targeted checks for the change (for example, the hosted PDFs return 200, or the phone number is absent from the live HTML).
   - `an-live` sends a real visit to Umami only with `REPLAY=1`; use that only to confirm a new website ID.
 - **Parallelism:** run suites sequentially. Parallel runs are only a stress tool: under CPU load, timing-sensitive checks can race (the `h42` caret race).
 
@@ -89,7 +91,8 @@ If a check fails, assume the site regressed until a control says otherwise:
   - **Images:** re-encode with `sharp` and confirm there is no EXIF or GPS data.
   - **PDFs:** rewrite with a scratch `pdf-lib` script that removes the Info dictionary, XMP, generator annotations and timestamps. Confirm the pages render pixel-identical to the originals.
 - **No layout shift:** reserve space up front (aspect ratios, reserved grid cells). Decide JS versus no-JS states by the `<html>` `js`/`no-js` class, which is set before first paint.
-- **Phone number:** it must never appear in built HTML. After touching the contact code, grep `dist/**/*.html`.
+- **Phone number:** it must never appear in built HTML or `terminal.json` (the résumés are a deliberate exception). After touching the contact code, run `seo-phone` (every built `.html` and `terminal.json`) or grep `dist/**/*.html` and `dist/**/terminal.json`.
+- **Gate results:** judge `npm run lint`, `check`, `format:check` and `test` by their exit code, and never truncate their output (`tail`, `head`) before reading the result. A truncated lint failure went unnoticed on three commits of the `polish` change.
 - **Terminal actions:** keep no whitespace between the command and its visually hidden destination (`{/* prettier-ignore */}` on that element).
 - **No `@types/node`:** use the small ambient files instead (`src/lib/node-test.d.ts`, `src/lib/node-build.d.ts`).
 - **Libraries:** keep `src/lib/*` pure and free of runtime imports (type-only imports are fine), so `node --test` runs them with type stripping.
