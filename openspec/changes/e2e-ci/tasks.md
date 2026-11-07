@@ -32,7 +32,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 6. Section and résumé tests
 
-- [ ] 6.1 Write S1–S5 in `sections.spec.ts`, reading expectations from the dictionaries and content; verify they pass and fail against their breakages
+- [x] 6.1 Write S1–S5 in `sections.spec.ts`, reading expectations from the dictionaries and content; verify they pass and fail against their breakages
 - [ ] 6.2 Write S6–S10; verify they pass, S7 asserts no digits of the phone, and all fail against their breakages
 - [ ] 6.3 Write R1 and R2 in `resume.spec.ts`; verify they pass and fail against their breakages
 
@@ -84,11 +84,11 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | I3 | Drop the hash in the switcher script | URL expected `/pt-br/#projects`, received `/pt-br/`, in desktop and mobile |
 | I4 | Redirect `/es/` too, or use the browser language | Used the browser language instead of the saved choice: the saved-choice test got `/#about` instead of `/pt-br/#about`, and the browser-language test got `pt-BR` redirected (`lang` expected `en`), in desktop and mobile |
 | I5 | Render the switcher links without `href` when JS is off | Removed the `href`: the `href` expectation `/` failed (link `EN — English` has no `href`), in desktop (mobile skips) |
-| S1 | Swap two sections in `Portfolio.astro` | |
-| S2 | Remove one journey step from the markup | |
-| S3 | Hide one experience entry's marker | |
-| S4 | Change a project's `rel` and swap two cards | |
-| S5 | Render a skills group's items without a list | |
+| S1 | Swap two sections in `Portfolio.astro` | Section ids `toEqual` mismatch (`about` and `experience` swapped), in desktop and mobile |
+| S2 | Remove one journey step from the markup | `.about__step` `toHaveText` expected one more item than received, in desktop and mobile |
+| S3 | Hide one experience entry's marker | `.xp__marker[data-thread-marker]` count expected 1, received 0 (the attribute removed), in desktop and mobile |
+| S4 | Change a project's `rel` and swap two cards | Reversed cards: first heading expected `GloboPop`, received `todsdev.github.io`. Then `rel="nofollow"` alone: `rel` expected `noopener`, received `nofollow`. Run separately, because the first masks the second. Both in desktop and mobile |
+| S5 | Render a skills group's items without a list | `toMatchAriaSnapshot` mismatch: no `list` or `listitem` nodes (a `div` instead of the `ul`), in desktop and mobile |
 | S6 | Drop the destination from a course's accessible name | |
 | S7 | Remove the runtime phone fill from `contact.ts` | |
 | S8 | Remove the footer's privacy link | |
