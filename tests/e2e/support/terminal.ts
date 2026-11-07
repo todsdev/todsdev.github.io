@@ -1,5 +1,11 @@
 import { expect, type Locator, type Page } from "@playwright/test";
 
+/**
+ * The one throwaway input: its underscores make it an impossible command name, so it always
+ * reports as `unknown` and can never match a real command.
+ */
+export const NOOP = "__noop_check__";
+
 /** Opens the terminal the way the visitor's device does: the `>_` button on touch, `/` otherwise. */
 export async function openTerminal(
   page: Page,

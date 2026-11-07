@@ -40,7 +40,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 - [x] 7.1 Write T1–T4 in `terminal.spec.ts`; verify T1 runs only in desktop, T2 only in mobile, and all fail against their breakages
 - [x] 7.2 Write T5–T9, with expectations from dictionaries and content, never `terminal.json`; verify they pass and fail against their breakages
-- [ ] 7.3 Write T10–T13 with `__noop_check__` as the constant, and A3 and A4 in `analytics.spec.ts`; verify they pass, and `grep` shows the constant is the only throwaway terminal input in `tests/e2e`
+- [x] 7.3 Write T10–T13 with `__noop_check__` as the constant, and A3 and A4 in `analytics.spec.ts`; verify they pass, and `grep` shows the constant is the only throwaway terminal input in `tests/e2e`
 
 ## 8. 404 and analytics tests
 
@@ -107,17 +107,17 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | T7 | Remove one egg from the `cat .secrets` output | The last egg line was missing: `toEqual` expected one more line than received, in desktop and mobile |
 | T8 | Change the `ping` output | The first `ping` line was missing: `toEqual` expected one more line than received (command `ping thiago`), in desktop and mobile |
 | T9 | Make `:q` do nothing in vim mode | After `:q` the prompt stayed `-- NORMAL --`, expected `visitor@todsdev:~$`, in desktop and mobile |
-| T10 | Echo the password into the log | |
-| T11 | Stop persisting the theme | |
-| T12 | Render typed input as HTML in the log | |
-| T13 | Leave the terminal open after `cd` | |
+| T10 | Echo the password into the log | The log contained `__noop_check__`: expected `false`, received `true`, in desktop and mobile |
+| T11 | Stop persisting the theme | Stored theme expected `amber`, received `null`, in desktop and mobile. A second breakage, applying the stored theme 500 ms late, failed the before-first-paint check (theme set at 512 ms, first paint at 28 ms or earlier) |
+| T12 | Render typed input as HTML in the log | The echo line read `visitor@todsdev:~$ x` instead of the typed markup, in desktop and mobile |
+| T13 | Leave the terminal open after `cd` | The dialog stayed visible, expected hidden, in desktop and mobile |
 | F1 | Always use English on the 404 page | |
 | F2 | Use `innerHTML` for the 404 path | |
 | F3 | Remove the no-JS generic path | |
 | A1 | Keep the query in `notFoundPath` | |
 | A2 | Send `not_found` on every page | |
-| A3 | Remove `data-event` from a nav link | |
-| A4 | Report the raw terminal input as the command | |
+| A3 | Remove `data-event` from a nav link | No `nav_click` event was intercepted (the list stayed empty, expected one), in desktop and mobile |
+| A4 | Report the raw terminal input as the command | The `terminal_command` events were missing the `unknown` one: the validator drops a raw `__noop_check__`, so the list was short by one, in desktop and mobile |
 | A5 | Call `window.umami.track` with no guard | Unguarded `window.umami!.track(...)` in `track()`: the terminal log read `terminal unavailable. Reload the page to try again.` instead of containing `help`, in desktop and mobile |
 | A6 | Remove the block from the fixture | `expect(failed).toContain("https://cloud.umami.is/script.js")` received `[]`, in desktop and mobile |
 | E1 | Keep the query in the canonical | |
