@@ -56,7 +56,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 10. Deploy workflow and smoke
 
-- [ ] 10.1 Change `deploy.yml` per decision 6; verify `gh workflow run deploy.yml --ref feat/e2e-ci` runs the build and skips deploy, and later pushes to the PR start no `deploy.yml` run
+- [x] 10.1 Change `deploy.yml` per decision 6; verify `gh workflow run deploy.yml --ref feat/e2e-ci` runs the build and skips deploy, and later pushes to the PR start no `deploy.yml` run
 - [ ] 10.2 Write M1–M4 in `smoke.spec.ts`; verify `npm run test:e2e:smoke` passes against the live site with no beacon sent, that M4 fails with the block removed only against a local preview, and that the others fail against a doctored local preview through `SMOKE_URL`
 - [ ] 10.3 Add the `smoke` job per decision 7; verify with `actionlint` or by reading the parsed workflow in `gh workflow view` that it needs `deploy`, and that the skipped run from 10.1 also skipped it
 - [ ] 10.4 Update the README's Deployment section and CLAUDE.md for `ci.yml`, the deploy condition, the smoke job, the required check on `main` and the relation to verify-scripts, adding `test:e2e` to the verification notes; verify `npm run format:check` passes and the spec's documentation scenarios hold
