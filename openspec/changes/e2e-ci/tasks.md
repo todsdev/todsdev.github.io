@@ -1,0 +1,176 @@
+# Tasks
+
+Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check` and `npm test`, judged by exit code with untruncated output. From group 2 on, commits that touch tests also run `npm run test:e2e`.
+
+A test's task is done only when its row in "Breakage evidence" records the observed failure. Breakages are temporary edits or a doctored `dist` copy. They are never committed, and `git status` is checked before each commit. The real phone number never goes in a test, fixture, commit message or log.
+
+## 1. Setup
+
+- [ ] 1.1 Create branch `feat/e2e-ci`, commit the artifacts and open a draft PR; verify the PR is draft and `openspec validate e2e-ci --strict` passes
+
+## 2. Playwright scaffolding
+
+- [ ] 2.1 Add `@playwright/test` and direct `yaml`, `playwright.config.ts` per design decision 1, the ignore entries and the ambient types per decision 8, and the scripts `test:e2e`, `test:e2e:ui` and `test:e2e:smoke`; verify `npm ls @types/node` is empty, and `npm run check`, `lint` and `format:check` pass with a trivial spec
+- [ ] 2.2 Add `support/fixtures.ts` with the auto Umami block and the `events` fixture per decision 2, then tests A5 and A6; verify both pass in both projects, that A6 fails with the block removed, and that `grep -r` finds no stand-in code in `dist/`
+- [ ] 2.3 Add `support/content.ts` and `support/terminal.ts`; verify the loader can't return a contact's `value` or `url`, leaving `support/phone.ts` (task 9.3) as the only reader of `2-phone.yaml`, with a check in the next test group that uses it
+- [ ] 2.4 Document `test:e2e`, `test:e2e:ui`, the browser install and the port in the README's Scripts section and CLAUDE.md; verify the documented commands run as written on a clean `node_modules`
+
+## 3. CI workflow
+
+- [ ] 3.1 Add `ci.yml` per decision 5; verify the workflow runs on the PR, every step reports, and the check is named `Gates and browser tests`
+- [ ] 3.2 Show that each gate blocks: push a temporary commit that fails lint, format or a unit test, and one that fails a browser test, then revert them; verify the check fails each time and the HTML report artifact appears only for the browser test failure
+- [ ] 3.3 Document in the README's Deployment section what runs on a PR; verify `npm run format:check` passes
+
+## 4. Hero tests
+
+- [ ] 4.1 Write H1–H5 in `hero.spec.ts`, recording whether H1 uses the clock or the fallback from decision 3; verify they pass in both projects and fail against their breakages
+
+## 5. i18n and navigation tests
+
+- [ ] 5.1 Write I1–I5 in `i18n.spec.ts`, using accessible names through role locators; verify they pass and fail against their breakages
+- [ ] 5.2 Write N1 and N2 in `navigation.spec.ts`; verify they pass and fail against their breakages
+
+## 6. Section and résumé tests
+
+- [ ] 6.1 Write S1–S5 in `sections.spec.ts`, reading expectations from the dictionaries and content; verify they pass and fail against their breakages
+- [ ] 6.2 Write S6–S10; verify they pass, S7 asserts no digits of the phone, and all fail against their breakages
+- [ ] 6.3 Write R1 and R2 in `resume.spec.ts`; verify they pass and fail against their breakages
+
+## 7. Terminal tests
+
+- [ ] 7.1 Write T1–T4 in `terminal.spec.ts`; verify T1 runs only in desktop, T2 only in mobile, and all fail against their breakages
+- [ ] 7.2 Write T5–T9, with expectations from dictionaries and content, never `terminal.json`; verify they pass and fail against their breakages
+- [ ] 7.3 Write T10–T13 with `__noop_check__` as the constant, and A3 and A4 in `analytics.spec.ts`; verify they pass, and `grep` shows the constant is the only throwaway terminal input in `tests/e2e`
+
+## 8. 404 and analytics tests
+
+- [ ] 8.1 Write F1–F3 in `not-found.spec.ts`, serving `/404.html` as the navigation response for the cases `astro preview` rejects; verify they pass and fail against their breakages
+- [ ] 8.2 Write A1 and A2; verify they pass and fail against their breakages, and the captured request is the only evidence used, with no `window` recording
+
+## 9. SEO and built output tests
+
+- [ ] 9.1 Write E1–E5 in `seo.spec.ts`; verify they pass and fail against their breakages
+- [ ] 9.2 Write B1 and B2 in `build-output.spec.ts`; verify they run once per run and fail against their breakages
+- [ ] 9.3 Write `support/phone.ts`, B3 and B4 per decision 4, reading the number from `2-phone.yaml` at test time, with a fictional number in B4; verify B3 passes on `dist/`, fails naming the file on a scratch doctored copy for the international, national and subscriber forms with separators, for JSON-LD, each `terminal.json`, `tel:` and `wa.me/`, and fails on an empty `DIST`
+- [ ] 9.4 Search the output and HTML report of the failing runs from 9.3 for the real digits, printing only whether they match; verify there is no match, and that `tests/e2e` and the CI workflow hold no copy of the number
+
+## 10. Deploy workflow and smoke
+
+- [ ] 10.1 Change `deploy.yml` per decision 6; verify `gh workflow run deploy.yml --ref feat/e2e-ci` runs the build and skips deploy, and later pushes to the PR start no `deploy.yml` run
+- [ ] 10.2 Write M1–M4 in `smoke.spec.ts`; verify `npm run test:e2e:smoke` passes against the live site with no beacon sent, that M4 fails with the block removed only against a local preview, and that the others fail against a doctored local preview through `SMOKE_URL`
+- [ ] 10.3 Add the `smoke` job per decision 7; verify with `actionlint` or by reading the parsed workflow in `gh workflow view` that it needs `deploy`, and that the skipped run from 10.1 also skipped it
+- [ ] 10.4 Update the README's Deployment section and CLAUDE.md for `ci.yml`, the deploy condition, the smoke job, the required check on `main` and the relation to verify-scripts, adding `test:e2e` to the verification notes; verify `npm run format:check` passes and the spec's documentation scenarios hold
+
+## 11. Integration
+
+- [ ] 11.1 Run `npx playwright test --repeat-each=3` locally and in one CI run with retries off; verify there are no failures, and fix the cause of any flake without relaxing a check unless the control in CLAUDE.md proves the check wrong
+- [ ] 11.2 Read the durations from three PR runs with `gh run view` and record them in this file; verify each is under 5 minutes, and report to the owner if any exceeds it, proposing browser caching per decision 5
+- [ ] 11.3 Confirm with a script that every name in `full.sh`'s `SUITES` appears in `design.md`'s tables and that every test in "Breakage evidence" has an observed failure; verify the script reports 92 of 92 suites and no empty rows
+- [ ] 11.4 Run `./full.sh` in the background to confirm the private suites still pass with the repo's new files; verify it reports 0 failed
+
+## Breakage evidence
+
+Fill "Observed" with the failing assertion, and the project where it failed. Planned breakages may be replaced by better ones if the row says so.
+
+| Test | Planned breakage | Observed |
+| --- | --- | --- |
+| H1 | Stop `hero.ts` before the typo is fixed | |
+| H2 | Remove the reduced-motion branch from the hero | |
+| H3 | Change the photo's `src` to a missing file | |
+| H4 | Remove the skip listeners from `hero.ts` | |
+| H5 | Add a second `h1` to the hero | |
+| I1 | Remove the `x-default` alternate | |
+| I2 | Revert a switcher name to the language only | |
+| I3 | Drop the hash in the switcher script | |
+| I4 | Redirect `/es/` too, or use the browser language | |
+| I5 | Render the switcher links without `href` when JS is off | |
+| S1 | Swap two sections in `Portfolio.astro` | |
+| S2 | Remove one journey step from the markup | |
+| S3 | Hide one experience entry's marker | |
+| S4 | Change a project's `rel` and swap two cards | |
+| S5 | Render a skills group's items without a list | |
+| S6 | Drop the destination from a course's accessible name | |
+| S7 | Remove the runtime phone fill from `contact.ts` | |
+| S8 | Remove the footer's privacy link | |
+| S9 | Keep sections hidden by not running `reveal.ts` | |
+| S10 | Gate section visibility on JS in CSS | |
+| N1 | Stop `nav.ts` from marking the active link | |
+| N2 | Move the switcher before the nav in the DOM | |
+| R1 | Point the Spanish résumé link to the English PDF | |
+| R2 | Change the terminal's `resume` path | |
+| T1 | Remove Esc handling or the focus return | |
+| T2 | Remove the `>_` button | |
+| T3 | Fetch `terminal.json` on page load | |
+| T4 | Remove `inert` from the page behind the dialog | |
+| T5 | Edit a built `terminal.json` help line in a doctored copy | |
+| T6 | List `.secrets` in plain `ls` | |
+| T7 | Remove one egg from the `cat .secrets` output | |
+| T8 | Change the `ping` output | |
+| T9 | Make `:q` do nothing in vim mode | |
+| T10 | Echo the password into the log | |
+| T11 | Stop persisting the theme | |
+| T12 | Render typed input as HTML in the log | |
+| T13 | Leave the terminal open after `cd` | |
+| F1 | Always use English on the 404 page | |
+| F2 | Use `innerHTML` for the 404 path | |
+| F3 | Remove the no-JS generic path | |
+| A1 | Keep the query in `notFoundPath` | |
+| A2 | Send `not_found` on every page | |
+| A3 | Remove `data-event` from a nav link | |
+| A4 | Report the raw terminal input as the command | |
+| A5 | Call `window.umami.track` with no guard | |
+| A6 | Remove the block from the fixture | |
+| E1 | Keep the query in the canonical | |
+| E2 | Change `og:locale` for one locale | |
+| E3 | Serve a wrong-size PNG in a doctored copy | |
+| E4 | Emit the canonical on the 404 page | |
+| E5 | Add a `telephone` field with a fictional number | |
+| B1 | Add the 404 page to the sitemap | |
+| B2 | Remove the sitemap line from robots | |
+| B3 | Write the number from the YAML into a scratch doctored copy (each form and file, per 9.3) | |
+| B4 | Remove the separator tolerance from the matcher | |
+| M1 | Doctored preview: wrong `lang` | |
+| M2 | Doctored preview: remove the 404 script | |
+| M3 | Doctored preview: remove `og/en.png` | |
+| M4 | Remove the block, against a local preview only | |
+
+## Workflow follow-up
+
+- Archive on the branch: sync the delta specs, run `openspec validate --all --strict`, update the README's counts for specs and archived changes (21 and 19, read at archive time), and move the change to `openspec/changes/archive/`.
+- Merge with a merge commit once the checks are green and no deploy is running.
+- Before archiving, update the README's "Automated browser verification" bullet to mention the new suite.
+
+### Post-merge checklist
+
+- Wait for the deploy, including the new `smoke` job, then run the live suites from CLAUDE.md, `seo-phone` among them. Also confirm that PRs no longer start a `Build and deploy` run.
+- Confirm the check's name exists on this PR's head commit, which targets `main` (`ci.yml` runs only on pull requests, so a commit on `main` never carries it). `<PR>` is this PR's number. The command must print `Gates and browser tests`:
+
+  ```sh
+  gh api "repos/todsdev/todsdev.github.io/commits/$(gh pr view <PR> --json headRefOid --jq .headRefOid)/check-runs" --jq '.check_runs[].name'
+  ```
+
+- Apply the branch protection approved by the owner: the CI check required, no required reviews, admins not enforced.
+
+  ```sh
+  gh api -X PUT repos/todsdev/todsdev.github.io/branches/main/protection --input - <<'JSON'
+  {
+    "required_status_checks": {
+      "strict": false,
+      "checks": [{ "context": "Gates and browser tests" }]
+    },
+    "enforce_admins": false,
+    "required_pull_request_reviews": null,
+    "restrictions": null,
+    "allow_force_pushes": false,
+    "allow_deletions": false
+  }
+  JSON
+  ```
+
+- Read the rule back and confirm it matches the `site-deployment` scenario:
+
+  ```sh
+  gh api repos/todsdev/todsdev.github.io/branches/main/protection --jq '{checks: .required_status_checks.checks, admins: .enforce_admins.enabled, reviews: .required_pull_request_reviews}'
+  ```
+
+- Clean up: `git checkout main && git pull`, then delete the branch locally and on origin.
