@@ -1,9 +1,16 @@
+import type { Page } from "@playwright/test";
+import { UMAMI_PRIVACY } from "../../src/lib/analytics";
+import { actionsFor, type ContactKind } from "../../src/lib/contact";
+import { OPEN_CERT } from "../../src/lib/courses";
 import { sectionIds } from "../../src/lib/sections";
 import { projectActions, sortProjects } from "../../src/lib/projects";
 import {
+  contacts,
   entries,
   localePath,
   locales,
+  localized,
+  profile,
   text,
   type Locale,
 } from "./support/content";
@@ -198,4 +205,221 @@ test("S5: Skills are headings with lists, as the accessibility tree reads them",
       .join("\n");
     await expect(page.locator("#skills .file")).toMatchAriaSnapshot(template);
   }
+});
+
+test("S6: Courses are links that open in a new tab, and the hosted PDFs load", async ({
+  page,
+}) => {
+  interface Course {
+    title: string;
+    issuer: string;
+    date: string;
+    certificateUrl: string;
+    featured: boolean;
+  }
+  for (const locale of locales) {
+    await page.goto(localePath(locale));
+    // Featured first, then newest first; the sort is stable, so `order` breaks ties.
+    const courses = entries<Course>("courses", locale).sort(
+      (a, b) =>
+        Number(b.featured) - Number(a.featured) || b.date.localeCompare(a.date),
+    );
+    const rows = page.locator("#courses .ls__row");
+    await expect(rows).toHaveCount(courses.length);
+    for (const [i, course] of courses.entries()) {
+      const row = rows.nth(i);
+      await expect(row.locator("time")).toHaveAttribute(
+        "datetime",
+        course.date,
+      );
+      await expect(row.locator(".ls__issuer")).toContainText(course.issuer);
+      await expect(row.locator(".ls__title")).toContainText(course.title);
+      const link = row.getByRole("link");
+      await expect(link).toHaveAttribute("href", course.certificateUrl);
+      await expect(link).toHaveAttribute("target", "_blank");
+      await expect(link).toHaveAttribute("rel", "noopener");
+      const name = `${OPEN_CERT}, ${text(locale, "courses.destination").replace("{title}", course.title)} (${text(locale, "links.newTab")})`;
+      await expect(link).toHaveAccessibleName(
+        new RegExp(`^${escapeRegExp(name).replace(",", " ?,")}$`),
+      );
+    }
+  }
+
+  // The PDFs hosted by this site are fetched from the local build, never from production.
+  for (const course of entries<Course>("courses", "en")) {
+    const url = new URL(course.certificateUrl);
+    if (url.host !== "todsdev.github.io") continue;
+    const response = await page.request.get(url.pathname);
+    expect(response.status(), url.pathname).toBe(200);
+    expect((await response.body()).subarray(0, 5).toString()).toBe("%PDF-");
+  }
+});
+
+test("S7: Contact lines come in order and the phone line fills in at runtime", async ({
+  page,
+}) => {
+  // The loader never reads the protected value or url (only support/phone.ts reads the number).
+  for (const contact of contacts()) {
+    expect(Object.keys(contact).sort()).toEqual(["kind", "label", "order"]);
+  }
+  for (const locale of locales) {
+    await page.goto(localePath(locale));
+    const lines = page.locator("#contact .contact");
+    await expect(lines).toHaveCount(contacts().length);
+    for (const [i, contact] of contacts().entries()) {
+      const line = lines.nth(i);
+      await expect(line).toHaveAttribute("data-kind", contact.kind);
+      await expect(line.locator(".contact__label")).toHaveText(
+        localized(contact.label, locale),
+      );
+      // The hidden destinations hold values (the phone's too), so only the commands are read.
+      const actions = actionsFor(contact.kind as ContactKind);
+      const controls = line.locator(".contact__action");
+      await expect(controls).toHaveCount(actions.length);
+      for (const [j, action] of actions.entries()) {
+        await expect(controls.nth(j)).toContainText(`$ ${action.command}`);
+      }
+    }
+
+    // The phone line holds a number once decoded, without asserting which one.
+    const value = page.locator('#contact [data-kind="phone"] .contact__value');
+    await expect
+      .poll(
+        async () =>
+          ((await value.textContent()) ?? "").replace(/\D/g, "").length,
+      )
+      .toBeGreaterThanOrEqual(10);
+    await expect(page.locator("#contact .contact__nojs").first()).toBeHidden();
+  }
+});
+
+test.describe("without JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("S7: the phone line shows the note instead of a number", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const phone = page.locator('#contact [data-kind="phone"]');
+    await expect(phone.locator(".contact__nojs")).toBeVisible();
+    await expect(phone.locator(".contact__nojs")).toContainText(
+      text("en", "contact.noJs"),
+    );
+    const filled = await phone
+      .locator("[data-fill=value]")
+      .evaluateAll((els) => els.map((el) => el.textContent));
+    expect(new Set(filled)).toEqual(new Set([""]));
+  });
+});
+
+test("S8: the footer has the credit, year, build date, privacy link and terminal hint", async ({
+  page,
+  isMobile,
+}) => {
+  const { name } = profile();
+  const [{ sourceUrl }] = entries<{ sourceUrl: string }>("profile", "en");
+  for (const locale of locales) {
+    await page.goto(localePath(locale));
+    const footer = page.locator(".site-footer");
+
+    const credit = footer.getByRole("link", {
+      name: text(locale, "footer.builtWith"),
+    });
+    await expect(credit).toHaveAttribute("href", sourceUrl);
+    await expect(credit).toHaveAttribute("target", "_blank");
+
+    const built = footer.locator("time");
+    const date = await built.getAttribute("datetime");
+    expect(date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const year = date!.slice(0, 4);
+    await expect(footer).toContainText(
+      text(locale, "footer.copyright")
+        .replace("{year}", year)
+        .replace("{name}", name),
+    );
+    await expect(footer).toContainText(text(locale, "footer.lastBuild"));
+
+    const privacy = footer.getByRole("link", {
+      name: text(locale, "footer.analytics"),
+    });
+    await expect(privacy).toHaveAttribute("href", UMAMI_PRIVACY);
+    await expect(privacy).toHaveAttribute("target", "_blank");
+
+    if (isMobile) {
+      await expect(
+        footer.getByRole("button", { name: text(locale, "terminal.open") }),
+      ).toBeVisible();
+    } else {
+      const [before = "", after = ""] = text(locale, "terminal.hint").split(
+        "{key}",
+      );
+      await expect(footer.locator(".term-hint__text")).toContainText(
+        before.trim(),
+      );
+      await expect(footer.locator(".term-hint__text")).toContainText(
+        after.trim(),
+      );
+      await expect(footer.locator(".term-hint__key")).toHaveText("/");
+    }
+  }
+});
+
+/** The fill of the scroll thread, as a fraction of its track. */
+const threadDrawn = (page: Page) =>
+  page.evaluate(() => {
+    const track = document
+      .querySelector(".scroll-thread__track")!
+      .getBoundingClientRect();
+    const fill = document
+      .querySelector(".scroll-thread__fill")!
+      .getBoundingClientRect();
+    return fill.height / track.height;
+  });
+
+test("S9: scrolling reveals every section and draws the thread, without overflow or errors", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/");
+  expect(await threadDrawn(page)).toBeLessThan(0.1);
+
+  for (const id of sectionIds) {
+    await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+  }
+  await page.evaluate(() =>
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "instant",
+    }),
+  );
+
+  const sections = page.locator("[data-reveal]");
+  await expect(sections.locator("visible=true")).toHaveCount(
+    await sections.count(),
+  );
+  await expect(page.locator("[data-reveal]:not(.is-visible)")).toHaveCount(0);
+  await expect.poll(() => threadDrawn(page)).toBeGreaterThan(0.99);
+  const overflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+  expect(errors).toEqual([]);
+});
+
+test.describe("without JavaScript, everything is visible", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("S10: the sections show and the thread is drawn", async ({ page }) => {
+    await page.goto("/");
+    await expect(page.locator("html")).toHaveClass(/no-js/);
+    const opacities = await page
+      .locator("[data-reveal]")
+      .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
+    expect(opacities.length).toBe(sectionIds.length);
+    expect(new Set(opacities)).toEqual(new Set(["1"]));
+    expect(await threadDrawn(page)).toBeGreaterThan(0.99);
+  });
 });

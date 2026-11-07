@@ -33,7 +33,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 6. Section and résumé tests
 
 - [x] 6.1 Write S1–S5 in `sections.spec.ts`, reading expectations from the dictionaries and content; verify they pass and fail against their breakages
-- [ ] 6.2 Write S6–S10; verify they pass, S7 asserts no digits of the phone, and all fail against their breakages
+- [x] 6.2 Write S6–S10; verify they pass, S7 asserts no digits of the phone, and all fail against their breakages
 - [ ] 6.3 Write R1 and R2 in `resume.spec.ts`; verify they pass and fail against their breakages
 
 ## 7. Terminal tests
@@ -89,11 +89,11 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | S3 | Hide one experience entry's marker | `.xp__marker[data-thread-marker]` count expected 1, received 0 (the attribute removed), in desktop and mobile |
 | S4 | Change a project's `rel` and swap two cards | Reversed cards: first heading expected `GloboPop`, received `todsdev.github.io`. Then `rel="nofollow"` alone: `rel` expected `noopener`, received `nofollow`. Run separately, because the first masks the second. Both in desktop and mobile |
 | S5 | Render a skills group's items without a list | `toMatchAriaSnapshot` mismatch: no `list` or `listitem` nodes (a `div` instead of the `ul`), in desktop and mobile |
-| S6 | Drop the destination from a course's accessible name | |
-| S7 | Remove the runtime phone fill from `contact.ts` | |
-| S8 | Remove the footer's privacy link | |
-| S9 | Keep sections hidden by not running `reveal.ts` | |
-| S10 | Gate section visibility on JS in CSS | |
+| S6 | Drop the destination from a course's accessible name | Accessible name expected the course destination, received `open cert , (opens in a new tab)`, in desktop and mobile |
+| S7 | Remove the runtime phone fill from `contact.ts` | The fill is in `Contact.astro`'s inline script (not `contact.ts`); removing `el.textContent = value` left the phone line with 0 digits, expected at least 10, in desktop and mobile. The no-JS test correctly still passed |
+| S8 | Remove the footer's privacy link | Link `cookieless stats by Umami` not found (the `href` removed), in desktop and mobile |
+| S9 | Keep sections hidden by not running `reveal.ts` | `[data-reveal]:not(.is-visible)` count expected 0, received 7, in desktop and mobile |
+| S10 | Gate section visibility on JS in CSS | Computed opacities were not all `1` without JS (the `.js` gate removed from the hidden rule), in desktop and mobile |
 | N1 | Stop `nav.ts` from marking the active link | `aria-current` expected `location`, received empty, for both the click and the deep link, in desktop and mobile. The deep link is its own test: a hash-only `goto` after a load didn't scroll in mobile |
 | N2 | Move the switcher before the nav in the DOM | The first Tab stop expected `Home`, received `EN — English`, in desktop |
 | R1 | Point the Spanish résumé link to the English PDF | |
