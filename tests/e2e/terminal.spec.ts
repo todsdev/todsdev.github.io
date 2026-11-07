@@ -22,6 +22,7 @@ import {
   text,
 } from "./support/content";
 import { test, expect } from "./support/fixtures";
+import { firstPaint } from "./support/paint";
 import { NOOP, openTerminal, output, run } from "./support/terminal";
 
 test.describe("keyboard", () => {
@@ -302,14 +303,11 @@ test("T11: theme recolors, persists, resets, and is applied before first paint",
   // A reload keeps the theme, and it was applied before the first paint.
   await page.reload();
   await expect(root).toHaveAttribute("data-theme", "amber");
-  const timing = await page.evaluate(() => {
-    const w = window as unknown as { __themeSetAt: number | null };
-    const paint = performance.getEntriesByName("first-paint")[0];
-    return { themeSetAt: w.__themeSetAt, firstPaint: paint?.startTime };
-  });
-  expect(timing.themeSetAt).not.toBeNull();
-  expect(timing.firstPaint).toBeDefined();
-  expect(timing.themeSetAt!).toBeLessThan(timing.firstPaint!);
+  const themeSetAt = await page.evaluate(
+    () => (window as unknown as { __themeSetAt: number | null }).__themeSetAt,
+  );
+  expect(themeSetAt).not.toBeNull();
+  expect(themeSetAt!).toBeLessThan(await firstPaint(page));
 
   const again = await openTerminal(page, isMobile);
   await run(again, "theme gray");

@@ -7,6 +7,7 @@ import {
   type Locale,
 } from "./support/content";
 import { test, expect } from "./support/fixtures";
+import { firstPaint } from "./support/paint";
 
 /** Paths to the 404 page, the locale it should detect and the path it shows. */
 const PATHS: [path: string, locale: Locale, shown: string][] = [
@@ -216,14 +217,11 @@ test("F3: with JavaScript no other locale's text is visible at first paint", asy
   });
   await page.goto("/pt-br/velho");
   await expect(page.locator("html")).toHaveAttribute("lang", langCode["pt-br"]);
-  const timing = await page.evaluate(() => ({
-    langSetAt: (window as unknown as { __langSetAt: number | null })
-      .__langSetAt,
-    firstPaint: performance.getEntriesByName("first-paint")[0]?.startTime,
-  }));
-  expect(timing.langSetAt).not.toBeNull();
-  expect(timing.firstPaint).toBeDefined();
-  expect(timing.langSetAt!).toBeLessThan(timing.firstPaint!);
+  const langSetAt = await page.evaluate(
+    () => (window as unknown as { __langSetAt: number | null }).__langSetAt,
+  );
+  expect(langSetAt).not.toBeNull();
+  expect(langSetAt!).toBeLessThan(await firstPaint(page));
   await expect(
     page.getByText(text("en", "notFound.line"), { exact: true }),
   ).toBeHidden();
