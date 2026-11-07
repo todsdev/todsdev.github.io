@@ -2,13 +2,19 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import {
+  langCode,
+  localePath,
   locales,
+  shortCode,
   t,
   type Locale,
   type TranslationKey,
 } from "../../../src/i18n";
 
-export { locales, type Locale };
+export { langCode, localePath, locales, shortCode, type Locale };
+
+/** The production origin, as absolute URLs in the built pages use it. */
+export const SITE = "https://todsdev.github.io";
 
 /** A dictionary string, so expectations come from the same source as the page's text. */
 export const text = (locale: Locale, key: TranslationKey): string =>

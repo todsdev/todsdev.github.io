@@ -27,7 +27,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 5. i18n and navigation tests
 
-- [ ] 5.1 Write I1–I5 in `i18n.spec.ts`, using accessible names through role locators; verify they pass and fail against their breakages
+- [x] 5.1 Write I1–I5 in `i18n.spec.ts`, using accessible names through role locators; verify they pass and fail against their breakages
 - [ ] 5.2 Write N1 and N2 in `navigation.spec.ts`; verify they pass and fail against their breakages
 
 ## 6. Section and résumé tests
@@ -79,11 +79,11 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | H3 | Change the photo's `src` to a missing file | `naturalWidth` expected `> 0`, received `0`, in desktop and mobile |
 | H4 | Remove the skip listeners from `hero.ts` | `data-hero-state` expected `done`, received `typing`, for both key and pointer, in desktop and mobile |
 | H5 | Add a second `h1` to the hero | `locator('h1')` count expected 1, received 2, in desktop and mobile |
-| I1 | Remove the `x-default` alternate | |
-| I2 | Revert a switcher name to the language only | |
-| I3 | Drop the hash in the switcher script | |
-| I4 | Redirect `/es/` too, or use the browser language | |
-| I5 | Render the switcher links without `href` when JS is off | |
+| I1 | Remove the `x-default` alternate | The alternates list lacked the `x-default` entry (`toEqual` mismatch), in desktop and mobile |
+| I2 | Revert a switcher name to the language only | Link `EN — English` not found (`getByRole` with `exact`), in desktop and mobile. The names are literal in the test, because a dictionary-driven expectation would follow the breakage |
+| I3 | Drop the hash in the switcher script | URL expected `/pt-br/#projects`, received `/pt-br/`, in desktop and mobile |
+| I4 | Redirect `/es/` too, or use the browser language | Used the browser language instead of the saved choice: the saved-choice test got `/#about` instead of `/pt-br/#about`, and the browser-language test got `pt-BR` redirected (`lang` expected `en`), in desktop and mobile |
+| I5 | Render the switcher links without `href` when JS is off | Removed the `href`: the `href` expectation `/` failed (link `EN — English` has no `href`), in desktop (mobile skips) |
 | S1 | Swap two sections in `Portfolio.astro` | |
 | S2 | Remove one journey step from the markup | |
 | S3 | Hide one experience entry's marker | |

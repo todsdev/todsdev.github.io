@@ -1,6 +1,5 @@
 import type { Page } from "@playwright/test";
-import { localePath } from "../../src/i18n";
-import { locales, profile, text } from "./support/content";
+import { localePath, locales, profile, text } from "./support/content";
 import { test, expect } from "./support/fixtures";
 
 const { name, role } = profile();
