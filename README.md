@@ -10,10 +10,10 @@ One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, 
 
 The site was specified before it was coded, using Spec-Driven Development with [OpenSpec](https://github.com/Fission-AI/OpenSpec): every change starts as a proposal with requirements and scenarios, then becomes tasks, and the specs stay as the record of what the site does.
 
-- **Specs:** 20 capabilities in [`openspec/specs/`](openspec/specs/).
-- **Changes:** 18 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
+- **Specs:** 21 capabilities in [`openspec/specs/`](openspec/specs/).
+- **Changes:** 19 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
 - **One commit per task:** every task is a Conventional Commit on a feature branch, merged to `main` with a merge commit, so the history reads as the plan.
-- **Automated browser verification:** 92 headless-Chrome suites cover layout, fonts, layout shift, language switching, keyboard use, accessibility and analytics. They run from a separate private repository against a local build before a merge and against the live site after each deploy.
+- **Automated browser verification:** a Playwright suite in the repository (`tests/e2e/`) runs on every pull request against the production build, and a smoke subset checks the live site after each deploy. Behind it, 92 deeper headless-Chrome suites cover layout, fonts, layout shift, language switching, keyboard use, accessibility and analytics. They run from a separate private repository against a local build before a merge and against the live site after each deploy.
 
 The sections below document the project itself.
 
@@ -32,16 +32,30 @@ npm run dev
 
 ## Scripts
 
-| Command                | What it does                                                |
-| ---------------------- | ----------------------------------------------------------- |
-| `npm run dev`          | Start the dev server at `http://localhost:4321`             |
-| `npm run build`        | Build the static site into `dist/`                          |
-| `npm run preview`      | Serve the built `dist/` locally                             |
-| `npm run check`        | Type-check `.astro` and `.ts` files                         |
-| `npm run lint`         | Lint with ESLint                                            |
-| `npm run format`       | Format all files with Prettier                              |
-| `npm run format:check` | Verify formatting without writing changes                   |
-| `npm test`             | Run the automated tests (`*.test.ts`, Node built-in runner) |
+| Command                  | What it does                                                       |
+| ------------------------ | ------------------------------------------------------------------ |
+| `npm run dev`            | Start the dev server at `http://localhost:4321`                    |
+| `npm run build`          | Build the static site into `dist/`                                 |
+| `npm run preview`        | Serve the built `dist/` locally                                    |
+| `npm run check`          | Type-check `.astro` and `.ts` files                                |
+| `npm run lint`           | Lint with ESLint                                                   |
+| `npm run format`         | Format all files with Prettier                                     |
+| `npm run format:check`   | Verify formatting without writing changes                          |
+| `npm test`               | Run the automated tests (`*.test.ts`, Node built-in runner)        |
+| `npm run test:e2e`       | Build the site and run the browser tests headless                  |
+| `npm run test:e2e:ui`    | Open the same browser tests in Playwright's UI                     |
+| `npm run test:e2e:smoke` | Run the smoke subset against the live site, with analytics blocked |
+
+### Browser tests
+
+The browser tests (`tests/e2e/`, Playwright) run against the production build served on port 4322, in Chromium at a desktop and a phone viewport. Install the browser once; `--with-deps` also installs the system libraries on Linux:
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
+
+`npm run test:e2e` builds the site first and never reuses a server already on port 4322, so stop any other preview there. The HTML report is written to `playwright-report/`; open it with `npx playwright show-report`.
 
 ## Languages
 
@@ -360,8 +374,10 @@ GitHub Pages serves one `404.html` for every unknown path, so the page works out
 
 The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
 
-- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check`, `npm test` and `npm run build`. Nothing is deployed.
-- **Push or merge to `main`** (or a manual **Run workflow**): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
+- **Pull requests to `main`:** `.github/workflows/ci.yml` runs one check, **Gates and browser tests**: `npm ci`, `npm run lint`, `npm run check`, `npm run format:check`, `npm test`, `npm run build`, then the Playwright browser tests against that build. Nothing is deployed. If the browser tests fail, the HTML report (with traces) is attached to the run as an artifact for 7 days. `main` requires this check to pass before a merge (no required reviews, and the rule isn't enforced for administrators).
+- **Push or merge to `main`** (or a manual **Run workflow** on `main`): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
+- **Only `main` publishes:** the deploy job runs only for `main`, on a push or a manual run. A manual run on any other branch builds the site and skips the deploy.
+- **Smoke check:** after a successful deploy, the **Smoke check the live site** job runs `npm run test:e2e:smoke` against `https://todsdev.github.io`: the home in three locales, a 404 page and the `og:image` files, with analytics blocked, so no event reaches Umami. A failure marks the run red but doesn't roll anything back; see Rollback.
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
 - **Rollback:** open a PR that reverts the offending merge and merge it; the workflow redeploys the previous state.
