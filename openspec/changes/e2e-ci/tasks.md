@@ -50,7 +50,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 9. SEO and built output tests
 
 - [x] 9.1 Write E1–E5 in `seo.spec.ts`; verify they pass and fail against their breakages
-- [ ] 9.2 Write B1 and B2 in `build-output.spec.ts`; verify they run once per run and fail against their breakages
+- [x] 9.2 Write B1 and B2 in `build-output.spec.ts`; verify they run once per run and fail against their breakages
 - [ ] 9.3 Write `support/phone.ts`, B3 and B4 per decision 4, reading the number from `2-phone.yaml` at test time, with a fictional number in B4; verify B3 passes on `dist/`, fails naming the file on a scratch doctored copy for the international, national and subscriber forms with separators, for JSON-LD, each `terminal.json`, `tel:` and `wa.me/`, and fails on an empty `DIST`
 - [ ] 9.4 Search the output and HTML report of the failing runs from 9.3 for the real digits, printing only whether they match; verify there is no match, and that `tests/e2e` and the CI workflow hold no copy of the number
 
@@ -125,8 +125,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | E3 | Serve a wrong-size PNG in a doctored copy | Replaced by a better breakage: the generator's height set to 600 in `src/lib/seo.ts`, so the built PNG is 1200×600: `[width, height]` differed from `[1200, 630]` (locale `en`), in desktop |
 | E4 | Emit the canonical on the 404 page | The counts differed from all zeros (canonical 1), in desktop |
 | E5 | Add a `telephone` field with a fictional number | The keys included `telephone`, expected absent, in desktop |
-| B1 | Add the 404 page to the sitemap | |
-| B2 | Remove the sitemap line from robots | |
+| B1 | Add the 404 page to the sitemap | The `<loc>` list had one extra entry (`/404.html`) compared with the three homes (`toEqual`), in desktop. The file runs once per run: the mobile project ignores it (2 tests ran, not 4) |
+| B2 | Remove the sitemap line from robots | `Sitemap: https://todsdev.github.io/sitemap.xml` was missing from `[User-agent: *, Allow: /]`, in desktop |
 | B3 | Write the number from the YAML into a scratch doctored copy (each form and file, per 9.3) | |
 | B4 | Remove the separator tolerance from the matcher | |
 | M1 | Doctored preview: wrong `lang` | |
