@@ -1,6 +1,6 @@
 # todsdev.github.io
 
-One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses, in English, Portuguese and Spanish. Live at <https://todsdev.github.io/>.
+One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, projects and skills, in English, Portuguese and Spanish. Live at <https://todsdev.github.io/>.
 
 ![The portfolio's hero: the name, "Android Developer" and a photo on a dark terminal-style page](docs/assets/hero.png)
 
@@ -85,7 +85,7 @@ Portfolio data lives in YAML under `src/content/<collection>/`, one file per ent
 
 | Collection   | Fields (L = translatable)                                                                                                                                                        |
 | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `sourceUrl?`, `availability` — single entry                                                  |
+| `profile`    | `name`, `role` (L), `location` (L), `summary` (L), `journey`, `focus` (L), `photo`, `sourceUrl?`, `availability`, `courses` — single entry                                       |
 | `contacts`   | `kind` (`email` \| `phone` \| `whatsapp` \| `linkedin` \| `github` \| `instagram` \| `other`), `label` (L), `value`, `url`                                                       |
 | `experience` | `company`, `role` (L), `location` (L), `start`, `end` (omit if current), `description` (L), `tech[]`, `events[]?`                                                                |
 | `projects`   | `title`, `description` (L), `status` (`live` \| `building`), `ownership` (`contributor` \| `owner`), `owner?`, `via?`, `url?`, `repoUrl?`, `stores?`, `screenshots[]?`, `tech[]` |
@@ -156,6 +156,20 @@ availability:
 - `photo` is a path relative to `profile.yaml`. The image is optimized at build time (AVIF/WebP, responsive sizes). To change the photo, drop the new file next to `profile.yaml` and update the path (or overwrite `photo.jpg`). A 4:5 portrait works best (the current one is 960×1200). Strip location metadata before committing, because the original file is published too. A missing file fails the build with `photo: image file not found`.
 - `availability` drives the `● open to work` badge in the hero. Set `enabled: false` to hide it, or change `label` to reword it. No code changes are needed. The label is translatable and falls back to English.
 
+### Courses flag
+
+`courses.enabled` in the same file turns the whole courses feature on or off. It is required, so a missing or non-boolean value fails the build:
+
+```yaml
+# src/content/profile/profile.yaml (excerpt)
+courses:
+  enabled: false
+```
+
+- **While `false`, it hides:** the courses section and its nav link, the `certs` command and the `courses/` directory in the terminal (so `certs` is "command not found", Tab never offers either, and `terminal.json` has no certificates), the hosted certificate PDFs (`/certificates/*.pdf` is not built and returns 404), and the course mention in the meta description (`meta.descriptionNoCourses` is used instead).
+- **Turning it back on:** set `enabled: true`. No other edit is needed. The course YAMLs, the section component and the PDFs stay in the repository, and the same URLs come back.
+- **Re-running the check:** the flag-on code is not exercised while the flag is off. After turning it on, run `npm test`, `npm run test:e2e` (the tests that assert absence skip) and the `c-layout`, `c-links` and `c-stable` suites, then compare `dist/` with a build of `main` from a `git worktree`, normalizing the build date and asset hashes. The output should match `main` from before the flag existed. Task 7.1 of the `hide-courses` change records how it was done the first time.
+
 ### Projects
 
 Each project becomes a card in the projects section, featured projects first, then by `order`.
@@ -184,13 +198,15 @@ Each contact is one line in the contact section: `label · value · actions`, in
 
 ### Courses
 
+The section exists only while `courses.enabled` is `true` (see [Courses flag](#courses-flag)).
+
 Each course is one line in the courses section (`ls -l` style): localized date · issuer · title · `$ open cert`. Featured courses come first, then the rest, newest first; courses with the same date follow `order`.
 
 - `title` and `issuer` are shown exactly as printed on the certificate. They are names, so they aren't translated.
 - `date` is the completion date (`YYYY-MM-DD`). The page shows the month and year from the locale's month dictionary ("Nov 2022" / "nov 2022").
 - `certificateUrl` opens in a new tab:
   - **Udemy:** use the official `https://www.udemy.com/certificate/UC-…/` URL.
-  - **Share links that can expire (e.g. Adobe):** host the PDF instead. Put it in `public/certificates/<issuer>-<course>.pdf` and use its absolute site URL (`https://todsdev.github.io/certificates/…`). Keep the original link in a YAML comment.
+  - **Share links that can expire (e.g. Adobe):** host the PDF instead. Put it in `src/content/courses/certificates/<issuer>-<course>.pdf` and use its absolute site URL (`https://todsdev.github.io/certificates/…`). It is published there by an endpoint (`src/pages/certificates/[name].pdf.ts`), only while `courses.enabled` is `true`. Keep the original link in a YAML comment.
 - Before publishing a PDF, strip its metadata: the Info dictionary (title, author, producer, dates), XMP, and generator annotations. Check that it still renders the same page.
 
 ### Translatable fields
@@ -255,17 +271,17 @@ A hidden terminal for curious visitors. The site never depends on it: without Ja
 - **Closing:** `Esc` (in vim mode, the first `Esc` only leaves vim), `exit` or the `[x]` button; focus goes back to where it was. While it's open, focus stays inside (Tab completes, Shift+Tab reaches `[x]`) and the page behind is inert.
 - **Shell:** prompt `visitor@todsdev:~$`, ↑/↓ history (this page load only), Tab completion of the commands `help` lists and their arguments (including `.secrets` after `cat ` and `-a` after `ls `), and "did you mean …?" for typos. Commands are English; output follows the page's language.
 
-| Command                                                | Does                                                                                         |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| `help`                                                 | Lists the commands below with a description, then a dim hint to try `ls -a`                  |
-| `whoami`, `about`                                      | Name, role · location, summary                                                               |
-| `experience`, `projects`, `skills`, `certs`, `contact` | Compact text versions of the sections (`cat skills.txt` is `skills`)                         |
-| `ls`, `cd <section>`                                   | Lists the sections (`-a` adds `.secrets`); closes the terminal and scrolls to one (`~`: top) |
-| `resume`                                               | Downloads the résumé of the page's language                                                  |
-| `open github\|linkedin\|instagram\|repo`               | Opens the link in a new tab (`repo` is this site's source)                                   |
-| `lang en\|pt\|es`                                      | Switches language, keeping the active section, and remembers it like the switcher            |
-| `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default    |
-| `clear`, `history`, `exit`                             | As in a shell                                                                                |
+| Command                                                | Does                                                                                                                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `help`                                                 | Lists the commands below with a description, then a dim hint to try `ls -a`                                                 |
+| `whoami`, `about`                                      | Name, role · location, summary                                                                                              |
+| `experience`, `projects`, `skills`, `certs`, `contact` | Compact text versions of the sections (`cat skills.txt` is `skills`); `certs` exists only while `courses.enabled` is `true` |
+| `ls`, `cd <section>`                                   | Lists the sections (`-a` adds `.secrets`); closes the terminal and scrolls to one (`~`: top)                                |
+| `resume`                                               | Downloads the résumé of the page's language                                                                                 |
+| `open github\|linkedin\|instagram\|repo`               | Opens the link in a new tab (`repo` is this site's source)                                                                  |
+| `lang en\|pt\|es`                                      | Switches language, keeping the active section, and remembers it like the switcher                                           |
+| `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default                                   |
+| `clear`, `history`, `exit`                             | As in a shell                                                                                                               |
 
 Some commands are left out of `help` on purpose. They are listed below, behind a spoiler.
 
@@ -324,7 +340,7 @@ Page views come from Umami itself, per path (`/`, `/pt-br/`, `/es/`). On top of 
 | `vcard`            |                   | `$ wget contact.vcf`                                                                                                                          |
 | `resume`           | `language`        | `$ wget resume.pdf` or the terminal's `resume` (the language of the file served, after fallback)                                              |
 | `project_link`     | `project`, `link` | A project link is opened (`play-store`, `app-store`, `site`, `repo`); `project` is the entry id                                               |
-| `certificate`      | `course`          | `$ open cert`; `course` is the entry id                                                                                                       |
+| `certificate`      | `course`          | `$ open cert`; `course` is the entry id. Only while `courses.enabled` is `true`                                                               |
 | `not_found`        | `path`            | The 404 page loads (path only, no query or hash)                                                                                              |
 | `terminal_open`    |                   | The terminal opens (once per opening)                                                                                                         |
 | `terminal_command` | `command`         | A terminal command runs: its name (`./gradlew` → `gradlew`, `ls -a` → `ls`, `:q` in vim → `vim`), or `unknown`; never arguments or typed text |

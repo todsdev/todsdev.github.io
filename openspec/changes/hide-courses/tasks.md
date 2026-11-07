@@ -38,7 +38,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 ## 6. Docs
 
-- [ ] 6.1 Update the README: drop "and courses" from the introduction, document `courses.enabled` next to the availability badge (what it hides, how to turn it back on, re-running task 7.1's check), mark `certs` and the certificate hosting as flag-dependent, and update the certificate hosting path; verify `npm run format:check` passes and the spec's documentation scenarios hold
+- [x] 6.1 Update the README: drop "and courses" from the introduction, document `courses.enabled` next to the availability badge (what it hides, how to turn it back on, re-running task 7.1's check), mark `certs` and the certificate hosting as flag-dependent, and update the certificate hosting path; verify `npm run format:check` passes and the spec's documentation scenarios hold
 
 ## 7. Integration
 
