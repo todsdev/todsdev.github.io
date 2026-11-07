@@ -21,7 +21,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
   Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
 - [x] 3.3 Adapt S1, S9, S10, N2, E1 and E2 to `sections()` and the flag, and skip S6 with the spec's reason, adding `coursesEnabled()` and `sections()` to `support/content.ts` per decision 6; verify `npm run test:e2e` passes and S6 reports skipped with that reason
   Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
-- [ ] 3.4 Write C1 and C2 in `courses-off.spec.ts`; verify they pass in both projects and fail against their breakages
+- [x] 3.4 Write C1 and C2 in `courses-off.spec.ts`; verify they pass in both projects and fail against their breakages
 
 ## 4. Terminal
 
@@ -50,8 +50,8 @@ Fill "Observed" with the failing assertion and the project where it failed.
 
 | Test | Planned breakage | Observed |
 | --- | --- | --- |
-| C1 | Render `Courses` regardless of the flag | |
-| C2 | Add a stray `<div id="courses">` at the end of `<main>` | |
+| C1 | Render `Courses` regardless of the flag | `#courses` count: expected 0, received 1 (`en`), in desktop and mobile |
+| C2 | Add a stray `<div id="courses">` at the end of `<main>` | `window.scrollY` after `/#courses`: expected 0, received 2 (`en`), in desktop and mobile; C1 also failed on the extra `#courses` |
 | C3 | Drop the `section` tag from `certs` | |
 | C4 | Always include `certs` in `terminal.json` | |
 | C5 | `getStaticPaths` ignoring the flag; then the old description key | |
