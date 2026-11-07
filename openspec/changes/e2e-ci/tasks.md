@@ -44,7 +44,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 8. 404 and analytics tests
 
-- [ ] 8.1 Write F1–F3 in `not-found.spec.ts`, serving `/404.html` as the navigation response for the cases `astro preview` rejects; verify they pass and fail against their breakages
+- [x] 8.1 Write F1–F3 in `not-found.spec.ts`, serving `/404.html` as the navigation response for the cases `astro preview` rejects; verify they pass and fail against their breakages
 - [ ] 8.2 Write A1 and A2; verify they pass and fail against their breakages, and the captured request is the only evidence used, with no `window` recording
 
 ## 9. SEO and built output tests
@@ -111,9 +111,9 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | T11 | Stop persisting the theme | Stored theme expected `amber`, received `null`, in desktop and mobile. A second breakage, applying the stored theme 500 ms late, failed the before-first-paint check (theme set at 512 ms, first paint at 28 ms or earlier) |
 | T12 | Render typed input as HTML in the log | The echo line read `visitor@todsdev:~$ x` instead of the typed markup, in desktop and mobile |
 | T13 | Leave the terminal open after `cd` | The dialog stayed visible, expected hidden, in desktop and mobile |
-| F1 | Always use English on the 404 page | |
-| F2 | Use `innerHTML` for the 404 path | |
-| F3 | Remove the no-JS generic path | |
+| F1 | Always use English on the 404 page | `lang` expected `pt-BR`, received `en` on `/pt-br/projetos/velho`, in desktop and mobile |
+| F2 | Use `innerHTML` for the 404 path | The markup, script tag and quotes paths failed (the shown path no longer matched, `/` instead of the typed markup); the long, emoji, malformed and accented paths, which hold no HTML, still passed. Desktop at 320px |
+| F3 | Remove the no-JS generic path | h1 expected `bash: /this-page: command not found`, received `bash: : command not found`, in desktop. A second breakage, setting `lang` 500 ms late, failed the first-paint check (set at 509 ms, first paint before 20 ms) |
 | A1 | Keep the query in `notFoundPath` | |
 | A2 | Send `not_found` on every page | |
 | A3 | Remove `data-event` from a nav link | No `nav_click` event was intercepted (the list stayed empty, expected one), in desktop and mobile |
