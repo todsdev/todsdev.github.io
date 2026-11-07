@@ -47,13 +47,6 @@ Every page SHALL be rendered within a common shell that sets the document langua
 - **WHEN** a page provides its own title
 - **THEN** the rendered `<title>` reflects that page's title
 
-### Requirement: Not-found page
-The site SHALL provide a simple placeholder not-found page, using the shared shell and English dictionary strings, that is served for unknown paths and links back to the home page. A terminal-style 404 is out of scope.
-
-#### Scenario: Unknown path
-- **WHEN** a visitor requests a path that does not exist on the deployed site
-- **THEN** the custom not-found page is shown with a link to `/`
-
 ### Requirement: Quality checks
 The project SHALL provide commands for type checking, linting and format verification, each exiting non-zero when it finds a problem.
 
@@ -75,3 +68,10 @@ The project SHALL provide a test command (`npm test`) that runs automated tests 
 #### Scenario: Failing test
 - **WHEN** a test assertion fails, e.g. the fallback no longer returns the English value
 - **THEN** `npm test` exits with a non-zero status and names the failing test
+
+### Requirement: Lighthouse targets
+The locale pages (`/`, `/pt-br/`, `/es/`) SHALL score 100 in Accessibility, Best Practices and SEO and at least 95 in Performance, on mobile and desktop, as the median of 3 Lighthouse runs against the local production build.
+
+#### Scenario: Measured results
+- **WHEN** Lighthouse runs against the production build for each page and form factor
+- **THEN** each median meets its target, or the gap is reported to the owner with a proposed fix

@@ -92,6 +92,7 @@ If a check fails, assume the site regressed until a control says otherwise:
   - **PDFs:** rewrite with a scratch `pdf-lib` script that removes the Info dictionary, XMP, generator annotations and timestamps. Confirm the pages render pixel-identical to the originals.
 - **No layout shift:** reserve space up front (aspect ratios, reserved grid cells). Decide JS versus no-JS states by the `<html>` `js`/`no-js` class, which is set before first paint.
 - **Phone number:** it must never appear in built HTML or `terminal.json` (the résumés are a deliberate exception). After touching the contact code, run `seo-phone` (every built `.html` and `terminal.json`) or grep `dist/**/*.html` and `dist/**/terminal.json`.
+- **Gate results:** judge `npm run lint`, `check`, `format:check` and `test` by their exit code, and never truncate their output (`tail`, `head`) before reading the result. A truncated lint failure went unnoticed on three commits of the `polish` change.
 - **Terminal actions:** keep no whitespace between the command and its visually hidden destination (`{/* prettier-ignore */}` on that element).
 - **No `@types/node`:** use the small ambient files instead (`src/lib/node-test.d.ts`, `src/lib/node-build.d.ts`).
 - **Libraries:** keep `src/lib/*` pure and free of runtime imports (type-only imports are fine), so `node --test` runs them with type stripping.

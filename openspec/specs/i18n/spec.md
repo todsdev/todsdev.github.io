@@ -29,11 +29,15 @@ All UI strings (navigation, section titles, labels, aria-labels, the 404 page) S
 - **THEN** all navigation labels and section titles appear in Spanish
 
 ### Requirement: Language switcher
-The navigation SHALL include, on its right side and visible at every viewport width, one control per locale. Each shows a pixel-art flag (USA, Brazil, Spain), its code (`EN`, `PT`, `ES`) and an accessible name with the language name.
+The navigation SHALL include, on its right side and visible at every viewport width, one control per locale. Each shows a pixel-art flag (USA, Brazil, Spain) and its code (`EN`, `PT`, `ES`). Each accessible name SHALL start with the visible code, followed by the language name: `EN — English`, `PT — Português` and `ES — Español`, the same on every page.
 
 #### Scenario: Switcher contents
 - **WHEN** any page is rendered
-- **THEN** the switcher shows the USA flag with `EN`, the Brazil flag with `PT` and the Spain flag with `ES`, each with an accessible name such as "English", "Português (Brasil)" or "Español"
+- **THEN** the switcher shows the USA flag with `EN`, the Brazil flag with `PT` and the Spain flag with `ES`, with the accessible names `EN — English`, `PT — Português` and `ES — Español`
+
+#### Scenario: Name starts with the visible text
+- **WHEN** Lighthouse audits any locale page
+- **THEN** `label-content-name-mismatch` passes, with no switcher control flagged
 
 #### Scenario: Mobile visibility
 - **WHEN** the page is viewed at 320px wide
@@ -88,8 +92,12 @@ The site SHALL NOT redirect or switch locale based on the browser's language or 
 - **THEN** the English page is shown
 
 ### Requirement: Language metadata
-Each page SHALL declare its language on `<html lang>` (`en`, `pt-BR`, `es`) and SHALL link to all locale versions with `hreflang` alternates, including an `x-default` that points to English, using absolute URLs.
+Each page SHALL declare its language on `<html lang>` (`en`, `pt-BR`, `es`). Each locale page SHALL link to all locale versions with `hreflang` alternates, including an `x-default` that points to English, using absolute URLs. The not-found page SHALL have no `hreflang` alternates, and its `<html lang>` SHALL follow the requested path.
 
 #### Scenario: Portuguese page metadata
 - **WHEN** the `/pt-br/` page is inspected
 - **THEN** it has `<html lang="pt-BR">` and alternate links for `en`, `pt-BR`, `es` and `x-default` with absolute `https://todsdev.github.io/` URLs
+
+#### Scenario: Not-found page
+- **WHEN** a visitor opens `/es/viejo`
+- **THEN** `<html lang>` is `es` and the page has no alternate links

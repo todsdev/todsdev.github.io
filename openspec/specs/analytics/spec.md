@@ -39,11 +39,15 @@ Each page load on the production host SHALL record one page view for its path (`
 - **THEN** no page view or event is sent
 
 ### Requirement: Not-found event
-The 404 page SHALL record a `not_found` event whose data is the requested path (pathname only, no query or hash), so missing pages can be told apart from real ones.
+The 404 page SHALL record a `not_found` event whose data is the requested path (pathname only, no query or hash), so missing pages can be told apart from real ones. Its `locale` SHALL follow the page, as for every event: the locale resolved from the requested path.
 
 #### Scenario: Unknown path
 - **WHEN** a visitor opens `https://todsdev.github.io/old-page?x=1`
-- **THEN** a `not_found` event with `path` `/old-page` is recorded
+- **THEN** a `not_found` event with `path` `/old-page` and `locale` `en` is recorded
+
+#### Scenario: Localized path
+- **WHEN** a visitor opens `https://todsdev.github.io/pt-br/velho?x=1`
+- **THEN** a `not_found` event with `path` `/pt-br/velho` and `locale` `pt-br` is recorded
 
 ### Requirement: Contact events
 Each contact action click SHALL record a `contact` event with the contact `kind` (`email`, `phone`, `whatsapp`, `linkedin`, `github`, `instagram`) and the `action` (`mail`, `call`, `chat`, `open`, `copy`). The vCard download SHALL record a `vcard` event. The résumé download SHALL record a `resume` event with the `language` of the file served after fallback (`en`, `pt-br`, `es`).
