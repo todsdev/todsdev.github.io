@@ -52,7 +52,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 - [x] 9.1 Write E1–E5 in `seo.spec.ts`; verify they pass and fail against their breakages
 - [x] 9.2 Write B1 and B2 in `build-output.spec.ts`; verify they run once per run and fail against their breakages
 - [x] 9.3 Write `support/phone.ts`, B3 and B4 per decision 4, reading the number from `2-phone.yaml` at test time, with a fictional number in B4; verify B3 passes on `dist/`, fails naming the file on a scratch doctored copy for the international, national and subscriber forms with separators, for JSON-LD, each `terminal.json`, `tel:` and `wa.me/`, and fails on an empty `DIST`
-- [ ] 9.4 Search the output and HTML report of the failing runs from 9.3 for the real digits, printing only whether they match; verify there is no match, and that `tests/e2e` and the CI workflow hold no copy of the number
+- [x] 9.4 Search the output and HTML report of the failing runs from 9.3 for the real digits, printing only whether they match; verify there is no match, and that `tests/e2e` and the CI workflow hold no copy of the number
 
 ## 10. Deploy workflow and smoke
 
