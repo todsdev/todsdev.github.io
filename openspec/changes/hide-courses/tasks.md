@@ -43,7 +43,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 ## 7. Integration
 
 - [x] 7.1 Turn the flag on locally without committing, run `npm test`, `npm run test:e2e`, and `./run.sh` for `c-layout`, `c-links` and `c-stable`, then compare `dist/` with a `main` build from a `git worktree`, normalizing the build date and asset hashes; verify everything passes, C1–C5 report skipped, the only `dist/` differences are those two, and record the result in this file; revert the flag
-- [ ] 7.2 In `~/portfolio-verify-scripts`, add `COURSES` and `SECTIONS` to `lib.mjs`, apply design decision 7 to the listed suites, add `c-off` and classify it in `full.sh`, then commit and push there with the evidence; verify the three `c-*` suites print one `SKIP` line, `c-off` fails against C1's breakage once, and `full.sh` accepts the classification
+- [x] 7.2 In `~/portfolio-verify-scripts`, add `COURSES` and `SECTIONS` to `lib.mjs`, apply design decision 7 to the listed suites, add `c-off` and classify it in `full.sh`, then commit and push there with the evidence; verify the three `c-*` suites print one `SKIP` line, `c-off` fails against C1's breakage once, and `full.sh` accepts the classification
 - [ ] 7.3 Run `./full.sh` in the background; verify it reports 0 failed, with `c-layout`, `c-links` and `c-stable` skipped and `c-off` passing
 
 ## Flag-on check (task 7.1)
@@ -56,6 +56,18 @@ Run on 2026-11-08 with `courses.enabled: true` set locally and not committed, th
 - **A finding:** the first comparison showed `help.certs` last in `terminal.json` and `help` last in `strings`, because the payload was rebuilt by spreading. Values were equal, but the files didn't match `main`. Fixed in `stringsFor` (it now filters in place) and compared again: identical.
 - **Order of the runs:** the tests and the three `c-*` suites ran before that fix. Only the `dist/` comparison was repeated after it, and the flag-off gates and `npm run test:e2e` passed after it.
 
+## Verify-scripts evidence (task 7.2)
+
+- **`SKIP` lines:** with the flag off, `c-layout`, `c-links` and `c-stable` each print one `SKIP` line and exit 0. With it on they pass (37, 6 and 18 PASS) and `c-off` prints its `SKIP`.
+- **Flag-aware suites:** `kbd`, `l-nav`, `t64`, `t66`, `an-sections`, `an-markup`, `an-events`, `an-blocked`, `tm-commands`, `tm-shell` and `seo-meta` pass with the flag off and with it on. `an-live` is live only and was edited the same way, not run here.
+- **`full.sh`:** accepts the classification (it got to the build step instead of "unclassified scripts").
+- **`l-nav` tolerance (0.5px → 1px), with a control:** at 320px the last link's overhang is `scrollWidth`'s integer rounding against fractional positions. Worst overhang measured (px) at `/`, `/pt-br/`, `/es/`:
+  - `main` (`e365df0`, seven links): 0.38, 0.44, 0.44.
+  - this branch, flag on (seven links): 0.38, 0.44, 0.44, identical to `main`.
+  - this branch, flag off (six links): 0.38, 0.63, 0.63. This was the only failure, in `pt-br` and `es`.
+  - Breakage: `nav.ts` under-scrolling by 3px (`- 3` in `revealInStrip`) makes `l-nav` fail with the flag off: 3 PASS, 6 FAIL. Reverted.
+  - After the change: `l-nav` 9 PASS with the flag off and 9 PASS with it on.
+
 ## Breakage evidence
 
 Fill "Observed" with the failing assertion and the project where it failed.
@@ -67,7 +79,7 @@ Fill "Observed" with the failing assertion and the project where it failed.
 | C3 | Drop the `section` tag from `certs` | `en help` lists `certs`: expected the names not to contain it, in desktop (the first assertion; the later ones follow it) |
 | C4 | Always include `certs` in `terminal.json` | `terminal.json keys` (`en`): expected no `certs` property, received the five courses, in desktop |
 | C5 | `getStaticPaths` ignoring the flag; then the old description key | `getStaticPaths` ignoring the flag: `cursoemvideo-algoritmo.pdf` expected 404, received 200 (desktop). Old description key: `en meta[name="description"]` expected no course word, received "…skills and courses." (desktop). C5 runs once, in desktop |
-| c-off | Render `Courses` regardless of the flag | |
+| c-off | Render `Courses` regardless of the flag | 6 FAIL, 40 PASS, per locale: the absence check (`{"section":1,"links":1,"nav":1,"cert":5}`) and `/#courses` (scrolled to y≈5000, `courses` active) |
 
 ## Workflow follow-up
 
