@@ -42,9 +42,19 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 ## 7. Integration
 
-- [ ] 7.1 Turn the flag on locally without committing, run `npm test`, `npm run test:e2e`, and `./run.sh` for `c-layout`, `c-links` and `c-stable`, then compare `dist/` with a `main` build from a `git worktree`, normalizing the build date and asset hashes; verify everything passes, C1–C5 report skipped, the only `dist/` differences are those two, and record the result in this file; revert the flag
+- [x] 7.1 Turn the flag on locally without committing, run `npm test`, `npm run test:e2e`, and `./run.sh` for `c-layout`, `c-links` and `c-stable`, then compare `dist/` with a `main` build from a `git worktree`, normalizing the build date and asset hashes; verify everything passes, C1–C5 report skipped, the only `dist/` differences are those two, and record the result in this file; revert the flag
 - [ ] 7.2 In `~/portfolio-verify-scripts`, add `COURSES` and `SECTIONS` to `lib.mjs`, apply design decision 7 to the listed suites, add `c-off` and classify it in `full.sh`, then commit and push there with the evidence; verify the three `c-*` suites print one `SKIP` line, `c-off` fails against C1's breakage once, and `full.sh` accepts the classification
 - [ ] 7.3 Run `./full.sh` in the background; verify it reports 0 failed, with `c-layout`, `c-links` and `c-stable` skipped and `c-off` passing
+
+## Flag-on check (task 7.1)
+
+Run on 2026-11-08 with `courses.enabled: true` set locally and not committed, then reverted. `main` was `e365df0`, built in a `git worktree`.
+
+- **Unit tests and browser tests:** `npm test` passed (96 tests). `npm run test:e2e` passed: 112 passed, 28 skipped. S6 ran and passed in both projects, and C1–C5 reported skipped.
+- **Verify-scripts:** `c-layout` (37 PASS), `c-links` (6 PASS, the three hosted PDFs return 200) and `c-stable` (18 PASS) exited 0 with no FAIL.
+- **`dist/` against `main`:** the file lists match once asset hashes are normalized. After normalizing asset hashes, the three `index.html` and the three `terminal.json` are identical, and every file outside `_astro/` and the HTML and JSON is byte-identical (including the three certificate PDFs). The build date didn't differ, as both builds ran the same day. The only other differences are the hashed names of the two scripts that changed (`Terminal.astro…script_index_0_lang` and `terminal-shell`).
+- **A finding:** the first comparison showed `help.certs` last in `terminal.json` and `help` last in `strings`, because the payload was rebuilt by spreading. Values were equal, but the files didn't match `main`. Fixed in `stringsFor` (it now filters in place) and compared again: identical.
+- **Order of the runs:** the tests and the three `c-*` suites ran before that fix. Only the `dist/` comparison was repeated after it, and the flag-off gates and `npm run test:e2e` passed after it.
 
 ## Breakage evidence
 
