@@ -11,7 +11,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 ## 2. Flag and section list
 
 - [x] 2.1 Add `courses: { enabled: false }` to `profile.yaml` and the schema per design decision 1; verify the build fails naming the profile file and field when `courses` is removed or `enabled` is `"no"`, and passes as committed
-- [ ] 2.2 Add `renderedSections(courses)` to `src/lib/sections.ts` with unit tests for both values; verify `npm test` covers both and the order is unchanged otherwise
+- [x] 2.2 Add `renderedSections(courses)` to `src/lib/sections.ts` with unit tests for both values; verify `npm test` covers both and the order is unchanged otherwise
 
 ## 3. Page
 
