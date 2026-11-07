@@ -45,7 +45,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 8. 404 and analytics tests
 
 - [x] 8.1 Write F1–F3 in `not-found.spec.ts`, serving `/404.html` as the navigation response for the cases `astro preview` rejects; verify they pass and fail against their breakages
-- [ ] 8.2 Write A1 and A2; verify they pass and fail against their breakages, and the captured request is the only evidence used, with no `window` recording
+- [x] 8.2 Write A1 and A2; verify they pass and fail against their breakages, and the captured request is the only evidence used, with no `window` recording
 
 ## 9. SEO and built output tests
 
@@ -114,8 +114,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | F1 | Always use English on the 404 page | `lang` expected `pt-BR`, received `en` on `/pt-br/projetos/velho`, in desktop and mobile |
 | F2 | Use `innerHTML` for the 404 path | The markup, script tag and quotes paths failed (the shown path no longer matched, `/` instead of the typed markup); the long, emoji, malformed and accented paths, which hold no HTML, still passed. Desktop at 320px |
 | F3 | Remove the no-JS generic path | h1 expected `bash: /this-page: command not found`, received `bash: : command not found`, in desktop. A second breakage, setting `lang` 500 ms late, failed the first-paint check (set at 509 ms, first paint before 20 ms) |
-| A1 | Keep the query in `notFoundPath` | |
-| A2 | Send `not_found` on every page | |
+| A1 | Keep the query in `notFoundPath` | Sent `location.pathname + location.search` instead: the validator drops a path with `?`, so no `not_found` event arrived (expected one) for `/pt-br/velho?x=1#y`, in desktop and mobile. The page URL has its own query, so `notFoundPath` alone can't show the query: the script's argument is where it would leak |
+| A2 | Send `not_found` on every page | A locale page sent a `not_found` event (list expected empty, received one), in desktop and mobile |
 | A3 | Remove `data-event` from a nav link | No `nav_click` event was intercepted (the list stayed empty, expected one), in desktop and mobile |
 | A4 | Report the raw terminal input as the command | The `terminal_command` events were missing the `unknown` one: the validator drops a raw `__noop_check__`, so the list was short by one, in desktop and mobile |
 | A5 | Call `window.umami.track` with no guard | Unguarded `window.umami!.track(...)` in `track()`: the terminal log read `terminal unavailable. Reload the page to try again.` instead of containing `help`, in desktop and mobile |

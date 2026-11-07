@@ -1,3 +1,4 @@
+import { UMAMI_SCRIPT, WEBSITE_ID } from "../../src/lib/analytics";
 import { localePath, locales, text } from "./support/content";
 import { test, expect, type TrackedEvent } from "./support/fixtures";
 import { NOOP, openTerminal, run } from "./support/terminal";
@@ -87,4 +88,41 @@ test("A4: the terminal reports terminal_open and terminal_command, and an unknow
     ]);
   // The raw input never leaves the page.
   expect(JSON.stringify(events)).not.toContain(NOOP);
+});
+
+test("A1: a 404 reports not_found with the path and the detected locale", async ({
+  page,
+  events,
+}) => {
+  const visits: [url: string, path: string, locale: string][] = [
+    ["/pt-br/velho?x=1#y", "/pt-br/velho", "pt-br"],
+    ["/es/viejo", "/es/viejo", "es"],
+    ["/old-page?utm=1", "/old-page", "en"],
+  ];
+  for (const [url, path, locale] of visits) {
+    events.length = 0;
+    await page.goto(url);
+    await expect
+      .poll(() => only(events, "not_found"), url)
+      .toEqual([{ name: "not_found", data: { path, locale } }]);
+  }
+});
+
+test("A2: a locale page sends no not_found and has one async tracker tag", async ({
+  page,
+  events,
+}) => {
+  for (const locale of locales) {
+    events.length = 0;
+    await page.goto(localePath(locale));
+    // A page-load event arrives once the tracker has loaded: wait for the first.
+    await expect.poll(() => events.length, locale).toBeGreaterThan(0);
+    expect(only(events, "not_found")).toEqual([]);
+
+    const tag = page.locator("script[data-website-id]");
+    await expect(tag).toHaveCount(1);
+    await expect(tag).toHaveAttribute("src", UMAMI_SCRIPT);
+    await expect(tag).toHaveAttribute("data-website-id", WEBSITE_ID);
+    expect(await tag.evaluate((el: HTMLScriptElement) => el.async)).toBe(true);
+  }
 });
