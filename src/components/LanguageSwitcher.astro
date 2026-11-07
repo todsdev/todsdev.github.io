@@ -29,7 +29,7 @@ const flags = { en: FlagUS, "pt-br": FlagBR, es: FlagES } as const;
           href={localePath(l)}
           hreflang={langCode[l]}
           lang={langCode[l]}
-          aria-label={t(locale, `language.${l}` as const)}
+          aria-label={t(locale, `switcher.names.${l}` as const)}
           aria-current={l === locale ? "true" : undefined}
           data-locale={l}
         >

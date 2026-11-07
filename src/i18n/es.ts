@@ -194,6 +194,11 @@ export const es = {
   },
   switcher: {
     label: "Idioma",
+    names: {
+      en: "EN — English",
+      "pt-br": "PT — Português",
+      es: "ES — Español",
+    },
   },
   language: {
     en: "English",

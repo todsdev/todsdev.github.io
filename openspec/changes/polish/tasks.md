@@ -38,7 +38,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 ## 5. Language switcher
 
 - [x] 5.1 Update `t71` so each accessible name must start with the visible code and equal the expected string on `/`, `/pt-br/` and `/es/`, explaining it in the commit; verify it fails against the current build
-- [ ] 5.2 Add the `switcher.names` dictionary key and use it in `LanguageSwitcher.astro` per design decision 8; verify `t71`, `kbd`, `tm-theme` and `tm-open` pass, the `language.*` values are unchanged, and the switcher's layout doesn't change
+- [x] 5.2 Add the `switcher.names` dictionary key and use it in `LanguageSwitcher.astro` per design decision 8; verify `t71`, `kbd`, `tm-theme` and `tm-open` pass, the `language.*` values are unchanged, and the switcher's layout doesn't change
 
 ## 6. Lighthouse and contrast
 

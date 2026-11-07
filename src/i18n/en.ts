@@ -226,6 +226,12 @@ export const en = {
   },
   switcher: {
     label: "Language",
+    /** Accessible names of the switcher links: the visible code first (WCAG 2.5.3), the same in every locale. */
+    names: {
+      en: "EN — English",
+      "pt-br": "PT — Português",
+      es: "ES — Español",
+    },
   },
   language: {
     en: "English",
