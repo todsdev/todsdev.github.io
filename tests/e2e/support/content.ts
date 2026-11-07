@@ -40,6 +40,52 @@ export function collection(name: string): Entry[] {
     }));
 }
 
+const isLocalized = (value: object): value is { en: unknown } => {
+  const keys = Object.keys(value);
+  return (
+    keys.includes("en") &&
+    keys.every((key) => (locales as readonly string[]).includes(key))
+  );
+};
+
+/** Resolves every `{ en, pt-br, es }` field for a locale, falling back to English. */
+function localize(value: unknown, locale: Locale): unknown {
+  if (Array.isArray(value)) return value.map((v) => localize(v, locale));
+  if (value && typeof value === "object") {
+    if (isLocalized(value)) {
+      return localize(
+        (value as Record<string, unknown>)[locale] ?? value.en,
+        locale,
+      );
+    }
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, localize(v, locale)]),
+    );
+  }
+  return value;
+}
+
+/**
+ * The visible entries of a collection for a locale, in display order: `hidden` entries
+ * removed, sorted by `order` (none last, then by id), every translatable field resolved.
+ * The contacts are not available here: see `contacts()`.
+ */
+export function entries<T = Record<string, any>>( // eslint-disable-line @typescript-eslint/no-explicit-any
+  name: Exclude<string, "contacts">,
+  locale: Locale,
+): (T & { id: string })[] {
+  if (name === "contacts") throw new Error("Use contacts() for the contacts");
+  return collection(name)
+    .filter((entry) => !entry.hidden)
+    .sort(
+      (a, b) =>
+        ((a.order as number | undefined) ?? Infinity) -
+          ((b.order as number | undefined) ?? Infinity) ||
+        a.id.localeCompare(b.id),
+    )
+    .map((entry) => localize(entry, locale) as T & { id: string });
+}
+
 export interface Contact {
   kind: string;
   label: Partial<Record<Locale, string>> & { en: string };
