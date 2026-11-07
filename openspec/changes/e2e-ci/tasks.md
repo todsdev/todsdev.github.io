@@ -34,7 +34,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 - [x] 6.1 Write S1–S5 in `sections.spec.ts`, reading expectations from the dictionaries and content; verify they pass and fail against their breakages
 - [x] 6.2 Write S6–S10; verify they pass, S7 asserts no digits of the phone, and all fail against their breakages
-- [ ] 6.3 Write R1 and R2 in `resume.spec.ts`; verify they pass and fail against their breakages
+- [x] 6.3 Write R1 and R2 in `resume.spec.ts`; verify they pass and fail against their breakages
 
 ## 7. Terminal tests
 
@@ -96,8 +96,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | S10 | Gate section visibility on JS in CSS | Computed opacities were not all `1` without JS (the `.js` gate removed from the hidden rule), in desktop and mobile |
 | N1 | Stop `nav.ts` from marking the active link | `aria-current` expected `location`, received empty, for both the click and the deep link, in desktop and mobile. The deep link is its own test: a hash-only `goto` after a load didn't scroll in mobile |
 | N2 | Move the switcher before the nav in the DOM | The first Tab stop expected `Home`, received `EN — English`, in desktop |
-| R1 | Point the Spanish résumé link to the English PDF | |
-| R2 | Change the terminal's `resume` path | |
+| R1 | Point the Spanish résumé link to the English PDF | `href` expected `/resume/resume-es.pdf`, received `/resume/resume-en.pdf` (via the fallback in `src/lib/resume.ts`), in desktop and mobile |
+| R2 | Change the terminal's `resume` path | Download URL expected `/resume/resume-pt-br.pdf`, received `/resume/resume-en.pdf` (the path hard-coded in `src/lib/terminal-data.ts`), in desktop and mobile |
 | T1 | Remove Esc handling or the focus return | |
 | T2 | Remove the `>_` button | |
 | T3 | Fetch `terminal.json` on page load | |
