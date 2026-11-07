@@ -57,7 +57,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 10. Deploy workflow and smoke
 
 - [x] 10.1 Change `deploy.yml` per decision 6; verify `gh workflow run deploy.yml --ref feat/e2e-ci` runs the build and skips deploy, and later pushes to the PR start no `deploy.yml` run
-- [ ] 10.2 Write M1–M4 in `smoke.spec.ts`; verify `npm run test:e2e:smoke` passes against the live site with no beacon sent, that M4 fails with the block removed only against a local preview, and that the others fail against a doctored local preview through `SMOKE_URL`
+- [x] 10.2 Write M1–M4 in `smoke.spec.ts`; verify `npm run test:e2e:smoke` passes against the live site with no beacon sent, that M4 fails with the block removed only against a local preview, and that the others fail against a doctored local preview through `SMOKE_URL`
 - [ ] 10.3 Add the `smoke` job per decision 7; verify with `actionlint` or by reading the parsed workflow in `gh workflow view` that it needs `deploy`, and that the skipped run from 10.1 also skipped it
 - [ ] 10.4 Update the README's Deployment section and CLAUDE.md for `ci.yml`, the deploy condition, the smoke job, the required check on `main` and the relation to verify-scripts, adding `test:e2e` to the verification notes; verify `npm run format:check` passes and the spec's documentation scenarios hold
 
@@ -129,10 +129,10 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | B2 | Remove the sitemap line from robots | `Sitemap: https://todsdev.github.io/sitemap.xml` was missing from `[User-agent: *, Allow: /]`, in desktop |
 | B3 | Write the number from the YAML into a scratch doctored copy (each form and file, per 9.3) | On a scratch copy of `dist/` (deleted afterwards), a script read the number at run time and wrote it into seven places. `DIST=<copy>` failed B3 with the masked findings `index.html: international form, shape ## ## #####-####`; `pt-br/index.html: national form, shape ##) #####-####` (with parentheses); `es/index.html: subscriber form, shape ##### ####` (non-breaking space); `404.html: tel: link`; `terminal.json: international form`; `pt-br/terminal.json: wa.me/ link`; `es/terminal.json: national form`. A second copy with the number in the JSON-LD `telephone` of `index.html` failed with `index.html: international form`. An empty `DIST` failed on `files read` (expected 7, received 0). On the real `dist/` B3 passes |
 | B4 | Remove the separator tolerance from the matcher | With `SEP` set to the empty string, `found("+99 88 97777-0001")` expected `international`, received `undefined`, and the shape test received `undefined` (the "must not match" test still passed, as it should) |
-| M1 | Doctored preview: wrong `lang` | |
-| M2 | Doctored preview: remove the 404 script | |
-| M3 | Doctored preview: remove `og/en.png` | |
-| M4 | Remove the block, against a local preview only | |
+| M1 | Doctored preview: wrong `lang` | A scratch static server (deleted afterwards) served a copy of `dist/` with `lang="xx"` on the Portuguese home: `lang` expected `pt-BR`, received `xx`; the other three tests passed on the same copy. Run through `SMOKE_URL` |
+| M2 | Doctored preview: remove the 404 script | With the path script removed from `404.html`: h1 expected `bash: /pt-br/smoke-check-missing: command not found`, received `bash: /this-page: command not found` |
+| M3 | Doctored preview: remove `og/en.png` | Status for `/og/en.png` expected 200, received 404 (locale `en`) |
+| M4 | Remove the block, against a local preview only | With the Umami route removed from the fixture and an undoctored local copy as `SMOKE_URL`: `failed` expected to contain `https://cloud.umami.is/script.js`, received `[]`. Only M4 failed. It was not run against the live site without the block. `npm run test:e2e:smoke` passed against the live site with the block, and M4 showed that only the tracker script was requested (and stopped), so no beacon went out |
 
 ## Workflow follow-up
 
