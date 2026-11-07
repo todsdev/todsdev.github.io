@@ -168,7 +168,7 @@ test("T5: help lists the commands in the page's language", async ({
   isMobile,
 }) => {
   await expectOutput(page, isMobile, (locale) => [
-    ["help", texts(formatHelp(terminalStrings(locale)))],
+    ["help", texts(formatHelp(terminalStrings(locale), sections))],
   ]);
 });
 

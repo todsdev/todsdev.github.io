@@ -5,6 +5,7 @@
  * Commands and their arguments stay English in every locale.
  */
 import type { Dictionary } from "../i18n/en";
+import type { SectionId } from "./sections";
 
 /** The prompt shown before every input line. */
 export const PROMPT = "visitor@todsdev:~$";
@@ -15,6 +16,8 @@ export interface Command {
   hidden?: boolean;
   /** Arguments offered by Tab completion. Sections come from the caller. */
   args?: readonly string[] | "sections";
+  /** Only available while the page renders this section (see `available`). */
+  section?: SectionId;
 }
 
 /** Every command, in `help` order; hidden easter eggs last. */
@@ -25,7 +28,7 @@ export const COMMANDS: readonly Command[] = [
   { name: "experience" },
   { name: "projects" },
   { name: "skills" },
-  { name: "certs" },
+  { name: "certs", section: "courses" },
   { name: "contact" },
   { name: "ls", args: ["-a"] },
   { name: "cd", args: "sections" },
@@ -51,14 +54,31 @@ export const COMMANDS: readonly Command[] = [
   { name: "obs", hidden: true },
 ];
 
-/** Names `terminalCommand()` (src/lib/analytics.ts) reports; anything else is "unknown". */
+/** Every command name, whatever sections the page renders. */
 export const KNOWN: readonly string[] = COMMANDS.map((c) => c.name);
 
+/** Every `help` command, whatever sections the page renders. */
 export const VISIBLE: readonly string[] = COMMANDS.filter((c) => !c.hidden).map(
   (c) => c.name,
 );
 
-const byName = (name: string) => COMMANDS.find((c) => c.name === name);
+/** The commands usable on a page that renders `sections`: those tied to a section need it. */
+export function available(sections: readonly string[]): readonly Command[] {
+  return COMMANDS.filter((c) => !c.section || sections.includes(c.section));
+}
+
+/** Names `terminalCommand()` (src/lib/analytics.ts) reports; anything else is "unknown". */
+export const knownNames = (sections: readonly string[]): string[] =>
+  available(sections).map((c) => c.name);
+
+/** The `help` command names for `sections`, in table order. */
+export const visibleNames = (sections: readonly string[]): string[] =>
+  available(sections)
+    .filter((c) => !c.hidden)
+    .map((c) => c.name);
+
+const byName = (name: string, sections: readonly string[]) =>
+  available(sections).find((c) => c.name === name);
 
 export interface Parsed {
   /** Lowercased, with a leading "./" dropped ("./gradlew" → "gradlew", "./hello" → "hello"). */
@@ -99,7 +119,7 @@ export interface Completion {
 
 /**
  * Tab completion of the command name, or of the single argument of a command with `args`.
- * `sections` are the `cd` targets (without "hero").
+ * `sections` are the `cd` targets (without "hero"); they also decide which commands exist.
  */
 export function complete(
   input: string,
@@ -110,7 +130,7 @@ export function complete(
   if (tokens.length === 1) {
     const prefix = (tokens[0] ?? "").toLowerCase();
     // Easter eggs are never offered: they're found through `ls -a` and `cat .secrets`.
-    const visible = VISIBLE.filter((n) => n.startsWith(prefix));
+    const visible = visibleNames(sections).filter((n) => n.startsWith(prefix));
     if (visible.length === 1)
       return { value: `${visible[0]} `, candidates: [] };
     if (visible.length === 0) return none;
@@ -122,7 +142,7 @@ export function complete(
   }
   if (tokens.length !== 2) return none;
   const [name = "", partial = ""] = tokens;
-  const spec = byName(name.toLowerCase());
+  const spec = byName(name.toLowerCase(), sections);
   if (!spec?.args || spec.hidden) return none;
   const options = spec.args === "sections" ? sections : spec.args;
   // Keep a typed "~/" or "./" in front of a section.
@@ -169,10 +189,13 @@ function distance(a: string, b: string): number {
  * The known command closest to an unknown name: at most one edit away, or two for names
  * of seven or more characters (so "hello" doesn't suggest "help"). Ties keep table order.
  */
-export function suggest(name: string): string | undefined {
+export function suggest(
+  name: string,
+  sections: readonly string[],
+): string | undefined {
   const max = name.length >= 7 ? 2 : 1;
   let best: { name: string; d: number } | undefined;
-  for (const known of KNOWN) {
+  for (const known of knownNames(sections)) {
     const d = distance(name, known);
     if (d > 0 && d <= max && (!best || d < best.d)) best = { name: known, d };
   }
@@ -231,11 +254,14 @@ const plain = (texts: readonly string[]): Line[] =>
   texts.map((text) => ({ text }));
 
 /** The visible commands, then the dim hint that starts the trail to `ls -a`. */
-export function formatHelp(strings: Strings): Line[] {
+export function formatHelp(
+  strings: Strings,
+  sections: readonly string[],
+): Line[] {
   return [
     ...plain(
       pad(
-        VISIBLE.map((name) => [
+        visibleNames(sections).map((name) => [
           name,
           strings.help[name as keyof Strings["help"]] ?? "",
         ]),

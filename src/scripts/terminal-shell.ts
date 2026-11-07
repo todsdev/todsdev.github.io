@@ -8,7 +8,6 @@ import { decode } from "../lib/contact";
 import {
   ADB,
   GRADLE,
-  KNOWN,
   NEOFETCH_LOGO,
   PROMPT,
   SECRETS_FILE,
@@ -33,6 +32,7 @@ import {
   formatSecrets,
   formatSkills,
   formatWhoami,
+  knownNames,
   parse,
   sectionArg,
   THEME_KEY,
@@ -282,7 +282,7 @@ export function start(host: Host, data: TerminalData): Shell {
   }
 
   const commands: Record<string, Handler> = {
-    help: () => print(formatHelp(s)),
+    help: () => print(formatHelp(s, data.sections)),
     whoami: () => print(formatWhoami(data)),
     about: () => print(formatWhoami(data)),
     experience: () => print(formatExperience(data)),
@@ -433,7 +433,7 @@ export function start(host: Host, data: TerminalData): Shell {
 
   function notFound(name: string): void {
     say(fill(s.notFound, { name }), "error");
-    const close = suggest(name);
+    const close = suggest(name, data.sections);
     say(close ? fill(s.didYouMean, { command: close }) : s.helpHint, "muted");
   }
 
@@ -450,7 +450,9 @@ export function start(host: Host, data: TerminalData): Shell {
       if (!command) return;
       history.push(command);
       recallAt = history.length;
-      track("terminal_command", { command: terminalCommand(command, KNOWN) });
+      track("terminal_command", {
+        command: terminalCommand(command, knownNames(data.sections)),
+      });
       const { name, args } = parse(command);
       const handler = Object.hasOwn(commands, name)
         ? commands[name]

@@ -25,7 +25,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 ## 4. Terminal
 
-- [ ] 4.1 Add the `section` tag and `available(sections)` to `src/lib/terminal.ts` per decision 3, and pass `sections` to `formatHelp`, `suggest` and the known names, with unit tests for both flag states (help, Tab on `c` and `cd c`, `suggest("cert")`, `ls`); verify `npm test` passes and the updated existing tests still assert the flag-on output
+- [x] 4.1 Add the `section` tag and `available(sections)` to `src/lib/terminal.ts` per decision 3, and pass `sections` to `formatHelp`, `suggest` and the known names, with unit tests for both flag states (help, Tab on `c` and `cd c`, `suggest("cert")`, `ls`); verify `npm test` passes and the updated existing tests still assert the flag-on output
 - [ ] 4.2 Make `terminal-data.ts` omit `certs` and `help.certs` when off, and the shell dispatch only available commands; verify each built `terminal.json` has no `certs`, `courses` or course title, and `certs` reports `unknown` to analytics
 - [ ] 4.3 Adapt T5 and T6 to `sections()`, then write C3 and C4; verify they pass and C3 and C4 fail against their breakages
 

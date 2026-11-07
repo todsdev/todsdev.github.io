@@ -19,6 +19,7 @@ import {
   VIM_EXITS,
   VIM_PROMPT,
   VISIBLE,
+  available,
   complete,
   fill,
   formatCerts,
@@ -33,6 +34,7 @@ import {
   formatObs,
   formatPing,
   formatSecrets,
+  knownNames,
   formatProjects,
   formatSkills,
   formatWhoami,
@@ -215,14 +217,14 @@ test("Tab leaves other inputs alone", () => {
 });
 
 test("suggestions: one edit for short names, two from seven characters", () => {
-  assert.equal(suggest("whoamii"), "whoami");
-  assert.equal(suggest("neofech"), "neofetch");
-  assert.equal(suggest("hepl"), "help");
-  assert.equal(suggest("histroy"), "history");
-  assert.equal(suggest("hello"), undefined);
-  assert.equal(suggest("xyzzy"), undefined);
+  assert.equal(suggest("whoamii", SECTIONS), "whoami");
+  assert.equal(suggest("neofech", SECTIONS), "neofetch");
+  assert.equal(suggest("hepl", SECTIONS), "help");
+  assert.equal(suggest("histroy", SECTIONS), "history");
+  assert.equal(suggest("hello", SECTIONS), undefined);
+  assert.equal(suggest("xyzzy", SECTIONS), undefined);
   // Suggestions may name an easter egg: part of discovering them.
-  assert.equal(suggest("gti"), "git");
+  assert.equal(suggest("gti", SECTIONS), "git");
 });
 
 test("section arguments", () => {
@@ -332,7 +334,7 @@ test("every visible command has a help description in every locale", () => {
 });
 
 test("help lists exactly the visible commands, aligned, in the page's language", () => {
-  const lines = texts(formatHelp(ptBr.terminal)).slice(0, -1);
+  const lines = texts(formatHelp(ptBr.terminal, SECTIONS)).slice(0, -1);
   assert.deepEqual(
     lines.map((l) => l.split(/\s+/)[0]),
     [...VISIBLE],
@@ -455,7 +457,7 @@ test("help ends with the dim hint to ls -a in every locale", () => {
     es: "psst… no todo está en la lista. prueba ls -a",
   };
   for (const [locale, strings] of LOCALES) {
-    const lines = formatHelp(strings);
+    const lines = formatHelp(strings, SECTIONS);
     assert.deepEqual(lines.at(-1), { text: hints[locale], tone: "muted" });
     assert.equal(lines.length, VISIBLE.length + 1, locale);
   }
@@ -594,4 +596,72 @@ test("obs counts the OBS entry's Games and years from the content", async () => 
   });
   assert.throws(() => obsCounts(undefined), /olympic-broadcasting-services/);
   assert.throws(() => obsCounts({ start, events: [] }));
+});
+
+const NO_COURSES = SECTIONS.filter((id) => id !== "courses");
+
+test("certs is tied to the courses section: only available while it is rendered", () => {
+  assert.ok(available(SECTIONS).some((c) => c.name === "certs"));
+  assert.ok(!available(NO_COURSES).some((c) => c.name === "certs"));
+  assert.deepEqual(
+    available(NO_COURSES).map((c) => c.name),
+    COMMANDS.map((c) => c.name).filter((name) => name !== "certs"),
+  );
+  assert.deepEqual(knownNames(SECTIONS), [...KNOWN]);
+  assert.deepEqual(
+    knownNames(NO_COURSES),
+    KNOWN.filter((name) => name !== "certs"),
+  );
+});
+
+test("with courses off, help has no certs line in any locale", () => {
+  for (const [locale, strings] of LOCALES) {
+    const names = (sections: string[]) =>
+      texts(formatHelp(strings, sections))
+        .slice(0, -1)
+        .map((l) => l.split(/\s+/)[0]);
+    assert.ok(names(SECTIONS).includes("certs"), locale);
+    assert.deepEqual(
+      names(NO_COURSES),
+      VISIBLE.filter((name) => name !== "certs"),
+      locale,
+    );
+  }
+});
+
+test("with courses off, Tab on c and on cd c never offers certs or courses", () => {
+  assert.deepEqual(complete("c", NO_COURSES), {
+    value: "c",
+    candidates: ["cat", "cd", "clear", "contact"],
+  });
+  assert.deepEqual(complete("cd c", NO_COURSES), {
+    value: "cd contact",
+    candidates: [],
+  });
+  assert.deepEqual(complete("ce", NO_COURSES), {
+    value: "ce",
+    candidates: [],
+  });
+  // Typing certs by hand still gets no argument completion.
+  assert.deepEqual(complete("certs ", NO_COURSES), {
+    value: "certs ",
+    candidates: [],
+  });
+});
+
+test("with courses off, certs is no suggestion and is reported as unknown", () => {
+  assert.equal(suggest("cert", SECTIONS), "certs");
+  assert.equal(suggest("cert", NO_COURSES), undefined);
+  assert.equal(suggest("certs", NO_COURSES), undefined);
+  assert.equal(terminalCommand("certs", knownNames(SECTIONS)), "certs");
+  assert.equal(terminalCommand("certs", knownNames(NO_COURSES)), "unknown");
+});
+
+test("ls follows the sections it is given", () => {
+  assert.deepEqual(texts(formatLs(NO_COURSES)), [
+    "about/  experience/  projects/  skills/  contact/",
+  ]);
+  assert.deepEqual(texts(formatLs(NO_COURSES, true)), [
+    ".secrets  about/  experience/  projects/  skills/  contact/",
+  ]);
 });
