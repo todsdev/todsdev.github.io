@@ -49,3 +49,12 @@ export function contacts(): Contact[] {
     .map(({ kind, label, order }) => ({ kind, label, order }) as Contact)
     .sort((a, b) => a.order - b.order);
 }
+
+/** The profile's name and English role (the hero always shows the role in English). */
+export function profile(): { name: string; role: string } {
+  const [entry] = collection("profile") as unknown as {
+    name: string;
+    role: { en: string };
+  }[];
+  return { name: entry!.name, role: entry!.role.en };
+}

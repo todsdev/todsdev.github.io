@@ -23,7 +23,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 4. Hero tests
 
-- [ ] 4.1 Write H1–H5 in `hero.spec.ts`, recording whether H1 uses the clock or the fallback from decision 3; verify they pass in both projects and fail against their breakages
+- [x] 4.1 Write H1–H5 in `hero.spec.ts`, recording whether H1 uses the clock or the fallback from decision 3; verify they pass in both projects and fail against their breakages
 
 ## 5. i18n and navigation tests
 
@@ -74,11 +74,11 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 
 | Test | Planned breakage | Observed |
 | --- | --- | --- |
-| H1 | Stop `hero.ts` before the typo is fixed | |
-| H2 | Remove the reduced-motion branch from the hero | |
-| H3 | Change the photo's `src` to a missing file | |
-| H4 | Remove the skip listeners from `hero.ts` | |
-| H5 | Add a second `h1` to the hero | |
+| H1 | Stop `hero.ts` before the typo is fixed | `expect(state).toBe("done")` received `"typing"`, in desktop and mobile. H1 uses the clock (`page.clock`), not the fallback |
+| H2 | Remove the reduced-motion branch from the hero | `data-hero-state` expected `final`, received `typing`, in desktop and mobile |
+| H3 | Change the photo's `src` to a missing file | `naturalWidth` expected `> 0`, received `0`, in desktop and mobile |
+| H4 | Remove the skip listeners from `hero.ts` | `data-hero-state` expected `done`, received `typing`, for both key and pointer, in desktop and mobile |
+| H5 | Add a second `h1` to the hero | `locator('h1')` count expected 1, received 2, in desktop and mobile |
 | I1 | Remove the `x-default` alternate | |
 | I2 | Revert a switcher name to the language only | |
 | I3 | Drop the hash in the switcher script | |
