@@ -28,7 +28,7 @@ const titles = Object.fromEntries(
     // before any stylesheet so no other locale is painted. The first segment must be exactly
     // "pt-br" or "es". Keep in sync with `locales` and `langCode` in src/i18n/index.ts.
     (function () {
-      var first = location.pathname.split("/")[1];
+      const first = location.pathname.split("/")[1];
       document.documentElement.lang =
         first === "pt-br" ? "pt-BR" : first === "es" ? "es" : "en";
     })();
@@ -50,13 +50,13 @@ const titles = Object.fromEntries(
       // Right after the path span, so the path is in place before paint. Plain text only,
       // never innerHTML; a malformed escape keeps the raw path; the cut is by code point.
       (function () {
-        var path = location.pathname;
+        let path = location.pathname;
         try {
           path = decodeURIComponent(path);
-        } catch (e) {
+        } catch {
           // Keep the raw path.
         }
-        var chars = Array.from(path);
+        const chars = Array.from(path);
         if (chars.length > 80) path = chars.slice(0, 80).join("") + "…";
         document.querySelector("[data-nf-path]").textContent = path;
         document.title = titles[document.documentElement.lang] || titles.en;
