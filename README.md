@@ -10,8 +10,8 @@ One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, 
 
 The site was specified before it was coded, using Spec-Driven Development with [OpenSpec](https://github.com/Fission-AI/OpenSpec): every change starts as a proposal with requirements and scenarios, then becomes tasks, and the specs stay as the record of what the site does.
 
-- **Specs:** 20 capabilities in [`openspec/specs/`](openspec/specs/).
-- **Changes:** 18 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
+- **Specs:** 21 capabilities in [`openspec/specs/`](openspec/specs/).
+- **Changes:** 19 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
 - **One commit per task:** every task is a Conventional Commit on a feature branch, merged to `main` with a merge commit, so the history reads as the plan.
 - **Automated browser verification:** a Playwright suite in the repository (`tests/e2e/`) runs on every pull request against the production build, and a smoke subset checks the live site after each deploy. Behind it, 92 deeper headless-Chrome suites cover layout, fonts, layout shift, language switching, keyboard use, accessibility and analytics. They run from a separate private repository against a local build before a merge and against the live site after each deploy.
 
