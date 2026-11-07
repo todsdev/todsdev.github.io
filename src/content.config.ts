@@ -85,6 +85,10 @@ const profile = defineCollection({
         enabled: z.boolean(),
         label: localizedText,
       }),
+      /** Shows the Courses section, its nav link, terminal entries and certificate files. */
+      courses: z.object({
+        enabled: z.boolean(),
+      }),
     }),
 });
 
