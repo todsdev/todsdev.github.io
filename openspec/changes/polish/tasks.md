@@ -42,7 +42,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 
 ## 6. Lighthouse and contrast
 
-- [ ] 6.1 Write `lh-table`, classify it as a tool and run it (3 runs × 3 pages × 2 form factors, median); save `openspec/changes/polish/lighthouse.md`; verify the table has 6 rows, each a median of 3, and `label-content-name-mismatch` passes on every page
+- [x] 6.1 Write `lh-table`, classify it as a tool and run it (3 runs × 3 pages × 2 form factors, median); save `openspec/changes/polish/lighthouse.md`; verify the table has 6 rows, each a median of 3, and `label-content-name-mismatch` passes on every page
 - [ ] 6.2 Measure every color below 4.5:1, in all themes, including pseudo-elements and the 404 page, and save it as `openspec/changes/polish/contrast.md` with ratios and whether each element is decorative, `aria-hidden` or has empty alternative text; verify the Skills line numbers and all `--text-dim` uses are listed, `s-a11y` passes, and every text entry is absent from the accessibility tree
 - [ ] 6.3 Fix in-scope gaps; if a target needs a palette, font or animation change, or a below-4.5:1 element isn't decorative, **stop, propose the change and wait for the owner's approval**; verify by rerunning `lh-table` and that `lighthouse.md` meets the targets or lists each approved exception
 
