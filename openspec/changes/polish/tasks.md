@@ -26,7 +26,7 @@ Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check`
 - [x] 3.3 Render the tags and JSON-LD in `BaseLayout` for locale pages; verify `seo-meta`, `seo-jsonld` and `seo-phone` pass except the image checks, and no tag appears on the 404 page
 - [x] 3.4 Add `sitemap.xml` and `robots.txt` endpoints; verify `seo-sitemap` passes
 - [x] 3.5 Write `seo-image`, add `sharp` and `opentype.js`, and add `src/lib/og-image.ts` and `src/pages/og/[locale].png.ts`; verify `seo-image` fails first and then passes, `seo-meta` passes in full, and the images are inspected by eye and carry no metadata
-- [ ] 3.6 Document SEO, share images and the `meta.jobTitle` key in the README; verify `npm run format:check` passes
+- [x] 3.6 Document SEO, share images and the `meta.jobTitle` key in the README; verify `npm run format:check` passes
 
 ## 4. README and license
 

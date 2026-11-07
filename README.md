@@ -48,6 +48,8 @@ All user-visible UI text comes from the dictionaries; never hardcode text in com
 2. Add the same key to `src/i18n/pt-br.ts` and `src/i18n/es.ts`. A missing or extra key fails `npm run check`.
 3. Use it in a component with `t(locale, "group.key")` from `src/i18n/index.ts`; keys are type-checked.
 
+The job title has its own key, `meta.jobTitle`, because the hero's `profile.role` is "Android Developer" in every locale (see [Search and sharing](#search-and-sharing)).
+
 ## Content
 
 Portfolio data lives in YAML under `src/content/<collection>/`, one file per entry, validated by the Zod schemas in `src/content.config.ts`.
@@ -305,6 +307,17 @@ track("terminal_command", { command: terminalCommand(input, KNOWN) });
 ```
 
 The browser verification scripts (`~/portfolio-verify-scripts`, versioned in the private repo `todsdev/portfolio-verify-scripts`) replace Umami with a local stub by default, so test runs, including those against the live site, are never counted.
+
+## Search and sharing
+
+What search engines and link previews read comes from one place, `src/lib/seo.ts`, and `BaseLayout` renders it on the three locale pages (the 404 page gets none of it):
+
+- **Metadata:** a localized description (`meta.description`), a canonical URL with the trailing slash GitHub Pages serves (`https://todsdev.github.io/`, `/pt-br/`, `/es/`), `hreflang` alternates, Open Graph tags (`og:locale` is `en_US`, `pt_BR` or `es_ES`) and Twitter `summary_large_image` tags with the same values.
+- **Structured data:** a JSON-LD `Person` with the name, job title, URL, email and the LinkedIn, GitHub and Instagram links. It is built from named fields only, so the phone number can't reach it.
+- **Sitemap and robots:** `/sitemap.xml` lists the three locale homes with their alternates, and `/robots.txt` allows everything and points to it.
+- **Job title:** `meta.jobTitle` ("Android Developer", "Desenvolvedor Android", "Desarrollador Android") feeds the JSON-LD and the share image. The hero's `profile.role` stays "Android Developer" in every locale on purpose (the typo animation needs it), so `meta.title` must end with `meta.jobTitle`; a unit test checks it. `meta.ogImageAlt` is the share image's alt text.
+- **Share images:** `/og/en.png`, `/og/pt-br.png` and `/og/es.png` are generated at build time, 1200×630, in the gray theme: the hero's prompt line, the name and the job title. The glyphs of the bundled fonts become SVG paths (`opentype.js`) and `sharp` rasterizes them, so the result doesn't depend on the fonts installed on the build machine, and the PNGs carry no metadata. Keep `opentype.js` on 1.x: 2.0.0 returns broken coordinates for VT323.
+- **Phone number:** it never appears in built HTML or `terminal.json`, structured data included (see [Contact and footer](#contact-and-footer)).
 
 ## 404 page
 
