@@ -1,6 +1,21 @@
 # todsdev.github.io
 
-One-page personal portfolio of Thiago Rodrigues (Android Developer), built with [Astro](https://astro.build) and served by GitHub Pages at <https://todsdev.github.io/>.
+One-page personal portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses, in English, Portuguese and Spanish. Live at <https://todsdev.github.io/>.
+
+![The portfolio's hero: the name, "Android Developer" and a photo on a dark terminal-style page](docs/assets/hero.png)
+
+**Stack:** [Astro](https://astro.build) and TypeScript, built to static HTML with no UI framework, served by GitHub Pages and deployed by GitHub Actions. Content lives in YAML and the UI text in typed dictionaries, so adding a project or a translation never touches a component. Analytics are cookieless ([Umami](https://umami.is)).
+
+## How it was built
+
+The site was specified before it was coded, using Spec-Driven Development with [OpenSpec](https://github.com/Fission-AI/OpenSpec): every change starts as a proposal with requirements and scenarios, then becomes tasks, and the specs stay as the record of what the site does.
+
+- **Specs:** 17 capabilities in [`openspec/specs/`](openspec/specs/).
+- **Changes:** 17 archived changes in [`openspec/changes/archive/`](openspec/changes/archive/), each with its proposal, design, specs and tasks.
+- **One commit per task:** every task is a Conventional Commit on a feature branch, merged to `main` with a merge commit, so the history reads as the plan.
+- **Automated browser verification:** 91 headless-Chrome suites cover layout, fonts, layout shift, language switching, keyboard use, accessibility and analytics. They run from a separate private repository against a local build before a merge and against the live site after each deploy.
+
+The sections below document the project itself.
 
 ## Prerequisites
 
@@ -338,3 +353,7 @@ The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the rep
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
 - **Rollback:** open a PR that reverts the offending merge and merge it; the workflow redeploys the previous state.
+
+## License
+
+The code is released under the [MIT License](LICENSE). The personal content (texts, photo, résumés and certificates) is not: all rights are reserved, and app screenshots and names belong to their owners. See [NOTICE.md](NOTICE.md) for the split.
