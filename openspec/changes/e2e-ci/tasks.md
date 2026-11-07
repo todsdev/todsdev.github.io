@@ -28,7 +28,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 5. i18n and navigation tests
 
 - [x] 5.1 Write I1–I5 in `i18n.spec.ts`, using accessible names through role locators; verify they pass and fail against their breakages
-- [ ] 5.2 Write N1 and N2 in `navigation.spec.ts`; verify they pass and fail against their breakages
+- [x] 5.2 Write N1 and N2 in `navigation.spec.ts`; verify they pass and fail against their breakages
 
 ## 6. Section and résumé tests
 
@@ -94,8 +94,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | S8 | Remove the footer's privacy link | |
 | S9 | Keep sections hidden by not running `reveal.ts` | |
 | S10 | Gate section visibility on JS in CSS | |
-| N1 | Stop `nav.ts` from marking the active link | |
-| N2 | Move the switcher before the nav in the DOM | |
+| N1 | Stop `nav.ts` from marking the active link | `aria-current` expected `location`, received empty, for both the click and the deep link, in desktop and mobile. The deep link is its own test: a hash-only `goto` after a load didn't scroll in mobile |
+| N2 | Move the switcher before the nav in the DOM | The first Tab stop expected `Home`, received `EN — English`, in desktop |
 | R1 | Point the Spanish résumé link to the English PDF | |
 | R2 | Change the terminal's `resume` path | |
 | T1 | Remove Esc handling or the focus return | |
