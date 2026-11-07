@@ -15,9 +15,12 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 ## 3. Page
 
-- [ ] 3.1 Render sections and nav links from `renderedSections` in `Portfolio.astro` and `SiteNav.astro` per decision 2; verify `grep` finds no `id="courses"`, `#courses` or `data-event="certificate"` in `dist/**/*.html`, and the nav has six links per locale
-- [ ] 3.2 Add `meta.descriptionNoCourses` to the three dictionaries with the spec's texts and pick the key by the flag; verify the built `<meta name="description">`, `og:description` and `twitter:description` per locale match the spec
-- [ ] 3.3 Adapt S1, S9, S10, N2, E1 and E2 to `sections()` and the flag, and skip S6 with the spec's reason, adding `coursesEnabled()` and `sections()` to `support/content.ts` per decision 6; verify `npm run test:e2e` passes and S6 reports skipped with that reason
+- [x] 3.1 Render sections and nav links from `renderedSections` in `Portfolio.astro` and `SiteNav.astro` per decision 2; verify `grep` finds no `id="courses"`, `#courses` or `data-event="certificate"` in `dist/**/*.html`, and the nav has six links per locale
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
+- [x] 3.2 Add `meta.descriptionNoCourses` to the three dictionaries with the spec's texts and pick the key by the flag; verify the built `<meta name="description">`, `og:description` and `twitter:description` per locale match the spec
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
+- [x] 3.3 Adapt S1, S9, S10, N2, E1 and E2 to `sections()` and the flag, and skip S6 with the spec's reason, adding `coursesEnabled()` and `sections()` to `support/content.ts` per decision 6; verify `npm run test:e2e` passes and S6 reports skipped with that reason
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
 - [ ] 3.4 Write C1 and C2 in `courses-off.spec.ts`; verify they pass in both projects and fail against their breakages
 
 ## 4. Terminal

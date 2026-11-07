@@ -1,19 +1,20 @@
 ---
 import { t, type Locale } from "../i18n";
 import { eventAttrs } from "../lib/analytics";
-import { sectionIds } from "../lib/sections";
+import type { SectionId } from "../lib/sections";
 
 interface Props {
   locale: Locale;
+  sections: readonly SectionId[];
 }
 
-const { locale } = Astro.props;
+const { locale, sections } = Astro.props;
 ---
 
 <header class="site-nav">
   <nav class="site-nav__sections" aria-label={t(locale, "nav.label")}>
     <ul class="site-nav__list" role="list">
-      {sectionIds.map((id) => (
+      {sections.map((id) => (
         <li>
           <a
             class="site-nav__link"

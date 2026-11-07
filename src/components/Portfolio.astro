@@ -14,8 +14,8 @@ import Terminal from "./Terminal.astro";
 import TerminalHint from "./TerminalHint.astro";
 import LanguageSwitcher from "./LanguageSwitcher.astro";
 import { t, type Locale } from "../i18n";
-import { reportMissingTranslations } from "../lib/content";
-import { sectionIds } from "../lib/sections";
+import { getEntries, reportMissingTranslations } from "../lib/content";
+import { renderedSections } from "../lib/sections";
 
 interface Props {
   locale: Locale;
@@ -23,13 +23,21 @@ interface Props {
 
 const { locale } = Astro.props;
 await reportMissingTranslations(locale);
-const contentSections = sectionIds.filter((id) => id !== "hero");
+const [profile] = await getEntries("profile", locale);
+if (!profile) {
+  throw new Error("src/content/profile must contain one entry");
+}
+const sections = renderedSections(profile.courses.enabled);
+const contentSections = sections.filter((id) => id !== "hero");
 ---
 
 <BaseLayout
   locale={locale}
   title={t(locale, "meta.title")}
-  description={t(locale, "meta.description")}
+  description={t(
+    locale,
+    profile.courses.enabled ? "meta.description" : "meta.descriptionNoCourses",
+  )}
   heroIntro
 >
   {locale === "en" && <script is:inline slot="head-start">
@@ -55,7 +63,7 @@ const contentSections = sectionIds.filter((id) => id !== "hero");
   <a class="skip-link" href="#main">
     {t(locale, "skipLink")}
   </a>
-  <SiteNav locale={locale}>
+  <SiteNav locale={locale} sections={sections}>
     <LanguageSwitcher slot="end" locale={locale} />
   </SiteNav>
   <main id="main" class="site-main">

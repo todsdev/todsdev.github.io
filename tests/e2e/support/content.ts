@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
+import { renderedSections } from "../../../src/lib/sections";
 import { en } from "../../../src/i18n/en";
 import { es } from "../../../src/i18n/es";
 import { ptBr } from "../../../src/i18n/pt-br";
@@ -117,3 +118,21 @@ export function profile(): { name: string; role: string } {
   }[];
   return { name: entry!.name, role: entry!.role.en };
 }
+
+/** Whether the Courses section is on: the profile's `courses.enabled`, read from the YAML, never from the page. */
+export function coursesEnabled(): boolean {
+  const [entry] = collection("profile") as unknown as {
+    courses: { enabled: boolean };
+  }[];
+  return entry!.courses.enabled;
+}
+
+/** The sections the page renders, in order, for the current flag. */
+export const sections = () => renderedSections(coursesEnabled());
+
+/** The meta, `og:` and `twitter:` description: the key follows the flag. */
+export const description = (locale: Locale): string =>
+  text(
+    locale,
+    coursesEnabled() ? "meta.description" : "meta.descriptionNoCourses",
+  );

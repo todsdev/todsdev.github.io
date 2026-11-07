@@ -5,6 +5,9 @@ export const es = {
     title: "Thiago Rodrigues — Desarrollador Android",
     description:
       "Portafolio de Thiago Rodrigues, Desarrollador Android: experiencia, proyectos, habilidades y cursos.",
+    /** Used instead of `description` while the profile's `courses.enabled` is false. */
+    descriptionNoCourses:
+      "Portafolio de Thiago Rodrigues, Desarrollador Android: experiencia, proyectos y habilidades.",
     jobTitle: "Desarrollador Android",
     ogImageAlt:
       "Thiago Rodrigues, Desarrollador Android: una tarjeta estilo terminal con el prompt ~/portfolio $ ./hello",

@@ -7,6 +7,9 @@ export const en = {
     title: "Thiago Rodrigues — Android Developer",
     description:
       "Portfolio of Thiago Rodrigues, Android Developer: experience, projects, skills and courses.",
+    /** Used instead of `description` while the profile's `courses.enabled` is false. */
+    descriptionNoCourses:
+      "Portfolio of Thiago Rodrigues, Android Developer: experience, projects and skills.",
     /** The job title as `meta.title` words it: the hero's `profile.role` stays English everywhere. */
     jobTitle: "Android Developer",
     /** Alt text of the share image. */
