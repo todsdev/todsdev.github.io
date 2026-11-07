@@ -373,7 +373,7 @@ GitHub Pages serves one `404.html` for every unknown path, so the page works out
 
 The site deploys to GitHub Pages through `.github/workflows/deploy.yml` (the repository's Pages source is set to **GitHub Actions**).
 
-- **Pull requests to `main`:** the **Check and build** job runs `npm ci`, `npm run check`, `npm run lint`, `npm run format:check`, `npm test` and `npm run build`. Nothing is deployed.
+- **Pull requests to `main`:** `.github/workflows/ci.yml` runs one check, **Gates and browser tests**: `npm ci`, `npm run lint`, `npm run check`, `npm run format:check`, `npm test`, `npm run build`, then the Playwright browser tests against that build. Nothing is deployed. If the browser tests fail, the HTML report (with traces) is attached to the run as an artifact for 7 days.
 - **Push or merge to `main`** (or a manual **Run workflow**): the same checks and build run, the `dist/` output is uploaded as the Pages artifact, and the **Deploy to GitHub Pages** job publishes it. If any check fails, nothing is deployed and the live site stays as it was.
 - **Concurrency:** deployments run one at a time. A newer queued run replaces an older queued one, and an in-progress deployment is never cancelled.
 - **Workflow:** work on a feature branch and open a PR; never push directly to `main`. Merging the PR deploys.
