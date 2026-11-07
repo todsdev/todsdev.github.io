@@ -38,7 +38,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 7. Terminal tests
 
-- [ ] 7.1 Write T1–T4 in `terminal.spec.ts`; verify T1 runs only in desktop, T2 only in mobile, and all fail against their breakages
+- [x] 7.1 Write T1–T4 in `terminal.spec.ts`; verify T1 runs only in desktop, T2 only in mobile, and all fail against their breakages
 - [ ] 7.2 Write T5–T9, with expectations from dictionaries and content, never `terminal.json`; verify they pass and fail against their breakages
 - [ ] 7.3 Write T10–T13 with `__noop_check__` as the constant, and A3 and A4 in `analytics.spec.ts`; verify they pass, and `grep` shows the constant is the only throwaway terminal input in `tests/e2e`
 
@@ -98,10 +98,10 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | N2 | Move the switcher before the nav in the DOM | The first Tab stop expected `Home`, received `EN — English`, in desktop |
 | R1 | Point the Spanish résumé link to the English PDF | `href` expected `/resume/resume-es.pdf`, received `/resume/resume-en.pdf` (via the fallback in `src/lib/resume.ts`), in desktop and mobile |
 | R2 | Change the terminal's `resume` path | Download URL expected `/resume/resume-pt-br.pdf`, received `/resume/resume-en.pdf` (the path hard-coded in `src/lib/terminal-data.ts`), in desktop and mobile |
-| T1 | Remove Esc handling or the focus return | |
-| T2 | Remove the `>_` button | |
-| T3 | Fetch `terminal.json` on page load | |
-| T4 | Remove `inert` from the page behind the dialog | |
+| T1 | Remove Esc handling or the focus return | Removed the focus return: after Esc the opener link was `inactive`, expected focused, in desktop (T1 skips mobile) |
+| T2 | Remove the `>_` button | Removed the button's `data-terminal-open` hook: tapping it left the dialog hidden, expected visible, in mobile (T2 skips desktop) |
+| T3 | Fetch `terminal.json` on page load | `loads` before any opening expected `[]`, received 3 requests, in desktop and mobile |
+| T4 | Remove `inert` from the page behind the dialog | Used `dialog.show()` instead of `showModal()`, which leaves the page behind interactive: a nav link took focus (expected `false`, received `true`), in desktop and mobile |
 | T5 | Edit a built `terminal.json` help line in a doctored copy | |
 | T6 | List `.secrets` in plain `ls` | |
 | T7 | Remove one egg from the `cat .secrets` output | |
