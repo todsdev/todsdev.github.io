@@ -67,7 +67,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 - [x] 11.2 Read the durations from three PR runs with `gh run view` and record them in this file; verify each is under 5 minutes, and report to the owner if any exceeds it, proposing browser caching per decision 5
   - Durations, from `gh run view` (start to last update, the whole check): 100 s (`42365055406`, commit `b3dba65`), 80 s (`42365276839`, `d863596`) and 72 s (`42365907142`, `715188d`). All are under 5 minutes, so no browser cache is needed. The slowest steps in those runs: install browser 11–13 s, browser tests 30–38 s. The estimate in design.md (about 3.5 min) was pessimistic. (The repeat run, `42365738216`, took 124 s for 3 times the tests.)
 - [x] 11.3 Confirm with a script that every name in `full.sh`'s `SUITES` appears in `design.md`'s tables and that every test in "Breakage evidence" has an observed failure; verify the script reports 92 of 92 suites and no empty rows
-- [ ] 11.4 Run `./full.sh` in the background to confirm the private suites still pass with the repo's new files; verify it reports 0 failed
+- [x] 11.4 Run `./full.sh` in the background to confirm the private suites still pass with the repo's new files; verify it reports 0 failed
 
 ## Breakage evidence
 
