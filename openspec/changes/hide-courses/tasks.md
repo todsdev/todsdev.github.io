@@ -26,8 +26,10 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 ## 4. Terminal
 
 - [x] 4.1 Add the `section` tag and `available(sections)` to `src/lib/terminal.ts` per decision 3, and pass `sections` to `formatHelp`, `suggest` and the known names, with unit tests for both flag states (help, Tab on `c` and `cd c`, `suggest("cert")`, `ls`); verify `npm test` passes and the updated existing tests still assert the flag-on output
-- [ ] 4.2 Make `terminal-data.ts` omit `certs` and `help.certs` when off, and the shell dispatch only available commands; verify each built `terminal.json` has no `certs`, `courses` or course title, and `certs` reports `unknown` to analytics
-- [ ] 4.3 Adapt T5 and T6 to `sections()`, then write C3 and C4; verify they pass and C3 and C4 fail against their breakages
+- [x] 4.2 Make `terminal-data.ts` omit `certs` and `help.certs` when off, and the shell dispatch only available commands; verify each built `terminal.json` has no `certs`, `courses` or course title, and `certs` reports `unknown` to analytics
+  Committed together with 4.2 and 4.3: the terminal's output and its e2e expectations must change atomically.
+- [x] 4.3 Adapt T5 and T6 to `sections()`, then write C3 and C4; verify they pass and C3 and C4 fail against their breakages
+  Committed together with 4.2 and 4.3: the terminal's output and its e2e expectations must change atomically.
 
 ## 5. Certificates
 
@@ -52,8 +54,8 @@ Fill "Observed" with the failing assertion and the project where it failed.
 | --- | --- | --- |
 | C1 | Render `Courses` regardless of the flag | `#courses` count: expected 0, received 1 (`en`), in desktop and mobile |
 | C2 | Add a stray `<div id="courses">` at the end of `<main>` | `window.scrollY` after `/#courses`: expected 0, received 2 (`en`), in desktop and mobile; C1 also failed on the extra `#courses` |
-| C3 | Drop the `section` tag from `certs` | |
-| C4 | Always include `certs` in `terminal.json` | |
+| C3 | Drop the `section` tag from `certs` | `en help` lists `certs`: expected the names not to contain it, in desktop (the first assertion; the later ones follow it) |
+| C4 | Always include `certs` in `terminal.json` | `terminal.json keys` (`en`): expected no `certs` property, received the five courses, in desktop |
 | C5 | `getStaticPaths` ignoring the flag; then the old description key | |
 | c-off | Render `Courses` regardless of the flag | |
 

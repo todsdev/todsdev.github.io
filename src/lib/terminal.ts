@@ -204,8 +204,14 @@ export function suggest(
 
 /* ---------- Output ---------- */
 
-/** The page's terminal strings (the `terminal` dictionary group). */
-export type Strings = Dictionary["terminal"];
+/**
+ * The page's terminal strings (the `terminal` dictionary group). `help.certs` is optional
+ * because `terminal.json` leaves it out while the courses section is off.
+ */
+export type Strings = Omit<Dictionary["terminal"], "help"> & {
+  help: Omit<Dictionary["terminal"]["help"], "certs"> &
+    Partial<Pick<Dictionary["terminal"]["help"], "certs">>;
+};
 
 /** Everything the content commands print, built per locale by src/lib/terminal-data.ts. */
 export interface TerminalData {
@@ -222,7 +228,8 @@ export interface TerminalData {
   experience: { period: string; company: string; role: string }[];
   projects: { title: string; status: string; badge: string }[];
   skills: { category: string; items: string[] }[];
-  certs: { date: string; title: string; issuer: string }[];
+  /** Left out while the courses section is off. */
+  certs?: { date: string; title: string; issuer: string }[];
   /** Protected kinds (phone, WhatsApp) carry no value or url: the shell decodes them from the page. */
   contacts: { kind: string; label: string; value?: string; url?: string }[];
   resume: { href: string; file: string; language: string };
@@ -298,7 +305,9 @@ export function formatSkills(d: TerminalData): Line[] {
 }
 
 export function formatCerts(d: TerminalData): Line[] {
-  return plain(d.certs.map((c) => `${c.date}  ${c.title} — ${c.issuer}`));
+  return plain(
+    (d.certs ?? []).map((c) => `${c.date}  ${c.title} — ${c.issuer}`),
+  );
 }
 
 /** `decoded` holds the protected values (phone, WhatsApp) read from the page, by kind. */

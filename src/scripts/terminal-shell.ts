@@ -71,6 +71,8 @@ type Handler = (args: string[]) => void;
 export function start(host: Host, data: TerminalData): Shell {
   const s = data.strings;
   const { input, log } = host;
+  /** The commands this page has: `certs` only while the courses section is rendered. */
+  const known = knownNames(data.sections);
   const history: string[] = [];
   let recallAt = 0;
 
@@ -451,12 +453,13 @@ export function start(host: Host, data: TerminalData): Shell {
       history.push(command);
       recallAt = history.length;
       track("terminal_command", {
-        command: terminalCommand(command, knownNames(data.sections)),
+        command: terminalCommand(command, known),
       });
       const { name, args } = parse(command);
-      const handler = Object.hasOwn(commands, name)
-        ? commands[name]
-        : undefined;
+      const handler =
+        Object.hasOwn(commands, name) && known.includes(name)
+          ? commands[name]
+          : undefined;
       if (handler) handler(args);
       else notFound(name);
     },
