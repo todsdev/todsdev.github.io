@@ -63,7 +63,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 
 ## 11. Integration
 
-- [ ] 11.1 Run `npx playwright test --repeat-each=3` locally and in one CI run with retries off; verify there are no failures, and fix the cause of any flake without relaxing a check unless the control in CLAUDE.md proves the check wrong
+- [x] 11.1 Run `npx playwright test --repeat-each=3` locally and in one CI run with retries off; verify there are no failures, and fix the cause of any flake without relaxing a check unless the control in CLAUDE.md proves the check wrong
 - [ ] 11.2 Read the durations from three PR runs with `gh run view` and record them in this file; verify each is under 5 minutes, and report to the owner if any exceeds it, proposing browser caching per decision 5
 - [ ] 11.3 Confirm with a script that every name in `full.sh`'s `SUITES` appears in `design.md`'s tables and that every test in "Breakage evidence" has an observed failure; verify the script reports 92 of 92 suites and no empty rows
 - [ ] 11.4 Run `./full.sh` in the background to confirm the private suites still pass with the repo's new files; verify it reports 0 failed
