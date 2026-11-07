@@ -6,6 +6,7 @@
  */
 declare module "node:fs" {
   export function existsSync(path: string): boolean;
+  export function readdirSync(path: string): string[];
   export function readFileSync(path: string | URL, encoding: "utf8"): string;
   export function readFileSync(path: string | URL): Uint8Array;
 }

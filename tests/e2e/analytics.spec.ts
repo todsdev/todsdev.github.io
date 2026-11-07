@@ -1,4 +1,5 @@
 import { test, expect } from "./support/fixtures";
+import { openTerminal } from "./support/terminal";
 
 test("A5: with Umami aborted, the page still works", async ({
   page,
@@ -11,10 +12,7 @@ test("A5: with Umami aborted, the page still works", async ({
   await page.locator('a[data-nav-link="about"]').click();
   await expect(page).toHaveURL(/#about$/);
 
-  if (isMobile) await page.locator("[data-terminal-open]").tap();
-  else await page.keyboard.press("/");
-  const dialog = page.locator("dialog[data-terminal]");
-  await expect(dialog).toBeVisible();
+  const dialog = await openTerminal(page, isMobile);
   await dialog.getByRole("textbox").fill("help");
   await page.keyboard.press("Enter");
   await expect(dialog.getByRole("log")).toContainText("help");
