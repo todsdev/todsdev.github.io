@@ -1,6 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
+import { en } from "../../../src/i18n/en";
+import { es } from "../../../src/i18n/es";
+import { ptBr } from "../../../src/i18n/pt-br";
 import {
   langCode,
   localePath,
@@ -19,6 +22,10 @@ export const SITE = "https://todsdev.github.io";
 /** A dictionary string, so expectations come from the same source as the page's text. */
 export const text = (locale: Locale, key: TranslationKey): string =>
   t(locale, key);
+
+/** The terminal's strings straight from the dictionaries, never from a built `terminal.json`. */
+export const terminalStrings = (locale: Locale) =>
+  ({ en, "pt-br": ptBr, es })[locale].terminal;
 
 /** A localized field with the English fallback the site uses. */
 export const localized = (

@@ -39,7 +39,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 7. Terminal tests
 
 - [x] 7.1 Write T1–T4 in `terminal.spec.ts`; verify T1 runs only in desktop, T2 only in mobile, and all fail against their breakages
-- [ ] 7.2 Write T5–T9, with expectations from dictionaries and content, never `terminal.json`; verify they pass and fail against their breakages
+- [x] 7.2 Write T5–T9, with expectations from dictionaries and content, never `terminal.json`; verify they pass and fail against their breakages
 - [ ] 7.3 Write T10–T13 with `__noop_check__` as the constant, and A3 and A4 in `analytics.spec.ts`; verify they pass, and `grep` shows the constant is the only throwaway terminal input in `tests/e2e`
 
 ## 8. 404 and analytics tests
@@ -102,11 +102,11 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | T2 | Remove the `>_` button | Removed the button's `data-terminal-open` hook: tapping it left the dialog hidden, expected visible, in mobile (T2 skips desktop) |
 | T3 | Fetch `terminal.json` on page load | `loads` before any opening expected `[]`, received 3 requests, in desktop and mobile |
 | T4 | Remove `inert` from the page behind the dialog | Used `dialog.show()` instead of `showModal()`, which leaves the page behind interactive: a nav link took focus (expected `false`, received `true`), in desktop and mobile |
-| T5 | Edit a built `terminal.json` help line in a doctored copy | |
-| T6 | List `.secrets` in plain `ls` | |
-| T7 | Remove one egg from the `cat .secrets` output | |
-| T8 | Change the `ping` output | |
-| T9 | Make `:q` do nothing in vim mode | |
+| T5 | Edit a built `terminal.json` help line in a doctored copy | Changed one help string in the `strings` that `terminal-data.ts` writes into `terminal.json`, which is the same as doctoring the built file: the `help` output differed from the dictionary's lines by one line (`toEqual`), in desktop and mobile |
+| T6 | List `.secrets` in plain `ls` | Plain `ls` printed `.secrets` first: the output differed by one line from the expected `ls` (`toEqual`), in desktop and mobile |
+| T7 | Remove one egg from the `cat .secrets` output | The last egg line was missing: `toEqual` expected one more line than received, in desktop and mobile |
+| T8 | Change the `ping` output | The first `ping` line was missing: `toEqual` expected one more line than received (command `ping thiago`), in desktop and mobile |
+| T9 | Make `:q` do nothing in vim mode | After `:q` the prompt stayed `-- NORMAL --`, expected `visitor@todsdev:~$`, in desktop and mobile |
 | T10 | Echo the password into the log | |
 | T11 | Stop persisting the theme | |
 | T12 | Render typed input as HTML in the log | |

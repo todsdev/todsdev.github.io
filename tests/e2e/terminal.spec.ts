@@ -1,6 +1,26 @@
-import { localePath, locales, text } from "./support/content";
+import {
+  ADB,
+  E492,
+  PROMPT,
+  VIM_PROMPT,
+  formatBlame,
+  formatBrew,
+  formatHelp,
+  formatLs,
+  formatPing,
+  formatSecrets,
+  type Line,
+} from "../../src/lib/terminal";
+import { sectionIds } from "../../src/lib/sections";
+import {
+  localePath,
+  locales,
+  profile,
+  terminalStrings,
+  text,
+} from "./support/content";
 import { test, expect } from "./support/fixtures";
-import { openTerminal, run } from "./support/terminal";
+import { openTerminal, output, run } from "./support/terminal";
 
 test.describe("keyboard", () => {
   test.beforeEach(({ isMobile }) => {
@@ -118,4 +138,92 @@ test("T4: the dialog is named, its input is labelled and the page behind is iner
     });
     expect(tookFocus).toBe(false);
   }
+});
+
+const texts = (lines: Line[]) => lines.map((line) => line.text);
+
+/** Runs a command in each locale and checks its output against the expected lines. */
+async function expectOutput(
+  page: import("@playwright/test").Page,
+  isMobile: boolean,
+  commands: (locale: (typeof locales)[number]) => [string, string[]][],
+) {
+  for (const locale of locales) {
+    await page.goto(localePath(locale));
+    const dialog = await openTerminal(page, isMobile);
+    for (const [command, expected] of commands(locale)) {
+      await run(dialog, command);
+      await expect.poll(() => output(dialog), command).toEqual(expected);
+    }
+  }
+}
+
+const sections = sectionIds.filter((id) => id !== "hero");
+
+test("T5: help lists the commands in the page's language", async ({
+  page,
+  isMobile,
+}) => {
+  await expectOutput(page, isMobile, (locale) => [
+    ["help", texts(formatHelp(terminalStrings(locale)))],
+  ]);
+});
+
+test("T6: ls hides .secrets and ls -a lists it first", async ({
+  page,
+  isMobile,
+}) => {
+  await expectOutput(page, isMobile, () => [
+    ["ls", texts(formatLs(sections))],
+    ["ls -a", texts(formatLs(sections, true))],
+  ]);
+  expect(texts(formatLs(sections))[0]).not.toContain(".secrets");
+  expect(texts(formatLs(sections, true))[0]).toMatch(/^\.secrets {2}/);
+});
+
+test("T7: cat .secrets prints the header and every easter egg", async ({
+  page,
+  isMobile,
+}) => {
+  await expectOutput(page, isMobile, (locale) => [
+    ["cat .secrets", texts(formatSecrets(terminalStrings(locale)))],
+  ]);
+});
+
+test("T8: sampled easter eggs print their output", async ({
+  page,
+  isMobile,
+}) => {
+  const { name } = profile();
+  await expectOutput(page, isMobile, (locale) => {
+    const strings = terminalStrings(locale);
+    return [
+      ["ping thiago", texts(formatPing(strings))],
+      ["git blame", texts(formatBlame(strings, name))],
+      ["brew coffee", texts(formatBrew(strings))],
+      ["adb devices", [...ADB]],
+    ];
+  });
+});
+
+test("T9: vim enters a mode that only :q leaves", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/");
+  const dialog = await openTerminal(page, isMobile);
+  const prompt = dialog.locator("[data-terminal-prompt]");
+  await expect(prompt).toHaveText(PROMPT);
+
+  await run(dialog, "vim");
+  await expect(prompt).toHaveText(VIM_PROMPT);
+  await run(dialog, "ls");
+  await expect.poll(() => output(dialog)).toEqual([E492]);
+  await expect(prompt).toHaveText(VIM_PROMPT);
+
+  await run(dialog, ":q");
+  await expect(prompt).toHaveText(PROMPT);
+  await expect
+    .poll(() => output(dialog))
+    .toEqual([terminalStrings("en").vimExit]);
 });
