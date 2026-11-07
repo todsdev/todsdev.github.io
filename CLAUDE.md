@@ -15,18 +15,18 @@ Work on one change at a time, in this order:
    - Branch: `feat/<change>` or `fix/<change>`.
    - Task 1.1 commits the artifacts and opens a draft PR.
    - After each task: mark `- [x]` in `tasks.md` and commit only that task's files plus `tasks.md`, with a Conventional Commit. Then push.
-   - Gate every commit on `npm run lint`, `npm run check`, `npm run format:check` and `npm test`.
+   - Gate every commit on `npm run lint`, `npm run check`, `npm run format:check` and `npm test`. Also run `npm run test:e2e` when the commit touches the site or the tests.
    - Never push to `main`.
 4. **Archive on the branch:**
    - Sync the delta specs into `openspec/specs/` and verify them.
    - Run `openspec validate --all --strict`.
    - Move the change to `openspec/changes/archive/YYYY-MM-DD-<name>/`, commit and push.
-5. **Merge with a merge commit** (`gh pr ready N && gh pr merge N --merge`) once the PR checks are green.
-   - Never merge while a deploy is running: check `gh run list -w deploy.yml --status in_progress`. The deploy's concurrency group is `pages`.
+5. **Merge with a merge commit** (`gh pr ready N && gh pr merge N --merge`) once the PR check `Gates and browser tests` is green. `main` requires it.
+   - Never merge while a deploy is running: check `gh run list -w deploy.yml --status in_progress`. The deploy's concurrency group is `pages`, and a deploy run now lasts about a minute longer because of its `smoke` job.
 6. **Wait for the deploy:**
    - Find the run for the merge commit: `gh run list -w deploy.yml --commit <sha>`.
    - If none appears within about 2 minutes, run `gh workflow run deploy.yml --ref main`. This has happened before.
-   - Watch it until it succeeds.
+   - Watch it until it succeeds, the `smoke` job included. A red `smoke` job means the live site is broken: report it, and don't roll back on your own.
 7. **Live checks** against `https://todsdev.github.io` (see below).
 8. **Cleanup:** `git checkout main && git pull`, then delete the branch locally and on origin, without asking.
 
@@ -85,13 +85,26 @@ If a check fails, assume the site regressed until a control says otherwise:
 - **Bad check:** if it also fails on `main` or live, or only intermittently, fix the check. Explain the evidence and the cause in the commit message.
 - **Tolerance:** never relax a check's tolerance without that evidence.
 
+## Browser tests in the repo
+
+`tests/e2e/` holds the Playwright suite. Run it with `npm run test:e2e` (headless, builds first) or `npm run test:e2e:ui`. Install the browser once with `npx playwright install chromium`. It serves the production build on port 4322, so it never collides with `run.sh` on 4321, and it refuses to reuse a server already on that port: stop a stale preview first.
+
+**What runs where:**
+
+- **In CI, on every PR** (`ci.yml`, check `Gates and browser tests`): lint, check, format check, unit tests, build and `npm run test:e2e`, in desktop and mobile Chromium.
+- **In CI, after each deploy** (the `smoke` job of `deploy.yml`): `npm run test:e2e:smoke`, four tests against the live site.
+- **Only in `~/portfolio-verify-scripts`:** pixel, timing, layout shift, fonts, contrast, PDF internals, the real Umami script and everything in the live run list above. The change `e2e-ci` (`design.md`) maps each browser test to the suites it replaces in part. The suite here doesn't replace them: keep running the suites that match what you changed.
+
+- Every test blocks Umami through an auto fixture in `support/fixtures.ts`. Never load the real tracker in a test.
+- Expectations come from the dictionaries and content (`support/content.ts`), never from the output under test.
+
 ## Other practices
 
 - **Untrusted files** (downloads, store images, certificate PDFs): copy them into a fresh scratch directory and only parse or re-encode them.
   - **Images:** re-encode with `sharp` and confirm there is no EXIF or GPS data.
   - **PDFs:** rewrite with a scratch `pdf-lib` script that removes the Info dictionary, XMP, generator annotations and timestamps. Confirm the pages render pixel-identical to the originals.
 - **No layout shift:** reserve space up front (aspect ratios, reserved grid cells). Decide JS versus no-JS states by the `<html>` `js`/`no-js` class, which is set before first paint.
-- **Phone number:** it must never appear in built HTML or `terminal.json` (the résumés are a deliberate exception). After touching the contact code, run `seo-phone` (every built `.html` and `terminal.json`) or grep `dist/**/*.html` and `dist/**/terminal.json`.
+- **Phone number:** it must never appear in built HTML or `terminal.json` (the résumés are a deliberate exception). After touching the contact code, run `seo-phone` (every built `.html` and `terminal.json`) or grep `dist/**/*.html` and `dist/**/terminal.json`. The browser test B3 (`npm run test:e2e`) runs the same scan on every PR, reading the number from the content file at test time. It holds no copy of the number, and neither may any other test, fixture or workflow.
 - **Gate results:** judge `npm run lint`, `check`, `format:check` and `test` by their exit code, and never truncate their output (`tail`, `head`) before reading the result. A truncated lint failure went unnoticed on three commits of the `polish` change.
 - **Terminal actions:** keep no whitespace between the command and its visually hidden destination (`{/* prettier-ignore */}` on that element).
 - **No `@types/node`:** use the small ambient files instead (`src/lib/node-test.d.ts`, `src/lib/node-build.d.ts`).
