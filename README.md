@@ -253,6 +253,11 @@ A hidden terminal for curious visitors. The site never depends on it: without Ja
 | `theme green\|amber\|gray`                             | Phosphor color theme for the whole site, remembered in the browser; `gray` is the default    |
 | `clear`, `history`, `exit`                             | As in a shell                                                                                |
 
+Some commands are left out of `help` on purpose. They are listed below, behind a spoiler.
+
+<details>
+<summary>spoilers</summary>
+
 Easter eggs are never listed by `help` or offered by Tab. The way to find them is a hint trail: `help` ends with a hint to try `ls -a`, which shows `.secrets`, and `cat .secrets` lists them all with a comment each.
 
 | Easter egg        | Does                                                                                                                                              |
@@ -270,15 +275,22 @@ Easter eggs are never listed by `help` or offered by Tab. The way to find them i
 | `vim`             | Vim mode: the prompt becomes a dim `-- NORMAL --`, only `:q`, `:q!`, `:wq`, `:x` or `Esc` get out, anything else is `E492: Not an editor command` |
 | `obs`             | The Olympic Games worked, as text only, then a tip to type `experience`                                                                           |
 
+How the hidden commands are built:
+
+- **Intro replay:** `./hello` sends a `hero:replay` event to `src/scripts/hero.ts`, which runs the same sequence as on load once the page has stopped scrolling.
+- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once, `matrix` prints a note instead and `./hello` only jumps to the top.
+- **Data:** That includes `obs`: its numbers are the Games listed under the `olympic-broadcasting-services` experience entry and the years from its start to the latest one, and the build fails if that entry is missing.
+- **Analytics:** `sudo hire-me` also sends the section's own `contact` event.
+
+</details>
+
 How it's built:
 
-- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice. That includes `obs`: its numbers are the Games listed under the `olympic-broadcasting-services` experience entry and the years from its start to the latest one, and the build fails if that entry is missing.
+- **Data:** `terminal.json` per locale (`src/lib/terminal-data.ts`) comes from the same collections and dictionaries as the page, plus the `terminal` dictionary group. Editing content or a dictionary updates the terminal on the next build; nothing is written twice.
 - **Phone:** like the contact section, the phone and WhatsApp values are never in the HTML or in `terminal.json`; `contact` decodes them from the contact section at runtime.
 - **Code:** `src/lib/terminal.ts` holds the command table, parsing, completion, suggestions and output formats (unit-tested); `src/scripts/terminal.ts` opens and closes the dialog; `src/scripts/terminal-shell.ts` runs the commands.
 - **Themes:** `src/styles/tokens.css` overrides only the seven color tokens under `<html data-theme>`, and an inline script in `BaseLayout` applies the stored theme before first paint. Every theme keeps AA contrast.
-- **Intro replay:** `./hello` sends a `hero:replay` event to `src/scripts/hero.ts`, which runs the same sequence as on load once the page has stopped scrolling.
-- **Motion:** with reduced motion, nothing animates: the `./gradlew build` log prints at once, `matrix` prints a note instead and `./hello` only jumps to the top.
-- **Analytics:** see [Analytics](#analytics). `resume` and `sudo hire-me` also send the section's own `resume` and `contact` events.
+- **Analytics:** see [Analytics](#analytics). `resume` also sends the section's own `resume` event.
 
 ## Analytics
 
