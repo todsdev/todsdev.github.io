@@ -33,7 +33,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 ## 5. Certificates
 
-- [ ] 5.1 `git mv` the three PDFs to `src/content/courses/certificates/`, add `src/pages/certificates/[name].pdf.ts` per decision 4, and update the three YAML comments; verify `dist/certificates` is absent with the flag off, and with it on temporarily the three built files have the same SHA-256 as the originals in `main`
+- [x] 5.1 `git mv` the three PDFs to `src/content/courses/certificates/`, add `src/pages/certificates/[name].pdf.ts` per decision 4, and update the three YAML comments; verify `dist/certificates` is absent with the flag off, and with it on temporarily the three built files have the same SHA-256 as the originals in `main`
 - [ ] 5.2 Write C5; verify it passes and fails against both of its breakages
 
 ## 6. Docs
