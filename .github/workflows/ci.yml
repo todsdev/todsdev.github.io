@@ -47,7 +47,7 @@ jobs:
         run: npx playwright install --with-deps --only-shell chromium
 
       - name: Browser tests
-        run: npm run test:e2e
+        run: npm run test:e2e -- --repeat-each=3 --retries=0
 
       - name: Upload the browser test report
         if: failure()
