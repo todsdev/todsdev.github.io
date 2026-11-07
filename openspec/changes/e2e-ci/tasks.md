@@ -13,7 +13,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 - [x] 2.1 Add `@playwright/test` and direct `yaml`, `playwright.config.ts` per design decision 1, the ignore entries and the ambient types per decision 8, and the scripts `test:e2e`, `test:e2e:ui` and `test:e2e:smoke`; verify `npm ls @types/node` is empty, and `npm run check`, `lint` and `format:check` pass with a trivial spec
 - [x] 2.2 Add `support/fixtures.ts` with the auto Umami block and the `events` fixture per decision 2, then tests A5 and A6; verify both pass in both projects, that A6 fails with the block removed, and that `grep -r` finds no stand-in code in `dist/`
 - [x] 2.3 Add `support/content.ts` and `support/terminal.ts`; verify the loader can't return a contact's `value` or `url`, leaving `support/phone.ts` (task 9.3) as the only reader of `2-phone.yaml`, with a check in the next test group that uses it
-- [ ] 2.4 Document `test:e2e`, `test:e2e:ui`, the browser install and the port in the README's Scripts section and CLAUDE.md; verify the documented commands run as written on a clean `node_modules`
+- [x] 2.4 Document `test:e2e`, `test:e2e:ui`, the browser install and the port in the README's Scripts section and CLAUDE.md; verify the documented commands run as written on a clean `node_modules`
 
 ## 3. CI workflow
 

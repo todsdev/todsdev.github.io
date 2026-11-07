@@ -85,6 +85,13 @@ If a check fails, assume the site regressed until a control says otherwise:
 - **Bad check:** if it also fails on `main` or live, or only intermittently, fix the check. Explain the evidence and the cause in the commit message.
 - **Tolerance:** never relax a check's tolerance without that evidence.
 
+## Browser tests in the repo
+
+`tests/e2e/` holds the Playwright suite. Run it with `npm run test:e2e` (headless, builds first) or `npm run test:e2e:ui`. Install the browser once with `npx playwright install chromium`. It serves the production build on port 4322, so it never collides with `run.sh` on 4321, and it refuses to reuse a server already on that port: stop a stale preview first.
+
+- Every test blocks Umami through an auto fixture in `support/fixtures.ts`. Never load the real tracker in a test.
+- Expectations come from the dictionaries and content (`support/content.ts`), never from the output under test.
+
 ## Other practices
 
 - **Untrusted files** (downloads, store images, certificate PDFs): copy them into a fresh scratch directory and only parse or re-encode them.

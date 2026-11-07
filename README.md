@@ -42,6 +42,19 @@ npm run dev
 | `npm run format`       | Format all files with Prettier                              |
 | `npm run format:check` | Verify formatting without writing changes                   |
 | `npm test`             | Run the automated tests (`*.test.ts`, Node built-in runner) |
+| `npm run test:e2e`     | Build the site and run the browser tests headless           |
+| `npm run test:e2e:ui`  | Open the same browser tests in Playwright's UI              |
+
+### Browser tests
+
+The browser tests (`tests/e2e/`, Playwright) run against the production build served on port 4322, in Chromium at a desktop and a phone viewport. Install the browser once; `--with-deps` also installs the system libraries on Linux:
+
+```sh
+npx playwright install chromium
+npm run test:e2e
+```
+
+`npm run test:e2e` builds the site first and never reuses a server already on port 4322, so stop any other preview there. The HTML report is written to `playwright-report/`; open it with `npx playwright show-report`.
 
 ## Languages
 
