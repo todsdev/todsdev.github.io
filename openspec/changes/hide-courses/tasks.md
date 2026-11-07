@@ -34,7 +34,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 ## 5. Certificates
 
 - [x] 5.1 `git mv` the three PDFs to `src/content/courses/certificates/`, add `src/pages/certificates/[name].pdf.ts` per decision 4, and update the three YAML comments; verify `dist/certificates` is absent with the flag off, and with it on temporarily the three built files have the same SHA-256 as the originals in `main`
-- [ ] 5.2 Write C5; verify it passes and fails against both of its breakages
+- [x] 5.2 Write C5; verify it passes and fails against both of its breakages
 
 ## 6. Docs
 
@@ -56,7 +56,7 @@ Fill "Observed" with the failing assertion and the project where it failed.
 | C2 | Add a stray `<div id="courses">` at the end of `<main>` | `window.scrollY` after `/#courses`: expected 0, received 2 (`en`), in desktop and mobile; C1 also failed on the extra `#courses` |
 | C3 | Drop the `section` tag from `certs` | `en help` lists `certs`: expected the names not to contain it, in desktop (the first assertion; the later ones follow it) |
 | C4 | Always include `certs` in `terminal.json` | `terminal.json keys` (`en`): expected no `certs` property, received the five courses, in desktop |
-| C5 | `getStaticPaths` ignoring the flag; then the old description key | |
+| C5 | `getStaticPaths` ignoring the flag; then the old description key | `getStaticPaths` ignoring the flag: `cursoemvideo-algoritmo.pdf` expected 404, received 200 (desktop). Old description key: `en meta[name="description"]` expected no course word, received "…skills and courses." (desktop). C5 runs once, in desktop |
 | c-off | Render `Courses` regardless of the flag | |
 
 ## Workflow follow-up

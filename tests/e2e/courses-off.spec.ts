@@ -1,3 +1,5 @@
+import { existsSync, readdirSync } from "node:fs";
+import { join } from "node:path";
 import { fill } from "../../src/lib/terminal";
 import {
   coursesEnabled,
@@ -7,7 +9,7 @@ import {
   terminalStrings,
   text,
 } from "./support/content";
-import { readDist } from "./support/dist";
+import { distDir, readDist } from "./support/dist";
 import { test, expect } from "./support/fixtures";
 import { openTerminal, output, run } from "./support/terminal";
 
@@ -125,5 +127,45 @@ test("C4: terminal.json has no certs, no courses section, no help text and no co
         JSON.stringify(course.issuer).slice(1, -1),
       );
     }
+  }
+});
+
+test("C5: no certificate is published and no shared metadata names courses", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "reads tags and files, so it runs once, in desktop");
+  const courseWord = /course|curso|certificate|certificado/i;
+
+  const pdfs = readdirSync(
+    join(process.cwd(), "src", "content", "courses", "certificates"),
+  ).filter((file) => file.endsWith(".pdf"));
+  expect(pdfs.length).toBeGreaterThan(0);
+  for (const pdf of pdfs) {
+    const response = await page.request.get(`/certificates/${pdf}`);
+    expect(response.status(), pdf).toBe(404);
+  }
+  expect(existsSync(join(distDir(), "certificates")), "dist/certificates").toBe(
+    false,
+  );
+
+  for (const locale of locales) {
+    await page.goto(localePath(locale));
+    const tags = [
+      'meta[name="description"]',
+      'meta[property="og:title"]',
+      'meta[property="og:description"]',
+      'meta[property="og:image:alt"]',
+      'meta[name="twitter:description"]',
+      'meta[name="twitter:image:alt"]',
+    ];
+    for (const selector of tags) {
+      const content = await page.locator(selector).getAttribute("content");
+      expect(content, `${locale} ${selector}`).not.toMatch(courseWord);
+    }
+    const jsonLd = await page
+      .locator('script[type="application/ld+json"]')
+      .textContent();
+    expect(jsonLd, `${locale} JSON-LD`).not.toMatch(courseWord);
   }
 });
