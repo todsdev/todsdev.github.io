@@ -11,7 +11,10 @@ export default defineConfig({
   reporter: CI
     ? [["github"], ["html", { open: "never" }]]
     : [["list"], ["html", { open: "never" }]],
-  use: { trace: "on-first-retry" },
+  use: {
+    baseURL: SMOKE_URL ?? `http://localhost:${PORT}`,
+    trace: "on-first-retry",
+  },
   ...(SMOKE_URL
     ? {
         projects: [

@@ -11,7 +11,7 @@ A test's task is done only when its row in "Breakage evidence" records the obser
 ## 2. Playwright scaffolding
 
 - [x] 2.1 Add `@playwright/test` and direct `yaml`, `playwright.config.ts` per design decision 1, the ignore entries and the ambient types per decision 8, and the scripts `test:e2e`, `test:e2e:ui` and `test:e2e:smoke`; verify `npm ls @types/node` is empty, and `npm run check`, `lint` and `format:check` pass with a trivial spec
-- [ ] 2.2 Add `support/fixtures.ts` with the auto Umami block and the `events` fixture per decision 2, then tests A5 and A6; verify both pass in both projects, that A6 fails with the block removed, and that `grep -r` finds no stand-in code in `dist/`
+- [x] 2.2 Add `support/fixtures.ts` with the auto Umami block and the `events` fixture per decision 2, then tests A5 and A6; verify both pass in both projects, that A6 fails with the block removed, and that `grep -r` finds no stand-in code in `dist/`
 - [ ] 2.3 Add `support/content.ts` and `support/terminal.ts`; verify the loader can't return a contact's `value` or `url`, leaving `support/phone.ts` (task 9.3) as the only reader of `2-phone.yaml`, with a check in the next test group that uses it
 - [ ] 2.4 Document `test:e2e`, `test:e2e:ui`, the browser install and the port in the README's Scripts section and CLAUDE.md; verify the documented commands run as written on a clean `node_modules`
 
@@ -118,8 +118,8 @@ Fill "Observed" with the failing assertion, and the project where it failed. Pla
 | A2 | Send `not_found` on every page | |
 | A3 | Remove `data-event` from a nav link | |
 | A4 | Report the raw terminal input as the command | |
-| A5 | Call `window.umami.track` with no guard | |
-| A6 | Remove the block from the fixture | |
+| A5 | Call `window.umami.track` with no guard | Unguarded `window.umami!.track(...)` in `track()`: the terminal log read `terminal unavailable. Reload the page to try again.` instead of containing `help`, in desktop and mobile |
+| A6 | Remove the block from the fixture | `expect(failed).toContain("https://cloud.umami.is/script.js")` received `[]`, in desktop and mobile |
 | E1 | Keep the query in the canonical | |
 | E2 | Change `og:locale` for one locale | |
 | E3 | Serve a wrong-size PNG in a doctored copy | |
