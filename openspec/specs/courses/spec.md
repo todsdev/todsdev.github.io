@@ -43,12 +43,12 @@ Each line SHALL end with an `$ open cert` action linking to the course's `certif
 - **THEN** its accessible name contains "open cert", "JAVA POO [40 HORAS]" and "se abre en una pestaña nueva", and it links to `https://todsdev.github.io/certificates/cursoemvideo-java-poo.pdf`
 
 ### Requirement: Certificate links resolve
-Every `certificateUrl` SHALL point to the certificate.
+While courses are enabled, every `certificateUrl` SHALL point to the certificate.
 - **Hosted:** files under the site's `/certificates/` path SHALL be served with status 200 as PDFs.
 - **Udemy:** links SHALL be `https://www.udemy.com/certificate/<id>/` URLs whose certificate exists, shown by Udemy's certificate image for the same id returning 200.
 
 #### Scenario: Hosted PDF
-- **WHEN** `https://todsdev.github.io/certificates/cursoemvideo-algoritmo.pdf` is requested after deploy
+- **WHEN** courses are enabled and `https://todsdev.github.io/certificates/cursoemvideo-algoritmo.pdf` is requested after deploy
 - **THEN** it returns 200 with a PDF body
 
 #### Scenario: Udemy certificate
@@ -87,3 +87,29 @@ The courses SHALL be one list with one item per course. The ` · ` separators an
 #### Scenario: No layout shift
 - **WHEN** the page loads and the visitor scrolls through the section and focuses each action
 - **THEN** no layout shift is recorded and no element in the section moves or resizes
+
+### Requirement: Courses only while enabled
+The courses section SHALL render only while the profile's `courses.enabled` is `true`. While it is `false`, no locale page SHALL contain the section, a course line, an `$ open cert` action, a `certificate` analytics attribute, or any link or anchor to `#courses`.
+
+#### Scenario: Flag off
+- **WHEN** `courses.enabled` is `false` and any locale page is built
+- **THEN** it has no element with id `courses`, no `href` ending in `#courses`, no course title or issuer, and no `data-event="certificate"`
+
+#### Scenario: Flag on
+- **WHEN** `courses.enabled` is `true`
+- **THEN** the section renders as the other requirements of this capability describe
+
+#### Scenario: Deep link while off
+- **WHEN** `courses.enabled` is `false` and a visitor opens `/#courses`
+- **THEN** the page stays at the top, the hero is the active nav item, and no error is thrown
+
+### Requirement: Hosted certificates only while enabled
+Certificate files under the site's `/certificates/` path SHALL be published only while `courses.enabled` is `true`, at the same URLs as before. While it is `false`, the build output SHALL contain no `/certificates/` files and requesting one SHALL return 404.
+
+#### Scenario: Flag off
+- **WHEN** `courses.enabled` is `false` and `/certificates/cursoemvideo-algoritmo.pdf` is requested
+- **THEN** the response is 404, and the build output has no `certificates` directory
+
+#### Scenario: Flag on
+- **WHEN** `courses.enabled` is `true` and the same URL is requested
+- **THEN** it returns 200 with the same metadata-free PDF as before

@@ -57,7 +57,7 @@ Tab SHALL complete the command name, or the argument of `cd`, `open`, `lang`, `t
 - **THEN** the input reads `cat .secrets`, and then `ls -a`
 
 ### Requirement: Help
-`help` SHALL list every command a visitor can type, except the hidden easter eggs (`adb`, `./gradlew`, `neofetch`, `sudo`, `rm`, `matrix`, `./hello`, `ping`, `git`, `brew`, `vim`, `obs`), each with a one-line localized description. `theme` SHALL be listed. `certs` SHALL be listed only while courses are on. The list SHALL end with a dim hint line pointing to `ls -a`: "psst… not everything is listed. try ls -a" / "psst… nem tudo está na lista. tente ls -a" / "psst… no todo está en la lista. prueba ls -a".
+`help` SHALL list every command a visitor can type, except the hidden easter eggs (`adb`, `./gradlew`, `neofetch`, `sudo`, `rm`, `matrix`, `./hello`, `ping`, `git`, `brew`, `vim`, `obs`), each with a one-line localized description. `theme` SHALL be listed, and `certs` only while courses are on. The list SHALL end with a dim hint line pointing to `ls -a`: "psst… not everything is listed. try ls -a" / "psst… nem tudo está na lista. tente ls -a" / "psst… no todo está en la lista. prueba ls -a".
 
 #### Scenario: English help
 - **WHEN** courses are on and `help` is run on `/`
