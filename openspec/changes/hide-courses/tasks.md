@@ -44,7 +44,7 @@ A new test's task is done only when its row in "Breakage evidence" records the o
 
 - [x] 7.1 Turn the flag on locally without committing, run `npm test`, `npm run test:e2e`, and `./run.sh` for `c-layout`, `c-links` and `c-stable`, then compare `dist/` with a `main` build from a `git worktree`, normalizing the build date and asset hashes; verify everything passes, C1–C5 report skipped, the only `dist/` differences are those two, and record the result in this file; revert the flag
 - [x] 7.2 In `~/portfolio-verify-scripts`, add `COURSES` and `SECTIONS` to `lib.mjs`, apply design decision 7 to the listed suites, add `c-off` and classify it in `full.sh`, then commit and push there with the evidence; verify the three `c-*` suites print one `SKIP` line, `c-off` fails against C1's breakage once, and `full.sh` accepts the classification
-- [ ] 7.3 Run `./full.sh` in the background; verify it reports 0 failed, with `c-layout`, `c-links` and `c-stable` skipped and `c-off` passing
+- [x] 7.3 Run `./full.sh` in the background; verify it reports 0 failed, with `c-layout`, `c-links` and `c-stable` skipped and `c-off` passing
 
 ## Flag-on check (task 7.1)
 
@@ -86,3 +86,17 @@ Fill "Observed" with the failing assertion and the project where it failed.
 - Archive on the branch: sync the delta specs, run `openspec validate --all --strict`, update the README's counts (21 specs, 20 archived changes, 93 deeper suites, read at archive time), and move the change to `openspec/changes/archive/`.
 - Merge, deploy and live run per CLAUDE.md, adding `c-off` and `curl -I` of the three certificate URLs (each expected 404).
 - Post-merge: `gh release create v1.1.0 --target <merge sha> --title v1.1.0 --notes "Courses section hidden behind profile courses.enabled (off). Course content and components stay in the repo; set the flag to true to restore them."`
+
+## Full verify run (task 7.3)
+
+`./full.sh` against the flag-off build, third run: **passed 87, skipped 6, failed 0 (of 93)**.
+`c-layout`, `c-links` and `c-stable` skipped (courses off); `c-off` 46 PASS; `e2e` 54 PASS.
+The other skips (`h34b`, `h34c`, `h52`) are the availability badge being off, unrelated.
+
+The first two runs were not clean, and the cause was not the site:
+
+- Run 1: `e2e` failed (12 FAIL). Two hard-coded `7`s expected seven sections while six render.
+  Fixed in the script (`SECTIONS` from `lib.mjs`), scripts commit `cc1116a`.
+- Run 2: `lh-contrast`, `nf-escape` and `nf-locale` exited 1 with 0 FAIL and truncated PASS
+  counts (1, 12, 104), i.e. stopped partway. All three passed in runs 1 and 3 and alone
+  (9, 28, 130 PASS). Cause not identified; treated as transient, confirmed by run 3.
