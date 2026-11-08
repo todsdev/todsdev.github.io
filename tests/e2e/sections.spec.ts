@@ -2,15 +2,16 @@ import type { Page } from "@playwright/test";
 import { UMAMI_PRIVACY } from "../../src/lib/analytics";
 import { actionsFor, type ContactKind } from "../../src/lib/contact";
 import { OPEN_CERT } from "../../src/lib/courses";
-import { sectionIds } from "../../src/lib/sections";
 import { projectActions, sortProjects } from "../../src/lib/projects";
 import {
+  coursesEnabled,
   contacts,
   entries,
   localePath,
   locales,
   localized,
   profile,
+  sections,
   text,
   type Locale,
 } from "./support/content";
@@ -30,7 +31,7 @@ const present = (locale: Locale) => text(locale, "time.present");
 const years = (value: string, locale: Locale) =>
   /[–-]$/.test(value) ? `${value}${present(locale)}` : value;
 
-test("S1: the seven sections render in order with the locale's nav and titles", async ({
+test("S1: the sections render in order with the locale's nav and titles", async ({
   page,
 }) => {
   for (const locale of locales) {
@@ -38,15 +39,15 @@ test("S1: the seven sections render in order with the locale's nav and titles", 
     const ids = await page
       .locator("main > section[id]")
       .evaluateAll((sections) => sections.map((s) => s.id));
-    expect(ids).toEqual([...sectionIds]);
+    expect(ids).toEqual([...sections()]);
 
     const nav = page.getByRole("navigation", {
       name: text(locale, "nav.label"),
     });
     await expect(nav.getByRole("link")).toHaveText(
-      sectionIds.map((id) => text(locale, `nav.${id}` as const)),
+      sections().map((id) => text(locale, `nav.${id}` as const)),
     );
-    for (const id of sectionIds.filter((id) => id !== "hero")) {
+    for (const id of sections().filter((id) => id !== "hero")) {
       await expect(
         page.locator(`#${id}`).getByRole("heading", { level: 2 }),
       ).toHaveAccessibleName(text(locale, `prompt.${id}` as const));
@@ -210,6 +211,10 @@ test("S5: Skills are headings with lists, as the accessibility tree reads them",
 test("S6: Courses are links that open in a new tab, and the hosted PDFs load", async ({
   page,
 }) => {
+  test.skip(
+    !coursesEnabled(),
+    "courses are off (profile courses.enabled: false)",
+  );
   interface Course {
     title: string;
     issuer: string;
@@ -384,7 +389,7 @@ test("S9: scrolling reveals every section and draws the thread, without overflow
   await page.goto("/");
   expect(await threadDrawn(page)).toBeLessThan(0.1);
 
-  for (const id of sectionIds) {
+  for (const id of sections()) {
     await page.locator(`#${id}`).scrollIntoViewIfNeeded();
   }
   await page.evaluate(() =>
@@ -394,9 +399,9 @@ test("S9: scrolling reveals every section and draws the thread, without overflow
     }),
   );
 
-  const sections = page.locator("[data-reveal]");
-  await expect(sections.locator("visible=true")).toHaveCount(
-    await sections.count(),
+  const revealed = page.locator("[data-reveal]");
+  await expect(revealed.locator("visible=true")).toHaveCount(
+    await revealed.count(),
   );
   await expect(page.locator("[data-reveal]:not(.is-visible)")).toHaveCount(0);
   await expect.poll(() => threadDrawn(page)).toBeGreaterThan(0.99);
@@ -418,7 +423,7 @@ test.describe("without JavaScript, everything is visible", () => {
     const opacities = await page
       .locator("[data-reveal]")
       .evaluateAll((els) => els.map((el) => getComputedStyle(el).opacity));
-    expect(opacities.length).toBe(sectionIds.length);
+    expect(opacities.length).toBe(sections().length);
     expect(new Set(opacities)).toEqual(new Set(["1"]));
     expect(await threadDrawn(page)).toBeGreaterThan(0.99);
   });

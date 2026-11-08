@@ -1,0 +1,102 @@
+# Tasks
+
+Every commit is gated on `npm run lint`, `npm run check`, `npm run format:check` and `npm test`, judged by exit code with untruncated output. Commits that touch the site or the tests also run `npm run test:e2e`.
+
+A new test's task is done only when its row in "Breakage evidence" records the observed failure. Breakages are temporary edits. They are never committed, and `git status` is checked before each commit.
+
+## 1. Setup
+
+- [x] 1.1 Create branch `feat/hide-courses`, commit the artifacts and open a draft PR; verify the PR is draft and `openspec validate hide-courses --strict` passes
+
+## 2. Flag and section list
+
+- [x] 2.1 Add `courses: { enabled: false }` to `profile.yaml` and the schema per design decision 1; verify the build fails naming the profile file and field when `courses` is removed or `enabled` is `"no"`, and passes as committed
+- [x] 2.2 Add `renderedSections(courses)` to `src/lib/sections.ts` with unit tests for both values; verify `npm test` covers both and the order is unchanged otherwise
+
+## 3. Page
+
+- [x] 3.1 Render sections and nav links from `renderedSections` in `Portfolio.astro` and `SiteNav.astro` per decision 2; verify `grep` finds no `id="courses"`, `#courses` or `data-event="certificate"` in `dist/**/*.html`, and the nav has six links per locale
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
+- [x] 3.2 Add `meta.descriptionNoCourses` to the three dictionaries with the spec's texts and pick the key by the flag; verify the built `<meta name="description">`, `og:description` and `twitter:description` per locale match the spec
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
+- [x] 3.3 Adapt S1, S9, S10, N2, E1 and E2 to `sections()` and the flag, and skip S6 with the spec's reason, adding `coursesEnabled()` and `sections()` to `support/content.ts` per decision 6; verify `npm run test:e2e` passes and S6 reports skipped with that reason
+  Committed together with 3.1, 3.2 and 3.3: the site and its e2e expectations must change atomically.
+- [x] 3.4 Write C1 and C2 in `courses-off.spec.ts`; verify they pass in both projects and fail against their breakages
+
+## 4. Terminal
+
+- [x] 4.1 Add the `section` tag and `available(sections)` to `src/lib/terminal.ts` per decision 3, and pass `sections` to `formatHelp`, `suggest` and the known names, with unit tests for both flag states (help, Tab on `c` and `cd c`, `suggest("cert")`, `ls`); verify `npm test` passes and the updated existing tests still assert the flag-on output
+- [x] 4.2 Make `terminal-data.ts` omit `certs` and `help.certs` when off, and the shell dispatch only available commands; verify each built `terminal.json` has no `certs`, `courses` or course title, and `certs` reports `unknown` to analytics
+  Committed together with 4.2 and 4.3: the terminal's output and its e2e expectations must change atomically.
+- [x] 4.3 Adapt T5 and T6 to `sections()`, then write C3 and C4; verify they pass and C3 and C4 fail against their breakages
+  Committed together with 4.2 and 4.3: the terminal's output and its e2e expectations must change atomically.
+
+## 5. Certificates
+
+- [x] 5.1 `git mv` the three PDFs to `src/content/courses/certificates/`, add `src/pages/certificates/[name].pdf.ts` per decision 4, and update the three YAML comments; verify `dist/certificates` is absent with the flag off, and with it on temporarily the three built files have the same SHA-256 as the originals in `main`
+- [x] 5.2 Write C5; verify it passes and fails against both of its breakages
+
+## 6. Docs
+
+- [x] 6.1 Update the README: drop "and courses" from the introduction, document `courses.enabled` next to the availability badge (what it hides, how to turn it back on, re-running task 7.1's check), mark `certs` and the certificate hosting as flag-dependent, and update the certificate hosting path; verify `npm run format:check` passes and the spec's documentation scenarios hold
+
+## 7. Integration
+
+- [x] 7.1 Turn the flag on locally without committing, run `npm test`, `npm run test:e2e`, and `./run.sh` for `c-layout`, `c-links` and `c-stable`, then compare `dist/` with a `main` build from a `git worktree`, normalizing the build date and asset hashes; verify everything passes, C1–C5 report skipped, the only `dist/` differences are those two, and record the result in this file; revert the flag
+- [x] 7.2 In `~/portfolio-verify-scripts`, add `COURSES` and `SECTIONS` to `lib.mjs`, apply design decision 7 to the listed suites, add `c-off` and classify it in `full.sh`, then commit and push there with the evidence; verify the three `c-*` suites print one `SKIP` line, `c-off` fails against C1's breakage once, and `full.sh` accepts the classification
+- [x] 7.3 Run `./full.sh` in the background; verify it reports 0 failed, with `c-layout`, `c-links` and `c-stable` skipped and `c-off` passing
+
+## Flag-on check (task 7.1)
+
+Run on 2026-11-08 with `courses.enabled: true` set locally and not committed, then reverted. `main` was `e365df0`, built in a `git worktree`.
+
+- **Unit tests and browser tests:** `npm test` passed (96 tests). `npm run test:e2e` passed: 112 passed, 28 skipped. S6 ran and passed in both projects, and C1–C5 reported skipped.
+- **Verify-scripts:** `c-layout` (37 PASS), `c-links` (6 PASS, the three hosted PDFs return 200) and `c-stable` (18 PASS) exited 0 with no FAIL.
+- **`dist/` against `main`:** the file lists match once asset hashes are normalized. After normalizing asset hashes, the three `index.html` and the three `terminal.json` are identical, and every file outside `_astro/` and the HTML and JSON is byte-identical (including the three certificate PDFs). The build date didn't differ, as both builds ran the same day. The only other differences are the hashed names of the two scripts that changed (`Terminal.astro…script_index_0_lang` and `terminal-shell`).
+- **A finding:** the first comparison showed `help.certs` last in `terminal.json` and `help` last in `strings`, because the payload was rebuilt by spreading. Values were equal, but the files didn't match `main`. Fixed in `stringsFor` (it now filters in place) and compared again: identical.
+- **Order of the runs:** the tests and the three `c-*` suites ran before that fix. Only the `dist/` comparison was repeated after it, and the flag-off gates and `npm run test:e2e` passed after it.
+
+## Verify-scripts evidence (task 7.2)
+
+- **`SKIP` lines:** with the flag off, `c-layout`, `c-links` and `c-stable` each print one `SKIP` line and exit 0. With it on they pass (37, 6 and 18 PASS) and `c-off` prints its `SKIP`.
+- **Flag-aware suites:** `kbd`, `l-nav`, `t64`, `t66`, `an-sections`, `an-markup`, `an-events`, `an-blocked`, `tm-commands`, `tm-shell` and `seo-meta` pass with the flag off and with it on. `an-live` is live only and was edited the same way, not run here.
+- **`full.sh`:** accepts the classification (it got to the build step instead of "unclassified scripts").
+- **`l-nav` tolerance (0.5px → 1px), with a control:** at 320px the last link's overhang is `scrollWidth`'s integer rounding against fractional positions. Worst overhang measured (px) at `/`, `/pt-br/`, `/es/`:
+  - `main` (`e365df0`, seven links): 0.38, 0.44, 0.44.
+  - this branch, flag on (seven links): 0.38, 0.44, 0.44, identical to `main`.
+  - this branch, flag off (six links): 0.38, 0.63, 0.63. This was the only failure, in `pt-br` and `es`.
+  - Breakage: `nav.ts` under-scrolling by 3px (`- 3` in `revealInStrip`) makes `l-nav` fail with the flag off: 3 PASS, 6 FAIL. Reverted.
+  - After the change: `l-nav` 9 PASS with the flag off and 9 PASS with it on.
+
+## Breakage evidence
+
+Fill "Observed" with the failing assertion and the project where it failed.
+
+| Test | Planned breakage | Observed |
+| --- | --- | --- |
+| C1 | Render `Courses` regardless of the flag | `#courses` count: expected 0, received 1 (`en`), in desktop and mobile |
+| C2 | Add a stray `<div id="courses">` at the end of `<main>` | `window.scrollY` after `/#courses`: expected 0, received 2 (`en`), in desktop and mobile; C1 also failed on the extra `#courses` |
+| C3 | Drop the `section` tag from `certs` | `en help` lists `certs`: expected the names not to contain it, in desktop (the first assertion; the later ones follow it) |
+| C4 | Always include `certs` in `terminal.json` | `terminal.json keys` (`en`): expected no `certs` property, received the five courses, in desktop |
+| C5 | `getStaticPaths` ignoring the flag; then the old description key | `getStaticPaths` ignoring the flag: `cursoemvideo-algoritmo.pdf` expected 404, received 200 (desktop). Old description key: `en meta[name="description"]` expected no course word, received "…skills and courses." (desktop). C5 runs once, in desktop |
+| c-off | Render `Courses` regardless of the flag | 6 FAIL, 40 PASS, per locale: the absence check (`{"section":1,"links":1,"nav":1,"cert":5}`) and `/#courses` (scrolled to y≈5000, `courses` active) |
+
+## Workflow follow-up
+
+- Archive on the branch: sync the delta specs, run `openspec validate --all --strict`, update the README's counts (21 specs, 20 archived changes, 93 deeper suites, read at archive time), and move the change to `openspec/changes/archive/`.
+- Merge, deploy and live run per CLAUDE.md, adding `c-off` and `curl -I` of the three certificate URLs (each expected 404).
+- Post-merge: `gh release create v1.1.0 --target <merge sha> --title v1.1.0 --notes "Courses section hidden behind profile courses.enabled (off). Course content and components stay in the repo; set the flag to true to restore them."`
+
+## Full verify run (task 7.3)
+
+`./full.sh` against the flag-off build, third run: **passed 87, skipped 6, failed 0 (of 93)**.
+`c-layout`, `c-links` and `c-stable` skipped (courses off); `c-off` 46 PASS; `e2e` 54 PASS.
+The other skips (`h34b`, `h34c`, `h52`) are the availability badge being off, unrelated.
+
+The first two runs were not clean, and the cause was not the site:
+
+- Run 1: `e2e` failed (12 FAIL). Two hard-coded `7`s expected seven sections while six render.
+  Fixed in the script (`SECTIONS` from `lib.mjs`), scripts commit `cc1116a`.
+- Run 2: `lh-contrast`, `nf-escape` and `nf-locale` exited 1 with 0 FAIL and truncated PASS
+  counts (1, 12, 104), i.e. stopped partway. All three passed in runs 1 and 3 and alone
+  (9, 28, 130 PASS). Cause not identified; treated as transient, confirmed by run 3.

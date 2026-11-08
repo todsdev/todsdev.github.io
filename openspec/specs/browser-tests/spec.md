@@ -48,7 +48,7 @@ The suite SHALL cover the hero, locale routing and the language switcher, every 
 
 #### Scenario: Sections per locale
 - **WHEN** each locale page loads
-- **THEN** all seven sections render in order with that locale's titles
+- **THEN** the sections the courses flag allows render in order with that locale's titles
 
 #### Scenario: Résumé per locale
 - **WHEN** each locale page's résumé link is read
@@ -164,3 +164,25 @@ Failed tests SHALL retry once in CI and never locally. The first retry SHALL rec
 #### Scenario: Failure locally
 - **WHEN** a test fails locally
 - **THEN** it doesn't retry
+
+### Requirement: Tests follow the courses flag
+The suite SHALL read `courses.enabled` from the profile file at test time, never from the page. Tests of the courses section and its certificates SHALL skip with the reason `courses are off (profile courses.enabled: false)` while it is `false`. Tests that assert courses are absent SHALL skip with the reason `courses are on (profile courses.enabled: true)` while it is `true`. Shared section lists SHALL leave out courses while it is `false`.
+
+#### Scenario: Flag off
+- **WHEN** the suite runs with `courses.enabled: false`
+- **THEN** the courses tests are reported as skipped with that reason, and the absence tests run
+
+#### Scenario: Flag on
+- **WHEN** the suite runs with `courses.enabled: true`
+- **THEN** the courses tests run, and the absence tests are reported as skipped with that reason
+
+### Requirement: Courses absence coverage
+While courses are off, the suite SHALL check in every locale that the section, its nav link, any `#courses` link or anchor, any thread marker inside a courses section, the course mention in the description, the terminal's `certs` and `courses/` (in `help`, Tab, `ls`, `cd` and each `terminal.json`) and the hosted certificate URLs are all absent.
+
+#### Scenario: Certificate URLs
+- **WHEN** courses are off and each hosted certificate path is requested from the local build
+- **THEN** each returns 404
+
+#### Scenario: Terminal data
+- **WHEN** courses are off and each locale's `terminal.json` is fetched
+- **THEN** it has no `certs`, no `courses` section and no course title or issuer

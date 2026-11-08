@@ -13,11 +13,11 @@ import {
   THEME_KEY,
   type Line,
 } from "../../src/lib/terminal";
-import { sectionIds } from "../../src/lib/sections";
 import {
   localePath,
   locales,
   profile,
+  sections as renderedSections,
   terminalStrings,
   text,
 } from "./support/content";
@@ -161,14 +161,14 @@ async function expectOutput(
   }
 }
 
-const sections = sectionIds.filter((id) => id !== "hero");
+const sections = () => renderedSections().filter((id) => id !== "hero");
 
 test("T5: help lists the commands in the page's language", async ({
   page,
   isMobile,
 }) => {
   await expectOutput(page, isMobile, (locale) => [
-    ["help", texts(formatHelp(terminalStrings(locale)))],
+    ["help", texts(formatHelp(terminalStrings(locale), sections()))],
   ]);
 });
 
@@ -177,11 +177,11 @@ test("T6: ls hides .secrets and ls -a lists it first", async ({
   isMobile,
 }) => {
   await expectOutput(page, isMobile, () => [
-    ["ls", texts(formatLs(sections))],
-    ["ls -a", texts(formatLs(sections, true))],
+    ["ls", texts(formatLs(sections()))],
+    ["ls -a", texts(formatLs(sections(), true))],
   ]);
-  expect(texts(formatLs(sections))[0]).not.toContain(".secrets");
-  expect(texts(formatLs(sections, true))[0]).toMatch(/^\.secrets {2}/);
+  expect(texts(formatLs(sections()))[0]).not.toContain(".secrets");
+  expect(texts(formatLs(sections(), true))[0]).toMatch(/^\.secrets {2}/);
 });
 
 test("T7: cat .secrets prints the header and every easter egg", async ({

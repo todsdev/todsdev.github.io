@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import {
+  description,
   localePath,
   locales,
   profile,
@@ -31,7 +32,7 @@ test("E1: description and canonical per locale, ignoring the query", async ({
       await page.goto(`${localePath(locale)}${suffix}`);
       await expect(meta(page, "name", "description")).toHaveAttribute(
         "content",
-        text(locale, "meta.description"),
+        description(locale),
       );
       await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
         "href",
@@ -46,7 +47,7 @@ test("E2: Open Graph and Twitter tags per locale", async ({ page }) => {
     await page.goto(localePath(locale));
     const expected = {
       "og:title": text(locale, "meta.title"),
-      "og:description": text(locale, "meta.description"),
+      "og:description": description(locale),
       "og:url": `${SITE}${localePath(locale)}`,
       "og:type": "website",
       "og:locale": OG_LOCALE[locale],
@@ -73,7 +74,7 @@ test("E2: Open Graph and Twitter tags per locale", async ({ page }) => {
     const twitter = {
       "twitter:card": "summary_large_image",
       "twitter:title": text(locale, "meta.title"),
-      "twitter:description": text(locale, "meta.description"),
+      "twitter:description": description(locale),
       "twitter:image": `${SITE}/og/${locale}.png`,
       "twitter:image:alt": text(locale, "meta.ogImageAlt"),
     };

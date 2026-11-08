@@ -10,3 +10,8 @@ export const sectionIds = [
 ] as const;
 
 export type SectionId = (typeof sectionIds)[number];
+
+/** The sections the page renders: every id, without "courses" while the profile flag is off. */
+export function renderedSections(courses: boolean): readonly SectionId[] {
+  return courses ? sectionIds : sectionIds.filter((id) => id !== "courses");
+}

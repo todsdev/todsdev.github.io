@@ -57,3 +57,5 @@ availability:
     en: open to work
     pt-br: disponível
     es: disponible
+courses:
+  enabled: false

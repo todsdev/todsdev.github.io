@@ -8,7 +8,6 @@ import { decode } from "../lib/contact";
 import {
   ADB,
   GRADLE,
-  KNOWN,
   NEOFETCH_LOGO,
   PROMPT,
   SECRETS_FILE,
@@ -33,6 +32,7 @@ import {
   formatSecrets,
   formatSkills,
   formatWhoami,
+  knownNames,
   parse,
   sectionArg,
   THEME_KEY,
@@ -71,6 +71,8 @@ type Handler = (args: string[]) => void;
 export function start(host: Host, data: TerminalData): Shell {
   const s = data.strings;
   const { input, log } = host;
+  /** The commands this page has: `certs` only while the courses section is rendered. */
+  const known = knownNames(data.sections);
   const history: string[] = [];
   let recallAt = 0;
 
@@ -282,7 +284,7 @@ export function start(host: Host, data: TerminalData): Shell {
   }
 
   const commands: Record<string, Handler> = {
-    help: () => print(formatHelp(s)),
+    help: () => print(formatHelp(s, data.sections)),
     whoami: () => print(formatWhoami(data)),
     about: () => print(formatWhoami(data)),
     experience: () => print(formatExperience(data)),
@@ -433,7 +435,7 @@ export function start(host: Host, data: TerminalData): Shell {
 
   function notFound(name: string): void {
     say(fill(s.notFound, { name }), "error");
-    const close = suggest(name);
+    const close = suggest(name, data.sections);
     say(close ? fill(s.didYouMean, { command: close }) : s.helpHint, "muted");
   }
 
@@ -450,11 +452,14 @@ export function start(host: Host, data: TerminalData): Shell {
       if (!command) return;
       history.push(command);
       recallAt = history.length;
-      track("terminal_command", { command: terminalCommand(command, KNOWN) });
+      track("terminal_command", {
+        command: terminalCommand(command, known),
+      });
       const { name, args } = parse(command);
-      const handler = Object.hasOwn(commands, name)
-        ? commands[name]
-        : undefined;
+      const handler =
+        Object.hasOwn(commands, name) && known.includes(name)
+          ? commands[name]
+          : undefined;
       if (handler) handler(args);
       else notFound(name);
     },

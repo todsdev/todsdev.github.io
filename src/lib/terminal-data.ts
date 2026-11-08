@@ -16,7 +16,7 @@ import { sortCourses } from "./courses";
 import { formatMonth, formatPeriod } from "./period";
 import { sortProjects } from "./projects";
 import { resumeFor } from "./resume";
-import { sectionIds } from "./sections";
+import { renderedSections } from "./sections";
 import {
   OBS_ENTRY,
   obsCounts,
@@ -25,6 +25,18 @@ import {
 } from "./terminal";
 
 const strings = { en: en.terminal, "pt-br": ptBr.terminal, es: es.terminal };
+
+/** The locale's terminal strings; `help.certs` is dropped while the courses section is off. */
+function stringsFor(locale: Locale, courses: boolean): TerminalData["strings"] {
+  const all = strings[locale];
+  // `help` is replaced in place and filtered, so the key order matches the flag-on file.
+  return {
+    ...all,
+    help: Object.fromEntries(
+      Object.entries(all.help).filter(([name]) => courses || name !== "certs"),
+    ) as TerminalData["strings"]["help"],
+  };
+}
 
 export async function terminalData(locale: Locale): Promise<TerminalData> {
   const [profile] = await getEntries("profile", locale);
@@ -36,10 +48,11 @@ export async function terminalData(locale: Locale): Promise<TerminalData> {
   if (!email) throw new Error("contacts must include an email entry");
   const resume = resumeFor(locale);
   const experience = await getEntries("experience", locale);
+  const courses = profile.courses.enabled;
 
   return {
-    strings: strings[locale],
-    sections: sectionIds.filter((id) => id !== "hero"),
+    strings: stringsFor(locale, courses),
+    sections: renderedSections(courses).filter((id) => id !== "hero"),
     profile: {
       name: profile.name,
       role: profile.role,
@@ -71,11 +84,13 @@ export async function terminalData(locale: Locale): Promise<TerminalData> {
       category: s.category,
       items: s.items,
     })),
-    certs: sortCourses(await getEntries("courses", locale)).map((c) => ({
-      date: formatMonth(c.date, monthNames),
-      title: c.title,
-      issuer: c.issuer,
-    })),
+    ...(courses && {
+      certs: sortCourses(await getEntries("courses", locale)).map((c) => ({
+        date: formatMonth(c.date, monthNames),
+        title: c.title,
+        issuer: c.issuer,
+      })),
+    }),
     contacts: terminalContacts(contacts, (kind) =>
       isProtected(kind as ContactKind),
     ),

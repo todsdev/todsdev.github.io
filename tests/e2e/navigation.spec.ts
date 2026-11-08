@@ -1,15 +1,15 @@
 import type { Page } from "@playwright/test";
-import { locales, text } from "./support/content";
-import { sectionIds } from "../../src/lib/sections";
+import { locales, sections, text } from "./support/content";
+import type { SectionId } from "../../src/lib/sections";
 import { test, expect } from "./support/fixtures";
 
-const navLink = (page: Page, id: (typeof sectionIds)[number]) =>
+const navLink = (page: Page, id: SectionId) =>
   page
     .getByRole("navigation", { name: text("en", "nav.label") })
     .getByRole("link", { name: text("en", `nav.${id}` as const), exact: true });
 
 /** Exactly one link is active, and it's the one for `id`. */
-async function expectActive(page: Page, id: (typeof sectionIds)[number]) {
+async function expectActive(page: Page, id: SectionId) {
   await expect(navLink(page, id)).toHaveAttribute("aria-current", "location");
   await expect(page.locator(".site-nav [aria-current='location']")).toHaveCount(
     1,
@@ -50,7 +50,7 @@ test("N2: Tab goes through the skip link, the nav, then the switcher", async ({
 
   const order = [
     text("en", "skipLink"),
-    ...sectionIds.map((id) => text("en", `nav.${id}` as const)),
+    ...sections().map((id) => text("en", `nav.${id}` as const)),
     ...locales.map((l) => text("en", `switcher.names.${l}` as const)),
   ];
   for (const expected of order) {
